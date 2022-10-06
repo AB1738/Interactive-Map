@@ -1,1 +1,1 @@
-web: gunicorn Interactive_Map.wsgi --log-file -
+web: gunicorn Interactive_Map.wsgi 
