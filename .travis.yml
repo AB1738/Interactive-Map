@@ -14,5 +14,5 @@ install:
 script:
 - export DJANGO_SECRETKEY=secret # needed because settings.py pulls it from os.environ
 - black .
-- flake8 .
+- flake8 --max-line-length=100 .
 
