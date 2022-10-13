@@ -8,7 +8,9 @@ env:
 
 install:
 - pip install -r requirements.txt
+- pip install black
 
 script:
 - export DJANGO_SECRETKEY=secret # needed because settings.py pulls it from os.environ
+- black .
 
