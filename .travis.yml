@@ -16,5 +16,5 @@ script:
 - export DJANGO_SECRETKEY=secret # needed because settings.py pulls it from os.environ
 - black .
 - flake8 --max-line-length=100 .
-- coverage run
+- cd Interactive_Map && coverage run manage.py test map
 
