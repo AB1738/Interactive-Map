@@ -11,10 +11,12 @@ install:
 - pip install black
 - python3.9 -m pip install flake8
 - pip install coverage
+- pip install coveralls
 
 script:
 - export DJANGO_SECRETKEY=secret # needed because settings.py pulls it from os.environ
 - black .
 - flake8 --max-line-length=100 .
 - cd Interactive_Map && coverage run manage.py test map
+- coveralls
 
