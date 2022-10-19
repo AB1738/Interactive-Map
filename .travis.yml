@@ -19,5 +19,5 @@ script:
 - black .
 - flake8 --max-line-length=100 .
 - cd Interactive_Map && coverage run manage.py test map
-- cd .. & coveralls
+- cd .. && coveralls
 
