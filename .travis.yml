@@ -8,11 +8,6 @@ env:
 
 install:
 - pip install -r requirements.txt
-- pip install black
-- python3.9 -m pip install flake8
-- pip install pyyaml
-- pip install coverage
-- pip install coveralls
 
 script:
 - export DJANGO_SECRETKEY=secret # needed because settings.py pulls it from os.environ
