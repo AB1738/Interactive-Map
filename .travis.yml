@@ -4,7 +4,7 @@ python:
 - "3.9"
 
 env:
-- DJANGO=4.1.2 COVERALLS_REPO_TOKEN=2IRjhnTGqALDsNpBoZZGfO6sJz0pzziBK
+- DJANGO=4.1.2 COVERALLS_REPO_TOKEN=E3p82QfWMQiyUragCsvp731cSSQX88Q9Z
 
 install:
 - pip install -r requirements.txt
