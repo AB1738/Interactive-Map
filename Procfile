@@ -1,2 +1,2 @@
-web: gunicorn --chdir Interactive_Map Interactive_Map.wsgi 
+web: gunicorn Interactive_Map.wsgi 
 
