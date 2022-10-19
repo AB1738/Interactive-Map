@@ -4,7 +4,7 @@ python:
 - "3.9"
 
 env:
-- DJANGO=4.1.2 COVERALLS_REPO_TOKEN=E3p82QfWMQiyUragCsvp731cSSQX88Q9Z
+- DJANGO=4.1.2 
 
 install:
 - pip install -r requirements.txt
@@ -18,5 +18,6 @@ script:
 - export DJANGO_SECRETKEY=secret # needed because settings.py pulls it from os.environ
 - black .
 - flake8 --max-line-length=100 .
-- cd Interactive_Map && coverage run manage.py test map && coveralls
+- cd Interactive_Map && coverage run manage.py test map
+- coveralls
 
