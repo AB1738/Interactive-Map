@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 django = "*"
 gunicorn = "==20.1.0"
+python-decouple=="==3.6"
 
 [dev-packages]
 
