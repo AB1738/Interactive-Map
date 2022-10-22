@@ -3,7 +3,7 @@ import geocoder
 
 
 access_token='pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg'
-class Address(models.Model):
+class GroceryStoreAddresses(models.Model):
     address=models.TextField()
     lat=models.FloatField(blank=True,null=True)
     long=models.FloatField(blank=True,null=True)
@@ -13,4 +13,4 @@ class Address(models.Model):
         g=g.latlng
         self.lat=g[0]
         self.long=g[1]
-        return super(Address,self).save(*args,**kwargs)
+        return super(GroceryStoreAddresses,self).save(*args,**kwargs)
