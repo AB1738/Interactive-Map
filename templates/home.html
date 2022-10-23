@@ -1,66 +1,112 @@
 {% load static %}
 
 <!DOCTYPE html>
-
 <html>
-  <head>
-    <title>Homepage</title>
-  </head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    .button {
-      background-color: rgb(182, 16, 16);
-      color: white;
-      border: none;
-      height: 40px;
-      width: 200px;
-      font-weight: bold;
-      font-size: 15px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.15s;
-    }
+        <link rel="stylesheet" href="style.css">
+        <title>Ascent+</title>
+    </head>
+    <body>
+        <div class="main">
+            <header>
+                <h1>
+                    <a href="#" class="home">
+                        <div class="logo one">Ascent+</div>
+                        <div class="logo two">Interactive</div>
+                    </a>
+                </h1>
+                <div clas="pages">
+                    <a href="#" class="page-link">Home</a>
+                    <a href="#" class="page-link">Map</a>
+                    <a href="#" class="page-link">About</a>
+                </div>
+            </header>
+            <div class="banner">
+                
+                <div class="half">
+                    <h1 class="big-one">Interactive<br><span class="small-one">Maps</span></h1>
+                    <p class="details">Get around town better with the Interactive Maps project by Ascent!</p>
+                    <a href="#" class="start">Get Started</a>
+                </div>
+                <div class="half">
+                    <img class="bannerDecor" src="https://img.freepik.com/free-vector/business-team-putting-together-jigsaw-puzzle-isolated-flat-vector-illustration-cartoon-partners-working-connection-teamwork-partnership-cooperation-concept_74855-9814.jpg?w=1480&t=st=1666551711~exp=1666552311~hmac=809617f1ed968d03a5f27f72b66602dd739ef412cc8989f29d81476823f016d0">
+                </div>
+            </div>
+            <div class="container">
+                <h2 class="heading">Discover the new big thing!</h2>
+                <p class="subLine">Innovation • Resilliance • Retardation</p>
+                <div></div>
+                <div class="wrapper">
+                <div class="thirds">
+                    <div class="box">
+                        <div class="trioHead">
+                            <div class="boxDecor one">
+                                <div class="boxDecorInner"></div>
+                            </div>
+                            <div>
+                                <div class="icon">Clean</div>
+                                <div class="content">
+                                    <p>The reason why this is clean</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
 
-    .button:hover {
-      background-color: rgb(197, 77, 77);
-    }
+                        <div class="detail">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="thirds">
+                    <div class="box">
+                        <div class="trioHead">
+                            <div class="boxDecor two">
+                                <div class="boxDecorInner"></div>
+                            </div>
+                            <div>
+                                <div class="icon">Efficient</div>
+                                <div class="content">
+                                    <p>The reason why its efficient</p>
+                                </div>
+                            </div>
+                        </div>
 
-    .body {
-      background-image: url("/static/img/map.jpg");
-    }
+                        <div class="detail">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="thirds">
+                    <div class="box">
+                        <div class="trioHead">
+                            <div class="boxDecor three">
+                                <div class="boxDecorInner"></div>
+                            </div>
+                            <div>
+                                <div class="icon">Powerful</div>
+                                <div class="content">
+                                    <p>The reason why its powerful</p>
+                                </div>
+                            </div>
+                        </div>
 
-    .home {
-      color: rgb(69, 8, 8);
-      font-weight: bold;
-      font-size: 150px;
-      align-items: center;
-    }
-
-    .center {
-      margin-top: 200px;
-      margin-bottom: -200px;
-      margin-left: 60px;
-      width: 100%;
-      height: 200px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .home {
-      color: black;
-    }
-  </style>
-
-  <body class="body">
-    <div class="center">
-      <h1 class="home">Homepage</h1>
-    </div>
-
-    <div class="center">
-      <a href="/map">
-        <button class="button" type="submit">Click to go to map page</button>
-      </a>
-    </div>
-  </body>
+                      
+                        <div class="detail">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </body>
 </html>
