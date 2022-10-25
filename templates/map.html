@@ -26,17 +26,17 @@
   <body>
 
     <header>
-        <h1>
-            <a href="" class="home">
-                <div class="logo one">Ascent+</div>
-                <div class="logo two">Interactive</div>
-            </a>
-        </h1>
-        <div class="pages">
-            <a href="" class="page-link">Home</a>
-            <a href="#" class="page-link">Map</a>
-            <a href="#" class="page-link">About</a>
-        </div>
+      <h1>
+          <a href="#" class="home">
+              <div class="logo one">Ascent+</div>
+              <div class="logo two">Interactive</div>
+          </a>
+      </h1>
+      <div class="pages">
+          <a href="{% url 'home' %}" class="page-link">Home</a>
+          <a href="{% url 'map' %}" class="page-link">Map</a>
+          <a href="{% url 'aboutme' %}" class="page-link">About</a>
+      </div>
     </header>
     <div style="width: 100%; height: 80%">
       <div id="map" style="width: 100%; height: 800px"></div>
