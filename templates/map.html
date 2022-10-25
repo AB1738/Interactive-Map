@@ -1,55 +1,47 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
+    
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
     <link
-      href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css"
-      rel="stylesheet"
-    />
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css"
-      type="text/css"
-    />
+    href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css"
+    rel="stylesheet"
+  />
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css"
+    type="text/css"
+  />
+    
+    
+    <link rel="stylesheet" href="{% static 'css/mapPage.css' %}">
     <title>Sample Django Map Project</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-      }
-      button {
-        position: fixed;
-        bottom: 0;
-        right: 5%;
-      }
-
-      #map {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-      }
-    </style>
   </head>
   <body>
-    <style>
-      #menu {
-        margin: 0;
-        bottom: 5px;
-        position: absolute;
-        background: #efefef;
-        padding: 10px;
-        font-family: "Open Sans", sans-serif;
-      }
-    </style>
 
-    <div id="map" style="width: 100%; height: 600px"></div>
+    <header>
+        <h1>
+            <a href="" class="home">
+                <div class="logo one">Ascent+</div>
+                <div class="logo two">Interactive</div>
+            </a>
+        </h1>
+        <div class="pages">
+            <a href="" class="page-link">Home</a>
+            <a href="#" class="page-link">Map</a>
+            <a href="#" class="page-link">About</a>
+        </div>
+    </header>
+    <div style="width: 100%; height: 80%">
+      <div id="map" style="width: 100%; height: 800px"></div>
+    </div>
+    
 
     <div id="menu">
       <input
