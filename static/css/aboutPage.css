@@ -178,3 +178,7 @@ header {
     color: #fff;
 }
 
+.test{
+    border-radius: 50px;
+    background: white url("images/cat.jpg");
+}
