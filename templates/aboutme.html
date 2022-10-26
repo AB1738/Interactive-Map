@@ -1,0 +1,76 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" href="{% static 'css/aboutPage.css' %}">
+        <title>Ascent+</title>
+    </head>
+    <body>
+        <div class="main">
+            <header>
+                <h1>
+                    <a href="{% url 'home' %}" class="home">
+                        <div class="logo one">Ascent+</div>
+                        <div class="logo two">Interactive</div>
+                    </a>
+                </h1>
+                <div class="pages">
+                    <a href="{% url 'home' %}" class="page-link">Home</a>
+                    <a href="{% url 'map' %}" class="page-link">Map</a>
+                    <a href="{% url 'aboutme' %}" class="page-link">About</a>
+                </div>
+              </header>
+              <div class="project-description">
+                Project Description
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa minus delectus error harum alias? Sequi numquam officia expedita ea accusantium ullam, hic repellendus, atque illo tempora facilis, vel fugiat adipisci!</p>
+            </div>
+            <div class="container">
+                <div class="part">
+                    <div class="member">
+                        <div  class="image">
+                            <img class="test" src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/cute-cat-photos-1593441022.jpg">
+                        </div>
+                        <h3>John Zhen</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam voluptatum fuga iure. Est, dicta voluptatum.</p>
+                    </div>
+                    <div class="member">
+                        <div class="image">
+                            <img src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/cute-cat-photos-1593441022.jpg">
+                        </div>
+                        <h3>Ariel Bazil</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam voluptatum fuga iure. Est, dicta voluptatum.</p>
+                    </div>
+                    <div class="member">
+                        <div class="image">
+                            <img class="test" src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/cute-cat-photos-1593441022.jpg">
+                        </div>
+                        <h3>Richard Ngo</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam voluptatum fuga iure. Est, dicta voluptatum.</p>
+                    </div>
+                    <div class="member">
+                        <div class="image">
+                            <img src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/cute-cat-photos-1593441022.jpg"s>
+                        </div>
+                        <h3>Abdurrahman Elkadrawy</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam voluptatum fuga iure. Est, dicta voluptatum.</p>
+                    </div>
+                    <div class="member">
+                        <div class="image">
+                            <img class="test" src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/cute-cat-photos-1593441022.jpg">
+                        </div>
+                        <h3>Irfan Mahmood</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam voluptatum fuga iure. Est, dicta voluptatum.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

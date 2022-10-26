@@ -267,3 +267,7 @@ GitHub.sublime-settings
 .DS_Store
 
 .idea/
+
+static/admin
+
+Interactive_Map/admin
