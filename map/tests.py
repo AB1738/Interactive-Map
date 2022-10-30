@@ -13,3 +13,4 @@ class GroceryStoreAddressProcessingTestCase(TestCase):
         print(math.trunc(latlong[0]))
         print(math.trunc(latlong[1]))
         return(math.trunc(latlong[0])==40 and math.trunc(latlong[1])==-73)
+        
