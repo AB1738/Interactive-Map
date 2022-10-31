@@ -13,8 +13,9 @@ class AboutMeView(TemplateView):
 
 class MapView(CreateView):
     model = GroceryStoreAddresses
+    model=FarmersMarketAddresses
     fields = ['address']
-    # fields= ['farmer_address']
+    fields= ['farmer_address']
     template_name = 'map.html'
     success_url = '/'
 
@@ -23,5 +24,5 @@ class MapView(CreateView):
         context[
             "access_token"] = 'pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg'
         context['addresses'] = GroceryStoreAddresses.objects.all()
-        # context['farmer_addresses'] = FarmersMarketAddresses.objects.all()
+        context['farmer_addresses'] = FarmersMarketAddresses.objects.all()
         return context

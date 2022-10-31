@@ -90,18 +90,21 @@
     </script>
 
     <button onclick="showmarker()">Grocery Stores</button>
+    <button onclick="showmarker2()">Farmers Markets</button>
 
     <script>
-            {% for farmer_address in farmer_addresses %} var marker = new
-                            mapboxgl.Marker({
-      color: "#FFFFFF"}).setLngLat([{{ farmer_address.long }}, {{ address.lat }}]).addTo(map); {% endfor %}
+            function showmarker2(){
+              {% for farmer_address in farmer_addresses %} var marker = new
+                              mapboxgl.Marker({
+        color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); {% endfor %}
+      };
 
-            function showmarker()
-            {
-              {% for address in addresses %} var marker = new
-                            mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); {% endfor %}
+              function showmarker()
+              {
+                {% for address in addresses %} var marker = new
+                              mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); {% endfor %}
 
-            };
+              };
     </script>
   </body>
 </html>
