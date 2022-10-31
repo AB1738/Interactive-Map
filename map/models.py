@@ -13,4 +13,5 @@ class GroceryStoreAddresses(models.Model):
         g=g.latlng
         self.lat=g[0]
         self.long=g[1]
-        return super(GroceryStoreAddresses,self).save(*args,**kwargs)
+        super(GroceryStoreAddresses,self).save(*args,**kwargs)
+        return
