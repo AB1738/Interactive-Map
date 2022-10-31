@@ -87,29 +87,21 @@
           "star-intensity": 0.6, // Background star brightness (default 0.35 at low zoooms )
         });
       });
-
-      map.addControl(
-        new mapboxgl.GeolocateControl({
-          positionOptions: {
-            enableHighAccuracy: true,
-          },
-          // When active the map will receive updates to the device's location as it changes.
-          trackUserLocation: true,
-          // Draw an arrow next to the location dot to indicate which direction the device is heading.
-          showUserHeading: true,
-        })
-      );
     </script>
 
     <button onclick="showmarker()">Grocery Stores</button>
 
     <script>
-      function showmarker()
-      {
-        {% for address in addresses %} var marker = new
-                      mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); {% endfor %}
+            {% for farmer_address in farmer_addresses %} var marker = new
+                            mapboxgl.Marker({
+      color: "#FFFFFF"}).setLngLat([{{ farmer_address.long }}, {{ address.lat }}]).addTo(map); {% endfor %}
 
-      };
+            function showmarker()
+            {
+              {% for address in addresses %} var marker = new
+                            mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); {% endfor %}
+
+            };
     </script>
   </body>
 </html>
