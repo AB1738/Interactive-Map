@@ -1,6 +1,5 @@
 from django.db import models 
 import geocoder
-import csv
 
 
 access_token='pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg'
