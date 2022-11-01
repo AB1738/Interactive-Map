@@ -13,9 +13,9 @@ class AboutMeView(TemplateView):
 
 class MapView(CreateView):
     model = GroceryStoreAddresses
-    model=FarmersMarketAddresses
+    model= FarmersMarketAddresses
     fields = ['address']
-    fields= ['farmer_address']
+    fields = ['farmer_address']
     template_name = 'map.html'
     success_url = '/'
 
