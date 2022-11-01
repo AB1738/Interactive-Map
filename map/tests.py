@@ -25,3 +25,12 @@ class GroceryStoreTestCase(TestCase):
     def test_grocery_store_saved(self):
         grocery_store = GroceryStoreAddresses.objects.get(lat__exact="40")
         self.assertEqual(grocery_store.long, -73.0)
+
+
+class MapViewTestCase(TestCase):
+    def test_context(self):
+        response = self.client.get('/map/')
+        self.assertEqual(response.context['access_token'],
+                         'pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg')
+        self.assertIsNotNone(response.context['addresses'])
+        self.assertIsNotNone(response.context['farmer_addresses'])
