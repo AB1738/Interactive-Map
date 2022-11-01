@@ -7,7 +7,7 @@ import geocoder
 # Create your tests here.
 
 class FarmerMarketAddressProcessingTestCase(TestCase):
-    def setup(self):
+    def setUp(self):
         self.access_token = 'pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg'
         self.address_model = FarmersMarketAddresses(farmer_address="535 MARCY AVE")
 
@@ -19,7 +19,7 @@ class FarmerMarketAddressProcessingTestCase(TestCase):
 
 
 class GroceryStoreTestCase(TestCase):
-    def setup(self):
+    def setUp(self):
         GroceryStoreAddresses.objects.create(lat="40", long="-73")
 
     def test_grocery_store_saved(self):
