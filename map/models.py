@@ -14,4 +14,15 @@ class GroceryStoreAddresses(models.Model):
         self.lat=g[0]
         self.long=g[1]
         return super(GroceryStoreAddresses,self).save(*args,**kwargs)
-        
+
+class FarmersMarketAddresses(models.Model):
+    farmer_address=models.TextField()
+    lat=models.FloatField(blank=True,null=True)
+    long=models.FloatField(blank=True,null=True)
+
+    def save(self, *args, **kwargs):
+        g=geocoder.mapbox(self.farmer_address,key=access_token)
+        g=g.latlng
+        self.lat=g[0]
+        self.long=g[1]
+        return super(FarmersMarketAddresses,self).save(*args,**kwargs)

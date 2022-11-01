@@ -2,46 +2,41 @@
 <!DOCTYPE html>
 <html>
   <head>
-    
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
     <link
-    href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css"
-    rel="stylesheet"
-  />
-  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
-  <link
-    rel="stylesheet"
-    href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css"
-    type="text/css"
-  />
-    
-    
-    <link rel="stylesheet" href="{% static 'css/mapPage.css' %}">
+      href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css"
+      type="text/css"
+    />
+
+    <link rel="stylesheet" href="{% static 'css/mapPage.css' %}" />
     <title>Sample Django Map Project</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   </head>
   <body>
-
     <header>
       <h1>
-          <a href="{% url 'home' %}" class="home">
-              <div class="logo one">Ascent+</div>
-              <div class="logo two">Interactive</div>
-          </a>
+        <a href="{% url 'home' %}" class="home">
+          <div class="logo one">Ascent+</div>
+          <div class="logo two">Interactive</div>
+        </a>
       </h1>
       <div class="pages">
-          <a href="{% url 'home' %}" class="page-link">Home</a>
-          <a href="{% url 'map' %}" class="page-link">Map</a>
-          <a href="{% url 'aboutme' %}" class="page-link">About</a>
+        <a href="{% url 'home' %}" class="page-link">Home</a>
+        <a href="{% url 'map' %}" class="page-link">Map</a>
+        <a href="{% url 'aboutme' %}" class="page-link">About</a>
       </div>
     </header>
     <div style="width: 100%; height: 80%">
       <div id="map" style="width: 100%; height: 800px"></div>
     </div>
-    
 
     <div id="menu">
       <input
@@ -95,13 +90,19 @@
     </script>
 
     <button onclick="showmarker()">Grocery Stores</button>
+    <button onclick="showmarker2()">Farmers Markets</button>
 
     <script>
-      function showmarker()
-      {
-        {% for address in addresses %} var marker = new
-                      mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); {% endfor %}
+              function showmarker()
+              {
+                {% for address in addresses %} var marker = new
+                              mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); {% endfor %}
 
+              };
+              function showmarker2(){
+              {% for farmer_address in farmer_addresses %} var marker = new
+                              mapboxgl.Marker({
+        color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); {% endfor %}
       };
     </script>
   </body>
