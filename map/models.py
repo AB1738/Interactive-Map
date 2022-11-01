@@ -18,4 +18,4 @@ class FarmersMarketAddresses(models.Model):
         g=g.latlng
         self.lat=g[0]
         self.long=g[1]
-        return super(FarmersMarketAddresses,self).save(*args,**kwargs)
+        super(FarmersMarketAddresses,self).save(*args,**kwargs)
