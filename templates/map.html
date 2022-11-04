@@ -89,6 +89,10 @@
           map.setStyle("mapbox://styles/mapbox/" + layerId);
         };
       }
+      const nav = new mapboxgl.NavigationControl({
+        visualizePitch: true,
+      });
+      map.addControl(nav, "bottom-right");
 
       map.on("style.load", () => {
         map.setFog({
