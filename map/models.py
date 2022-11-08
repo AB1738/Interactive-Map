@@ -19,3 +19,15 @@ class FarmersMarketAddresses(models.Model):
         self.lat=g[0]
         self.long=g[1]
         super(FarmersMarketAddresses,self).save(*args,**kwargs)
+
+class FireHouseAddresses(models.Model):
+    fire_address=models.TextField()
+    lat=models.FloatField(blank=True,null=True)
+    long=models.FloatField(blank=True,null=True)
+
+    def save(self, *args, **kwargs):
+        g=geocoder.mapbox(self.fire_address,key=access_token)
+        g=g.latlng
+        self.lat=g[0]
+        self.long=g[1]
+        super(FireHouseAddresses,self).save(*args,**kwargs)
