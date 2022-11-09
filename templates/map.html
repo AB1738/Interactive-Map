@@ -153,17 +153,18 @@
     <button onclick="showmarker()">Grocery Stores</button>
     <button onclick="showmarker2()">Farmers Markets</button>
     <button onclick="showmarker3()">Fire Stations</button>
-    <button onclick="showmarker4()">Find Nearest</button>
+
+    <div><button onclick="showdirections()">Find Nearest</button></div>
 
     <script>
                var marker1showing = false;
                var marker2showing = false;
                var marker3showing = false;
-               var marker4showing = false;
+               var directionsshowing = false;
                var marker1s = [];
                var marker2s = [];
                var marker3s = [];
-               var marker4s = [];
+              //  var marker4s = [];
                function showmarker()
                {
                  if(!marker1showing)
@@ -207,8 +208,8 @@
                  }
                };
 
-         function showmarker4(){
-          if(!marker4showing){
+         function showdirections(){
+          if(!directionsshowing){
             marker4showing = true;
             var geolocate = new mapboxgl.GeolocateControl();
       map.addControl(geolocate);
