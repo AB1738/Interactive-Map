@@ -36,7 +36,6 @@
 
     <div id="map" style="width: 100%; height: 70vh"></div>
 
-
     <div id="menu">
       <input
         id="streets-v11"
@@ -88,6 +87,7 @@
           map.setStyle("mapbox://styles/mapbox/" + layerId);
         };
       }
+
       const nav = new mapboxgl.NavigationControl({
         visualizePitch: true,
       });
@@ -107,56 +107,71 @@
     <button onclick="showmarker()">Grocery Stores</button>
     <button onclick="showmarker2()">Farmers Markets</button>
     <button onclick="showmarker3()">Fire Stations</button>
+    <button onclick="showmarker4()">Find Nearest</button>
 
     <script>
-            var marker1showing = false;
-            var marker2showing = false;
-            var marker3showing = false;
-            var marker1s = [];
-            var marker2s = [];
-            var marker3s = [];
-            function showmarker()
-            {
-              if(!marker1showing)
-              {
-                  marker1showing = true;
-                  {% for address in addresses %} var marker = new
-                            mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
-              }
-              else
-              {
-                  marker1showing = false;
-                  marker1s.forEach((marker) => marker.remove());
-              }
-            };
-            function showmarker2(){
-            if(!marker2showing)
-            {
-                marker2showing = true;
-                              {% for farmer_address in farmer_addresses %} var marker = new
-                            mapboxgl.Marker({
-      color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); marker2s.push(marker); {% endfor %}
-            }
-              else
-              {
-                  marker2showing = false;
-                  marker2s.forEach((marker) => marker.remove());
-              }
-            };
-            function showmarker3(){
-            if(!marker3showing)
-            {
-                marker3showing = true;
-                              {% for fire_address in fire_addresses %} var marker = new
-                            mapboxgl.Marker({
-      color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
-            }
-              else
-              {
-                  marker3showing = false;
-                  marker3s.forEach((marker) => marker.remove());
-              }
-            };
+               var marker1showing = false;
+               var marker2showing = false;
+               var marker3showing = false;
+               var marker4showing = false;
+               var marker1s = [];
+               var marker2s = [];
+               var marker3s = [];
+               var marker4s = [];
+               function showmarker()
+               {
+                 if(!marker1showing)
+                 {
+                     marker1showing = true;
+                     {% for address in addresses %} var marker = new
+                               mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
+                 }
+                 else
+                 {
+                     marker1showing = false;
+                     marker1s.forEach((marker) => marker.remove());
+                 }
+               };
+               function showmarker2(){
+               if(!marker2showing)
+               {
+                   marker2showing = true;
+                                 {% for farmer_address in farmer_addresses %} var marker = new
+                               mapboxgl.Marker({
+         color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); marker2s.push(marker); {% endfor %}
+               }
+                 else
+                 {
+                     marker2showing = false;
+                     marker2s.forEach((marker) => marker.remove());
+                 }
+               };
+               function showmarker3(){
+               if(!marker3showing)
+               {
+                   marker3showing = true;
+                                 {% for fire_address in fire_addresses %} var marker = new
+                               mapboxgl.Marker({
+         color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
+               }
+                 else
+                 {
+                     marker3showing = false;
+                     marker3s.forEach((marker) => marker.remove());
+                 }
+               };
+
+         function showmarker4(){
+          if(!marker4showing){
+            marker4showing = true;
+
+      var directions = new MapboxDirections({
+        accessToken: mapboxgl.accessToken,
+      })
+
+      map.addControl(directions, "top-left").addTo(map);
+          }
+        }
     </script>
   </body>
 </html>
