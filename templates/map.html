@@ -164,7 +164,8 @@
          function showmarker4(){
           if(!marker4showing){
             marker4showing = true;
-
+            var geolocate = new mapboxgl.GeolocateControl();
+      map.addControl(geolocate);
       var directions = new MapboxDirections({
         accessToken: mapboxgl.accessToken,
       })
