@@ -166,6 +166,9 @@
             marker4showing = true;
             var geolocate = new mapboxgl.GeolocateControl();
       map.addControl(geolocate);
+      geolocate.on("geolocate", function (e) {
+          directions.setOrigin([e.coords.longitude, e.coords.latitude]);
+        });
       var directions = new MapboxDirections({
         accessToken: mapboxgl.accessToken,
       })
