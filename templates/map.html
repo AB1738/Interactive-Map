@@ -69,6 +69,10 @@
     </div>
 
     <script>
+      const bounds = [
+        [-75.323541,40.405131], // Southwest coordinates
+        [-71.566392,41.411836] // Northeast coordinates
+      ];
       mapboxgl.accessToken =
         "pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg";
       const map = new mapboxgl.Map({
@@ -76,7 +80,7 @@
         style: "mapbox://styles/mapbox/streets-v11", // style URL
         center: [-73.93, 40.73], // starting position [lng, lat]
         zoom: 11, // starting zoom
-        projection: "globe", // display the map as a 3D globe
+        maxBounds: bounds 
       });
 
       const layerList = document.getElementById("menu");
@@ -104,9 +108,9 @@
       });
     </script>
 
-    <button onclick="showmarker()">Grocery Stores</button>
-    <button onclick="showmarker2()">Farmers Markets</button>
-    <button onclick="showmarker3()">Fire Stations</button>
+    <button id="button1" onclick="showmarker()">Grocery Stores</button>
+    <button id="button2" onclick="showmarker2()">Farmers Markets</button>
+    <button id="button3" onclick="showmarker3()">Fire Stations</button>
 
     <script>
             var marker1showing = false;
@@ -120,18 +124,23 @@
               if(!marker1showing)
               {
                   marker1showing = true;
+                  document.getElementById("button1").style.background='#5A5A5A';
                   {% for address in addresses %} var marker = new
                             mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
+                  
+              
               }
               else
               {
                   marker1showing = false;
+                  document.getElementById("button1").style.background='#f0f0f0';
                   marker1s.forEach((marker) => marker.remove());
               }
             };
             function showmarker2(){
             if(!marker2showing)
             {
+                document.getElementById("button2").style.background='#5A5A5A';
                 marker2showing = true;
                               {% for farmer_address in farmer_addresses %} var marker = new
                             mapboxgl.Marker({
@@ -140,13 +149,16 @@
               else
               {
                   marker2showing = false;
+                  document.getElementById("button2").style.background='#f0f0f0';
                   marker2s.forEach((marker) => marker.remove());
               }
             };
             function showmarker3(){
             if(!marker3showing)
             {
+                
                 marker3showing = true;
+                document.getElementById("button3").style.background='#5A5A5A';
                               {% for fire_address in fire_addresses %} var marker = new
                             mapboxgl.Marker({
       color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
@@ -154,6 +166,7 @@
               else
               {
                   marker3showing = false;
+                  document.getElementById("button3").style.background='#f0f0f0';
                   marker3s.forEach((marker) => marker.remove());
               }
             };
