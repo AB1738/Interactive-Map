@@ -13,11 +13,11 @@ class AboutMeView(TemplateView):
 
 class MapView(CreateView):
     model = GroceryStoreAddresses
-    model=FarmersMarketAddresses
-    model=FireHouseAddresses
+    model = FarmersMarketAddresses
+    model = FireHouseAddresses
     fields = ['address']
-    fields= ['farmer_address']
-    fields=['fire_address']
+    fields = ['farmer_address']
+    fields = ['fire_address']
     template_name = 'map.html'
     success_url = '/'
 
