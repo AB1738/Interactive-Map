@@ -155,8 +155,49 @@
     <button onclick="showmarker3()">Fire Stations</button>
 
     <div><button onclick="showdirections()">Find Nearest</button></div>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+      
+
+        {% for farmer_address in farmer_addresses %} 
+
+        [{{ farmer_address.long }}, {{ farmer_address.lat }}];
+
+        {% endfor %}
+               
+
+
+        const haversine = ({longitude: lonA, latitude: latA}, {longitude: lonB, latitude: latB}) => {
+        const {PI, sin, cos, atan2} = Math,
+              r = PI/180,
+              R = 6371,
+              deltaLat = (latB - latA)*r,
+              deltaLon = (lonB - lonA)*r,
+              a = sin(deltaLat / 2)**2 + cos(cos(latB*r)*latA*r) * sin(deltaLon /2)**2,
+              c = 2 * atan2(a**0.5, (1 - a)**0.5),
+              d = R * c
+        return d
+      },
+      var geolocate = new mapboxgl.GeolocateControl();
+      var arr=[]
+      geolocate.on("geolocate", function (e) {
+         arr.push([e.coords.longitude, e.coords.latitude]);
+        });
+      arr = [e.coords.longitude, e.coords.longitude],
+
+      arr = [{"latitude":55.85,"longitude":4.22},{"latitude":55.89,"longitude":4.16},{"latitude":55.88,"longitude":-4.24}],
+      
+      {closest} = arr.reduce((r,o) => {
+        const distance = haversine(o, obj)
+        distance < r.minDistance || !r.closest &&
+        (r.closest = o, r.minDistance = distance)
+        return r
+      }, {closest: null, minDistance: null})
+      
+console.log(closest) -->
 
     <script>
+
                var marker1showing = false;
                var marker2showing = false;
                var marker3showing = false;
@@ -211,16 +252,33 @@
          function showdirections(){
           if(!directionsshowing){
             marker4showing = true;
+
+            //Create a new geolocator and add geolocator control to the map
             var geolocate = new mapboxgl.GeolocateControl();
-      map.addControl(geolocate);
+          map.addControl(geolocate);
+
+
+      //Set the origin of the directions plugin to be the user location when the geolocator button is clicked
       geolocate.on("geolocate", function (e) {
           directions.setOrigin([e.coords.longitude, e.coords.latitude]);
+
         });
+
+
+
+        //Get the coordinates of the geocoder search and set it as the directions plugin origin after the geocoder is used
+        geocoder.on("result", function (results) {
+
+          directions.setOrigin([results.result.center[0],results.result.center[1]]);
+        });
+
       var directions = new MapboxDirections({
         accessToken: mapboxgl.accessToken,
       })
-
+      //Adds direction plugin control to the map
       map.addControl(directions, "top-left").addTo(map);
+
+
           }
         }
     </script>
