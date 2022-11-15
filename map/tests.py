@@ -94,19 +94,19 @@ class MapViewHTMLTestCase(LiveServerTestCase):
     def test_find_closest_business(self):
         selenium = webdriver.Chrome()
         selenium.get('http://127.0.0.1:8000/map/')
-        time.sleep(1)
         selenium.find_element(By.ID, 'button1').click()
         selenium.find_element(By.CLASS_NAME, 'mapboxgl-ctrl-geolocate').click()
         selenium.find_element(By.ID, 'find_nearest_business_button').click()
+        time.sleep(1)
         self.assertIsNotNone(selenium.find_element(By.CLASS_NAME, "mapbox-directions-instructions"))
 
     def test_find_closest_business_with_no_markers_on_map(self):
         selenium = webdriver.Chrome()
         selenium.get('http://127.0.0.1:8000/map/')
-        time.sleep(1)
         selenium.find_element(By.CLASS_NAME, 'mapboxgl-ctrl-geolocate').click()
         selenium.find_element(By.ID, 'find_nearest_business_button').click()
-        self.assertRaises(NoSuchElementException, selenium.find_element(By.CLASS_NAME, "mapbox-directions-instructions"))
+        time.sleep(1)
+        self.assertRaises(NoSuchElementException, selenium.find_element, By.ID, "mapbox-directions-instructions")
 
 
 class HomePageViewTestCase(TestCase):
@@ -121,7 +121,7 @@ class HomePageViewTestCase(TestCase):
 class AboutPageViewTestCase(TestCase):
     def test_aboutpage_template(self):
         response = self.client.get('/aboutme/')
-        self.assertEqual(response.template[0].name, 'aboutme.html')
+        self.assertEqual(response.templates[0].name, 'aboutme.html')
 
     def test_aboutpage_response(self):
         response = self.client.get('/aboutme/')
