@@ -162,7 +162,7 @@
           user_location = turf.point([e.coords.longitude, e.coords.latitude]);
       });
           map.addControl(geolocate);
-          var directions = new MapboxDirections({
+            var directions = new MapboxDirections({
                     accessToken: mapboxgl.accessToken,
                     interactive: false,
                     controls: {
@@ -296,6 +296,7 @@ console.log(closest) -->
                  {
                      marker1showing = false;
                      marker1s.forEach((marker) => marker.remove());
+                     marker1s = []
                  }
                };
                function showmarker2(){
@@ -310,6 +311,7 @@ console.log(closest) -->
                  {
                      marker2showing = false;
                      marker2s.forEach((marker) => marker.remove());
+                     marker2s = []
                  }
                };
                function showmarker3(){
@@ -324,6 +326,7 @@ console.log(closest) -->
                  {
                      marker3showing = false;
                      marker3s.forEach((marker) => marker.remove());
+                     marker3s = []
                  }
                };
 
@@ -343,6 +346,7 @@ console.log(closest) -->
                     closest_marker = marker_point;
                 }
             }
+
               if(user_location != null && closest_marker != null)
               {
                   map.addControl(directions, "top-left");
