@@ -162,6 +162,14 @@
           user_location = turf.point([e.coords.longitude, e.coords.latitude]);
       });
           map.addControl(geolocate);
+          var directions = new MapboxDirections({
+                    accessToken: mapboxgl.accessToken,
+                    interactive: false,
+                    controls: {
+                        inputs: false,
+                        instructions: true,
+                    }
+                });
 
     </script>
 
@@ -169,7 +177,7 @@
     <button id="button2" onclick="showmarker2()">Farmers Markets</button>
     <button id="button3" onclick="showmarker3()">Fire Stations</button>
 
-    <div><button onclick="showdirections()">Find Nearest</button></div>
+    <div><button id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button></div>
     
     <!-- TESTING HOW TO RETURN CLOSEST COORDINATE PAIR TO A GIVEN SET OF COORDINATES -->
     
@@ -276,7 +284,6 @@ console.log(closest) -->
                var marker1s = [];
                var marker2s = [];
                var marker3s = [];
-              //  var marker4s = [];
                function showmarker()
                {
                  if(!marker1showing)
@@ -322,10 +329,10 @@ console.log(closest) -->
 
          function showdirections(){
           if(!directionsshowing){
-            marker4showing = true;
-            var allMarkers = marker1s.concat(marker2s, marker3s);
-            var closest_marker = null;
-            var shortest_dist = Number.MAX_SAFE_INTEGER;
+              directionsshowing = true;
+            let allMarkers = marker1s.concat(marker2s, marker3s);
+            let closest_marker = null;
+            let shortest_dist = Number.MAX_SAFE_INTEGER;
             const options = {units: 'miles'};
             for (const marker of allMarkers) {
                 let marker_point = turf.point([marker._lngLat.lng, marker._lngLat.lat]);
@@ -336,21 +343,16 @@ console.log(closest) -->
                     closest_marker = marker_point;
                 }
             }
-                var directions = new MapboxDirections({
-                    accessToken: mapboxgl.accessToken,
-                })
-                  map.addControl(directions, "top-left");
               if(user_location != null && closest_marker != null)
               {
+                  map.addControl(directions, "top-left");
                   directions.setOrigin(user_location.geometry.coordinates);
                   directions.setDestination(closest_marker.geometry.coordinates);
               }
-
-
-
-      //Adds direction plugin control to the map
-
-
+          }
+          else{
+              directionsshowing = false;
+              map.removeControl(directions);
           }
         }
     </script>
