@@ -80,6 +80,7 @@ class MapViewHTMLTestCase(LiveServerTestCase):
         selenium.find_element(By.ID, 'button1').click()
         self.assertIsNotNone(selenium.find_element(By.CLASS_NAME, "mapboxgl-marker"))
 
+
     def test_farmer_market_markers(self):
         selenium = webdriver.Chrome(chrome_options = self.chromeOptions)
         selenium.get('http://127.0.0.1:8000/map/')

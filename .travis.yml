@@ -5,18 +5,20 @@ python:
 
 addons:
   chrome: stable
-  apt:
-    packages:
-      - chromium-chromedriver
 
 env:
 - DJANGO=4.1.2
 
-install:
-- pip install -r requirements.txt
+install: # Install ChromeDriver (64bits; replace 64 with 32 for 32bits).
+  - wget -N http://chromedriver.storage.googleapis.com/2.30/chromedriver_linux64.zip -P ~/
+  - unzip ~/chromedriver_linux64.zip -d ~/
+  - rm ~/chromedriver_linux64.zip
+  - sudo mv -f ~/chromedriver /usr/local/share/
+  - sudo chmod +x /usr/local/share/chromedriver
+  - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
+  - pip install -r requirements.txt
 
-before_script:
-  - ln --symbolic /usr/lib/chromium-browser/chromedriver "${HOME}/bin/chromedriver"
+
 
 script:
 - export DJANGO_SECRETKEY=secret # needed because settings.py pulls it from os.environ
@@ -25,4 +27,6 @@ script:
 - flake8 --max-line-length=200 .
 - coverage run manage.py test map
 - coveralls
+- whereis google-chrome-stable
+- whereis chromedriver
 
