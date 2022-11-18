@@ -4,17 +4,19 @@ python:
 - "3.9"
 
 addons:
+  chrome: stable
   apt:
-    sources:
-      - google-chrome
     packages:
-      - google-chrome-stable
+      - chromium-chromedriver
 
 env:
 - DJANGO=4.1.2
 
 install:
 - pip install -r requirements.txt
+
+before_script:
+  - ln --symbolic /usr/lib/chromium-browser/chromedriver "${HOME}/bin/chromedriver"
 
 script:
 - export DJANGO_SECRETKEY=secret # needed because settings.py pulls it from os.environ
