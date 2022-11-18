@@ -11,7 +11,6 @@ env:
 
 install: # Install ChromeDriver (64bits; replace 64 with 32 for 32bits).
   - sudo apt install chromium-chromedriver
-  - cp /usr/lib/chromium-browser/chromedriver /usr/bin
   - pip install -r requirements.txt
 
 
@@ -23,6 +22,4 @@ script:
 - flake8 --max-line-length=200 .
 - coverage run manage.py test map
 - coveralls
-- whereis google-chrome-stable
-- whereis chromedriver
 
