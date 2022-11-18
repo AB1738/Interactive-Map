@@ -10,7 +10,7 @@ env:
 - DJANGO=4.1.2
 
 install: # Install ChromeDriver (64bits; replace 64 with 32 for 32bits).
-  - apt install chromium-chromedriver
+  - sudo apt install chromium-chromedriver
   - cp /usr/lib/chromium-browser/chromedriver /usr/bin
   - pip install -r requirements.txt
 
