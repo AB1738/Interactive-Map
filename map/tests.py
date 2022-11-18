@@ -68,30 +68,34 @@ class MapViewTestCase(TestCase):
         self.assertIsNotNone(response.context['farmer_addresses'])
 
 class MapViewHTMLTestCase(LiveServerTestCase):
+    def setUp(self):
+        self.chromeOptions = webdriver.ChromeOptions()
+        self.chromeOptions.add_argument("--disable-dev-shm-using")
+        self.chromeOptions.add_argument("--remote-debugging-port=8000")
 
     def test_grocery_store_markers(self):
-        selenium = webdriver.Chrome()
+        selenium = webdriver.Chrome(self.chromeOptions)
         selenium.get('http://127.0.0.1:8000/map/')
         time.sleep(1)
         selenium.find_element(By.ID, 'button1').click()
         self.assertIsNotNone(selenium.find_element(By.CLASS_NAME, "mapboxgl-marker"))
 
     def test_farmer_market_markers(self):
-        selenium = webdriver.Chrome()
+        selenium = webdriver.Chrome(self.chromeOptions)
         selenium.get('http://127.0.0.1:8000/map/')
         time.sleep(1)
         selenium.find_element(By.ID, 'button2').click()
         self.assertIsNotNone(selenium.find_element(By.CLASS_NAME, "mapboxgl-marker"))
 
     def test_fire_station_markers(self):
-        selenium = webdriver.Chrome()
+        selenium = webdriver.Chrome(self.chromeOptions)
         selenium.get('http://127.0.0.1:8000/map/')
         time.sleep(1)
         selenium.find_element(By.ID, 'button3').click()
         self.assertIsNotNone(selenium.find_element(By.CLASS_NAME, "mapboxgl-marker"))
 
     def test_find_closest_business(self):
-        selenium = webdriver.Chrome()
+        selenium = webdriver.Chrome(self.chromeOptions)
         selenium.get('http://127.0.0.1:8000/map/')
         selenium.find_element(By.ID, 'button1').click()
         selenium.find_element(By.CLASS_NAME, 'mapboxgl-ctrl-geolocate').click()
@@ -100,7 +104,7 @@ class MapViewHTMLTestCase(LiveServerTestCase):
         self.assertIsNotNone(selenium.find_element(By.CLASS_NAME, "mapbox-directions-instructions"))
 
     def test_find_closest_business_with_no_markers_on_map(self):
-        selenium = webdriver.Chrome()
+        selenium = webdriver.Chrome(self.chromeOptions)
         selenium.get('http://127.0.0.1:8000/map/')
         selenium.find_element(By.CLASS_NAME, 'mapboxgl-ctrl-geolocate').click()
         selenium.find_element(By.ID, 'find_nearest_business_button').click()
