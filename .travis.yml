@@ -1,7 +1,7 @@
 language: python
 
 python:
-- "3.9"
+- "3.10"
 
 env:
 - DJANGO=4.1.2
