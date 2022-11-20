@@ -1,6 +1,4 @@
 from django.test import TestCase, LiveServerTestCase
-from django.core.management import call_command
-from map.management.commands import loaddata
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
