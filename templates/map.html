@@ -15,6 +15,14 @@
       href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css"
       type="text/css"
     />
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css"
+      type="text/css"
+    />
+      <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
     <link rel="stylesheet" href="{% static 'css/mapPage.css' %}" />
     <title>Interactive Maps</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -35,7 +43,6 @@
     </header>
 
     <div id="map" style="width: 100%; height: 70vh"></div>
-
 
     <div id="menu">
       <input
@@ -69,14 +76,18 @@
     </div>
 
     <script>
+      const bounds = [
+        [-75.323541,40.405131], // Southwest coordinates
+        [-71.566392,41.411836] // Northeast coordinates
+      ];
       mapboxgl.accessToken =
         "pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg";
       const map = new mapboxgl.Map({
         container: "map", // container ID
-        style: "mapbox://styles/mapbox/streets-v11", // style URL
+        style: "mapbox://styles/mapbox/streets-v11?optimize=true", // style URL
         center: [-73.93, 40.73], // starting position [lng, lat]
         zoom: 11, // starting zoom
-        projection: "globe", // display the map as a 3D globe
+        maxBounds: bounds
       });
 
       const layerList = document.getElementById("menu");
@@ -88,6 +99,7 @@
           map.setStyle("mapbox://styles/mapbox/" + layerId);
         };
       }
+
       const nav = new mapboxgl.NavigationControl({
         visualizePitch: true,
       });
@@ -102,12 +114,110 @@
           "star-intensity": 0.6, // Background star brightness (default 0.35 at low zoooms )
         });
       });
+
+      var geocoder = new MapboxGeocoder({
+        // Initialize the geocoder
+        accessToken: mapboxgl.accessToken, // Set the access token
+        mapboxgl: mapboxgl, // Set the mapbox-gl instance
+        marker: false, // Do not use the default marker style
+        {#placeholder: "Enter NYC Addresses ",#}
+      });
+
+      // Add the geocoder to the map
+      map.addControl(geocoder);
+      // After the map style has loaded on the page,
+      // add a source layer and default styling for a single point
+      map.on("load", () => {
+        map.addSource("single-point", {
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: [],
+          },
+        });
+
+        map.addLayer({
+          id: "point",
+          source: "single-point",
+          type: "circle",
+          paint: {
+            "circle-radius": 10,
+            "circle-color": "#448ee4",
+          },
+        });
+
+
+      });
+          var geolocate = new mapboxgl.GeolocateControl({
+              positionOptions: {
+                enableHighAccuracy: true
+                },
+                // When active the map will receive updates to the device's location as it changes.
+                trackUserLocation: true,
+                // Draw an arrow next to the location dot to indicate which direction the device is heading.
+                showUserHeading: true
+          })
+      var user_location = null;
+      geolocate.on('geolocate', (e) => {
+          user_location = turf.point([e.coords.longitude, e.coords.latitude]);
+      });
+          map.addControl(geolocate);
+            var directions = new MapboxDirections({
+                    accessToken: mapboxgl.accessToken,
+                    interactive: false,
+                    {#controls: {#}
+                    {#    inputs: false,#}
+                    {#    instructions: true,#}
+                    {#}#}
+                });
+
     </script>
 
-    <button onclick="showmarker()">Grocery Stores</button>
-    <button onclick="showmarker2()">Farmers Markets</button>
-    <button onclick="showmarker3()">Fire Stations</button>
+    <button id="button1" onclick="showmarker()">Grocery Stores</button>
+    <button id="button2" onclick="showmarker2()">Farmers Markets</button>
+    <button id="button3" onclick="showmarker3()">Fire Stations</button>
 
+    <div><button id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button></div>
+    
+    <!-- TESTING HOW TO RETURN CLOSEST COORDINATE PAIR TO A GIVEN SET OF COORDINATES -->
+    
+    <!-- <script>
+      
+        HOW TO ITERATE THROUGH THE FARMERS MARKET DATABASE AND RETRIEVE LONG,LAT OF THE ENTRIES
+        ___________________________________________________________________________
+        {% for farmer_address in farmer_addresses %} 
+
+        [{{ farmer_address.long }}, {{ farmer_address.lat }}];
+
+        {% endfor %}
+        _____________________________________________________________________________
+               
+
+
+        const haversine = ({longitude: lonA, latitude: latA}, {longitude: lonB, latitude: latB}) => {
+        const {PI, sin, cos, atan2} = Math,
+              r = PI/180,
+              R = 6371,
+              deltaLat = (latB - latA)*r,
+              deltaLon = (lonB - lonA)*r,
+              a = sin(deltaLat / 2)**2 + cos(cos(latB*r)*latA*r) * sin(deltaLon /2)**2,
+              c = 2 * atan2(a**0.5, (1 - a)**0.5),
+              d = R * c
+        return d
+      },
+      
+
+      arr = [{"latitude":55.85,"longitude":4.22},{"latitude":55.89,"longitude":4.16},{"latitude":55.88,"longitude":-4.24}],
+      
+      {closest} = arr.reduce((r,o) => {
+        const distance = haversine(o, obj)
+        distance < r.minDistance || !r.closest &&
+        (r.closest = o, r.minDistance = distance)
+        return r
+      }, {closest: null, minDistance: null})
+      
+console.log(closest) -->
+</script>
     <script>
             var marker1showing = false;
             var marker2showing = false;
@@ -120,18 +230,23 @@
               if(!marker1showing)
               {
                   marker1showing = true;
+                  document.getElementById("button1").style.background='#5A5A5A';
                   {% for address in addresses %} var marker = new
                             mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
+                  
+              
               }
               else
               {
                   marker1showing = false;
+                  document.getElementById("button1").style.background='#f0f0f0';
                   marker1s.forEach((marker) => marker.remove());
               }
             };
             function showmarker2(){
             if(!marker2showing)
             {
+                document.getElementById("button2").style.background='#5A5A5A';
                 marker2showing = true;
                               {% for farmer_address in farmer_addresses %} var marker = new
                             mapboxgl.Marker({
@@ -140,13 +255,16 @@
               else
               {
                   marker2showing = false;
+                  document.getElementById("button2").style.background='#f0f0f0';
                   marker2s.forEach((marker) => marker.remove());
               }
             };
             function showmarker3(){
             if(!marker3showing)
             {
+                
                 marker3showing = true;
+                document.getElementById("button3").style.background='#5A5A5A';
                               {% for fire_address in fire_addresses %} var marker = new
                             mapboxgl.Marker({
       color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
@@ -154,9 +272,93 @@
               else
               {
                   marker3showing = false;
+                  document.getElementById("button3").style.background='#f0f0f0';
                   marker3s.forEach((marker) => marker.remove());
               }
             };
+
+               var marker1showing = false;
+               var marker2showing = false;
+               var marker3showing = false;
+               var directionsshowing = false;
+               var marker1s = [];
+               var marker2s = [];
+               var marker3s = [];
+               function showmarker()
+               {
+                 if(!marker1showing)
+                 {
+                     marker1showing = true;
+                     {% for address in addresses %} var marker = new
+                               mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
+                 }
+                 else
+                 {
+                     marker1showing = false;
+                     marker1s.forEach((marker) => marker.remove());
+                     marker1s = []
+                 }
+               };
+               function showmarker2(){
+               if(!marker2showing)
+               {
+                   marker2showing = true;
+                                 {% for farmer_address in farmer_addresses %} var marker = new
+                               mapboxgl.Marker({
+         color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); marker2s.push(marker); {% endfor %}
+               }
+                 else
+                 {
+                     marker2showing = false;
+                     marker2s.forEach((marker) => marker.remove());
+                     marker2s = []
+                 }
+               };
+               function showmarker3(){
+               if(!marker3showing)
+               {
+                   marker3showing = true;
+                                 {% for fire_address in fire_addresses %} var marker = new
+                               mapboxgl.Marker({
+         color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
+               }
+                 else
+                 {
+                     marker3showing = false;
+                     marker3s.forEach((marker) => marker.remove());
+                     marker3s = []
+                 }
+               };
+
+         function showdirections(){
+          if(!directionsshowing){
+              directionsshowing = true;
+            let allMarkers = marker1s.concat(marker2s, marker3s);
+            let closest_marker = null;
+            let shortest_dist = Number.MAX_SAFE_INTEGER;
+            const options = {units: 'miles'};
+            for (const marker of allMarkers) {
+                let marker_point = turf.point([marker._lngLat.lng, marker._lngLat.lat]);
+                let distance = turf.distance(user_location, marker_point, options);
+                if(distance < shortest_dist)
+                {
+                    shortest_dist = distance;
+                    closest_marker = marker_point;
+                }
+            }
+
+              if(user_location != null && closest_marker != null)
+              {
+                  map.addControl(directions, "top-left");
+                  directions.setOrigin(user_location.geometry.coordinates);
+                  directions.setDestination(closest_marker.geometry.coordinates);
+              }
+          }
+          else{
+              directionsshowing = false;
+              map.removeControl(directions);
+          }
+        }
     </script>
   </body>
 </html>

@@ -24,17 +24,16 @@ class Command(BaseCommand):
             with open(kwargs['Path'], newline='') as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
-                    match kwargs['ObjectType']:
-                        case ModelType.FarmerMarket:
-                            FarmersMarketAddresses.objects.create(farmer_address=row['Street Address'])
-                        case ModelType.GroceryStore:
-                            if row['Latitude'] != '' and row['Longitude'] != '':
-                                GroceryStoreAddresses.objects.create(lat=row['Latitude'], long=row['Longitude'])
-                        case ModelType.Firehouses:
-                            if row['Latitude'] != '' and row['Longitude'] != '':
-                                FireHouseAddresses.objects.create(lat=row['Latitude'], long=row['Longitude'])
-                        case _:
-                            return
+                    if kwargs['ObjectType'] == ModelType.FarmerMarket:
+                        FarmersMarketAddresses.objects.create(farmer_address=row['Street Address'])
+                    elif kwargs['ObjectType'] == ModelType.GroceryStore:
+                        if row['Latitude'] != '' and row['Longitude'] != '':
+                            GroceryStoreAddresses.objects.create(lat=row['Latitude'], long=row['Longitude'])
+                    elif kwargs['ObjectType'] == ModelType.Firehouses:
+                        if row['Latitude'] != '' and row['Longitude'] != '':
+                            FireHouseAddresses.objects.create(lat=row['Latitude'], long=row['Longitude'])
+                    else:
+                        return
         except Exception:
             traceback.print_exc()
 

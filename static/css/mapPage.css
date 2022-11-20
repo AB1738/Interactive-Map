@@ -62,3 +62,17 @@ header {
 .page-link:not(:last-child) {
     margin-right: 35px;
 }
+
+.mapbox-directions-destination {
+    display: none;
+}
+
+.mapbox-directions-origin {
+    display: none;
+}
+
+#map > div.mapboxgl-control-container > div.mapboxgl-ctrl-top-left > div > div.directions-control.directions-control-inputs > div > div:nth-child(1) > button {
+    display: none;
+}
+
+
