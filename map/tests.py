@@ -2,7 +2,6 @@ from django.test import TestCase, LiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from django.core.management import call_command
 from map.models import GroceryStoreAddresses, FarmersMarketAddresses, FireHouseAddresses
 import geocoder
 import time
@@ -10,7 +9,6 @@ import time
 
 class FarmerMarketAddressProcessingTestCase(TestCase):
     def setUp(self):
-        call_command('flush', '--noinut')
         self.access_token = 'pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg'
         self.address_model = FarmersMarketAddresses(farmer_address="535 MARCY AVE")
         self.invalid_address_model = FarmersMarketAddresses(farmer_address="!@#@!#@!$!!$@$@$@$@")
@@ -36,7 +34,6 @@ class FarmerMarketAddressProcessingTestCase(TestCase):
 
 class GroceryStoreTestCase(TestCase):
     def setUp(self):
-        call_command('flush', '--noinput')
         GroceryStoreAddresses.objects.create(lat="40", long="-73")
 
 
@@ -46,7 +43,6 @@ class GroceryStoreTestCase(TestCase):
 
 class FireHouseAddressTestCase(TestCase):
     def setUp(self):
-        call_command('flush', '--noinput')
         FireHouseAddresses.objects.create(lat="39", long="-34")
 
     def test_firehouse_saved(self):
@@ -54,9 +50,6 @@ class FireHouseAddressTestCase(TestCase):
         self.assertEqual(firehouse.long, -34)
 
 class MapViewTestCase(TestCase):
-    def setUp(self):
-        call_command('flush', '--noinput')
-
     def test_map_template(self):
         response = self.client.get('/map/')
         self.assertEqual(response.templates[0].name, 'map.html')
@@ -74,7 +67,6 @@ class MapViewTestCase(TestCase):
 
 class MapViewHTMLTestCase(LiveServerTestCase):
     def setUp(self):
-        call_command('flush', '--noinput')
         self.chromeOptions = webdriver.ChromeOptions()
         self.chromeOptions.add_argument('--no-sandbox')
         # self.chromeOptions.add_argument('--headless')
@@ -130,9 +122,6 @@ class MapViewHTMLTestCase(LiveServerTestCase):
 
 
 class HomePageViewTestCase(TestCase):
-    def setUp(self):
-        call_command('flush', '--noinput')
-
     def test_homepage_template(self):
         response = self.client.get('/')
         self.assertEqual(response.templates[0].name, 'home.html')
@@ -142,9 +131,6 @@ class HomePageViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
 class AboutPageViewTestCase(TestCase):
-    def setUp(self):
-        call_command('flush', '--noinput')
-
     def test_aboutpage_template(self):
         response = self.client.get('/aboutme/')
         self.assertEqual(response.templates[0].name, 'aboutme.html')

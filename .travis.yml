@@ -26,6 +26,6 @@ script:
 - python manage.py loaddata
 - black .
 - flake8 --max-line-length=200 .
-- coverage run manage.py test map
+- coverage run manage.py test --noinput map
 - coveralls
 
