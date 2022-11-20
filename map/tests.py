@@ -7,8 +7,6 @@ import geocoder
 import time
 
 
-# Create your tests here.
-
 class FarmerMarketAddressProcessingTestCase(TestCase):
     def setUp(self):
         self.access_token = 'pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg'
