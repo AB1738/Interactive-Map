@@ -1,4 +1,6 @@
 from django.test import TestCase, LiveServerTestCase
+from django.core.management import call_command
+from map.management.commands import loaddata
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -51,7 +53,6 @@ class FireHouseAddressTestCase(TestCase):
         self.assertEqual(firehouse.long, -34)
 
 class MapViewTestCase(TestCase):
-
     def test_map_template(self):
         response = self.client.get('/map/')
         self.assertEqual(response.templates[0].name, 'map.html')
@@ -71,44 +72,52 @@ class MapViewHTMLTestCase(LiveServerTestCase):
     def setUp(self):
         self.chromeOptions = webdriver.ChromeOptions()
         self.chromeOptions.add_argument('--no-sandbox')
-        self.chromeOptions.add_argument('--headless')
+        # self.chromeOptions.add_argument('--headless')
         self.chromeOptions.add_argument('--disable-dev-shm-usage')
         self.chromeOptions.add_argument("--disable-setuid-sandbox")
+        FireHouseAddresses.objects.create(lat="40.801155", long="-73.959647")
+        FarmersMarketAddresses.objects.create(farmer_address="535 MARCY AVE")
+        GroceryStoreAddresses.objects.create(lat="40.801155", long="-73.959647")
+        self.params = dict({
+            "latitude": 40.801155,
+            "longitude": -73.959647,
+            "accuracy": 100
+        })
 
     def test_grocery_store_markers(self):
         selenium = webdriver.Chrome(executable_path="/usr/local/bin/chromedriver", chrome_options = self.chromeOptions)
-        selenium.get('http://127.0.0.1:8000/map/')
-        time.sleep(1)
+        selenium.execute_cdp_cmd("Emulation.setGeolocationOverride", self.params)
+        selenium.get('%s%s' % (self.live_server_url, '/map/'))
         selenium.find_element(By.ID, 'button1').click()
         self.assertIsNotNone(selenium.find_element(By.CLASS_NAME, "mapboxgl-marker"))
 
-
     def test_farmer_market_markers(self):
         selenium = webdriver.Chrome(executable_path="/usr/local/bin/chromedriver", chrome_options = self.chromeOptions)
-        selenium.get('http://127.0.0.1:8000/map/')
-        time.sleep(1)
+        selenium.execute_cdp_cmd("Emulation.setGeolocationOverride", self.params)
+        selenium.get('%s%s' % (self.live_server_url, '/map/'))
         selenium.find_element(By.ID, 'button2').click()
         self.assertIsNotNone(selenium.find_element(By.CLASS_NAME, "mapboxgl-marker"))
 
     def test_fire_station_markers(self):
         selenium = webdriver.Chrome(executable_path="/usr/local/bin/chromedriver", chrome_options = self.chromeOptions)
-        selenium.get('http://127.0.0.1:8000/map/')
-        time.sleep(1)
+        selenium.execute_cdp_cmd("Emulation.setGeolocationOverride", self.params)
+        selenium.get('%s%s' % (self.live_server_url, '/map/'))
         selenium.find_element(By.ID, 'button3').click()
         self.assertIsNotNone(selenium.find_element(By.CLASS_NAME, "mapboxgl-marker"))
 
     def test_find_closest_business(self):
         selenium = webdriver.Chrome(executable_path="/usr/local/bin/chromedriver", chrome_options = self.chromeOptions)
-        selenium.get('http://127.0.0.1:8000/map/')
+        selenium.execute_cdp_cmd("Emulation.setGeolocationOverride", self.params)
+        selenium.get('%s%s' % (self.live_server_url, '/map/'))
         selenium.find_element(By.ID, 'button1').click()
         selenium.find_element(By.CLASS_NAME, 'mapboxgl-ctrl-geolocate').click()
         selenium.find_element(By.ID, 'find_nearest_business_button').click()
-        time.sleep(1)
         self.assertIsNotNone(selenium.find_element(By.CLASS_NAME, "mapbox-directions-instructions"))
 
     def test_find_closest_business_with_no_markers_on_map(self):
         selenium = webdriver.Chrome(executable_path="/usr/local/bin/chromedriver", chrome_options = self.chromeOptions)
-        selenium.get('http://127.0.0.1:8000/map/')
+        selenium.execute_cdp_cmd("Emulation.setGeolocationOverride", self.params)
+        selenium.get('%s%s' % (self.live_server_url, '/map/'))
         selenium.find_element(By.CLASS_NAME, 'mapboxgl-ctrl-geolocate').click()
         selenium.find_element(By.ID, 'find_nearest_business_button').click()
         time.sleep(1)
