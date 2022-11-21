@@ -42,42 +42,74 @@
       </div>
     </header>
 
-    <div id="map" style="width: 100%; height: 70vh"></div>
-
-    <div id="menu">
-      <input
-        id="streets-v11"
-        type="radio"
-        name="rtoggle"
-        value="streets"
-        checked="checked"
-      />
-      <!-- See a list of Mapbox-hosted public styles at -->
-      <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
-      <label for="streets-v11">streets</label>
-      <input id="light-v10" type="radio" name="rtoggle" value="light" />
-      <label for="light-v10">light</label>
-      <input id="dark-v10" type="radio" name="rtoggle" value="dark" />
-      <label for="dark-v10">dark</label>
-      <input
-        id="navigation-night-v1"
-        type="radio"
-        name="rtoggle"
-        value="night"
-      />
-      <label for="navigation-night-v1">night</label>
-      <input
-        id="satellite-streets-v11"
-        type="radio"
-        name="rtoggle"
-        value="satellite"
-      />
-      <label for="satellite-streets-v11">satellite</label>
+    <button class="openbtn" onclick="openClose()">☰ Open Sidebar</button></div>
+    <div id ="mySidebar" class="sidebar">
+      <div id="menu">
+        <input
+          id="streets-v11"
+          type="radio"
+          name="rtoggle"
+          value="streets"
+          checked="checked"
+        />
+        <!-- See a list of Mapbox-hosted public styles at -->
+        <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
+        <label for="streets-v11">streets</label>
+        <input id="light-v10" type="radio" name="rtoggle" value="light" />
+        <label for="light-v10">light</label>
+        <input id="dark-v10" type="radio" name="rtoggle" value="dark" />
+        <label for="dark-v10">dark</label>
+        <input
+          id="navigation-night-v1"
+          type="radio"
+          name="rtoggle"
+          value="night"
+        />
+        <label for="navigation-night-v1">night</label>
+        <input
+          id="satellite-streets-v11"
+          type="radio"
+          name="rtoggle"
+          value="satellite"
+        />
+        <label for="satellite-streets-v11">satellite</label>
+      </div>
+      <button id="button1" onclick="showmarker()">Grocery Stores</button>
+      <button id="button2" onclick="showmarker2()">Farmers Markets</button>
+      <button id="button3" onclick="showmarker3()">Fire Stations</button>
+  
+      <div><button id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button></div>
     </div>
     <div class="radius-slider-container">
         Radius: <input type="range" min="1" max="10" value="3" id="radius-slider">
         <input id="radius-input" type="number" min="1" max="10" value="3">
     </div>
+    <div id="main" style="height: 91vh;">
+      <div id="map" style="width: 100%; height: 100%; position: relative"></div>
+    <script>
+      function openNav() {
+        document.getElementById("mySidebar").style.width = "20%"
+        document.getElementById("main").style.marginLeft = "20%";
+        document.getElementById("main").style.width = "80%"
+      }
+      
+      function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("main").style.marginLeft= "0";
+        document.getElementById("main").style.width = "100%"
+      }
+
+      function openClose(){
+        if(document.getElementById("mySidebar").style.width=="20%"){
+          closeNav();
+        }else{
+          openNav();
+        }
+      }
+      </script>
+
+
+
     <script>
         const RADIUS_LIMIT = 10;
         let radius_slider = document.getElementById('radius-slider');
@@ -197,6 +229,45 @@
     <button id="button3" onclick="showmarker3()">Fire Stations</button>
 
     <div><button id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button></div>
+    
+    <!-- TESTING HOW TO RETURN CLOSEST COORDINATE PAIR TO A GIVEN SET OF COORDINATES -->
+    
+    <!-- <script>
+      
+        HOW TO ITERATE THROUGH THE FARMERS MARKET DATABASE AND RETRIEVE LONG,LAT OF THE ENTRIES
+        ___________________________________________________________________________
+        {% for farmer_address in farmer_addresses %} 
+
+        [{{ farmer_address.long }}, {{ farmer_address.lat }}];
+
+        {% endfor %}
+        _____________________________________________________________________________
+               
+
+
+        const haversine = ({longitude: lonA, latitude: latA}, {longitude: lonB, latitude: latB}) => {
+        const {PI, sin, cos, atan2} = Math,
+              r = PI/180,
+              R = 6371,
+              deltaLat = (latB - latA)*r,
+              deltaLon = (lonB - lonA)*r,
+              a = sin(deltaLat / 2)**2 + cos(cos(latB*r)*latA*r) * sin(deltaLon /2)**2,
+              c = 2 * atan2(a**0.5, (1 - a)**0.5),
+              d = R * c
+        return d
+      },
+      
+
+      arr = [{"latitude":55.85,"longitude":4.22},{"latitude":55.89,"longitude":4.16},{"latitude":55.88,"longitude":-4.24}],
+      
+      {closest} = arr.reduce((r,o) => {
+        const distance = haversine(o, obj)
+        distance < r.minDistance || !r.closest &&
+        (r.closest = o, r.minDistance = distance)
+        return r
+      }, {closest: null, minDistance: null})
+      
+console.log(closest) -->
 </script>
     <script>
             var marker1showing = false;
