@@ -84,14 +84,20 @@
         let radius_input = document.getElementById('radius-input');
         radius_slider.addEventListener('change', (e) => {
            radius_input.value = e.target.value;
-           let circle = turf.circle(user_location, radius_slider.value, {units: 'miles'});
-           map.getSource('user-radius').setData(circle);
+           if(user_location != null)
+           {
+               let circle = turf.circle(user_location, parseFloat(e.target.value), {units: 'miles'});
+               map.getSource('user-radius').setData(circle);
+           }
         });
         radius_input.addEventListener('change', (e) => {
             radius_slider.value = e.target.value;
             radius_input.value = e.target.value > RADIUS_LIMIT ? RADIUS_LIMIT : e.target.value;
-            let circle = turf.circle(user_location, radius_input.value, {units: 'miles'});
-           map.getSource('user-radius').setData(circle);
+            if(user_location != null)
+            {
+                let circle = turf.circle(user_location, parseFloat(e.target.value), {units: 'miles'});
+                map.getSource('user-radius').setData(circle);
+            }
         })
       const bounds = [
         [-75.323541,40.405131], // Southwest coordinates
@@ -156,10 +162,9 @@
               showAccuracyCircle: false,
           })
       var user_location = null;
-          var geolocateIsOn = false;
           function drawUserRadius(user_location) {
               let default_radius = 1;
-              if(geolocateIsOn && typeof map.getLayer('user-radius') === 'undefined') {
+              if(typeof map.getLayer('user-radius') === 'undefined') {
               let circle = turf.circle(user_location, default_radius, {units: 'miles'});
               map.addLayer({
                   "id": "user-radius",
@@ -178,8 +183,6 @@
 
       geolocate.on('geolocate', (e) => {
           user_location = turf.point([e.coords.longitude, e.coords.latitude]);
-          geolocateIsOn = true;
-          drawUserRadius(user_location);
       });
           map.addControl(geolocate);
             var directions = new MapboxDirections({
@@ -309,9 +312,10 @@
 
          function showdirections(){
           if(!directionsshowing){
+              drawUserRadius(user_location);
               directionsshowing = true;
             let allMarkers = marker1s.concat(marker2s, marker3s);
-            let radius = document.getElementById('radius-slider').value;
+            let radius = parseFloat(document.getElementById('radius-input').value);
             let circle_buffer = turf.buffer(user_location, radius, {units: 'miles'});
             var points_in_circle = allMarkers.filter(function (marker) {
                 return turf.booleanPointInPolygon(turf.point([marker._lngLat.lng, marker._lngLat.lat]), circle_buffer);
@@ -329,6 +333,14 @@
                   directions.setDestination(closest_marker.geometry.coordinates);
               }
             }
+          }
+          else
+          {
+              directionsshowing = false;
+              if(map.hasControl(directions))
+              {
+                  map.removeControl(directions);
+              }
           }
         }
     </script>
