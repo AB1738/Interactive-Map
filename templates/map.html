@@ -42,38 +42,69 @@
       </div>
     </header>
 
-    <div id="map" style="width: 100%; height: 70vh"></div>
-
-    <div id="menu">
-      <input
-        id="streets-v11"
-        type="radio"
-        name="rtoggle"
-        value="streets"
-        checked="checked"
-      />
-      <!-- See a list of Mapbox-hosted public styles at -->
-      <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
-      <label for="streets-v11">streets</label>
-      <input id="light-v10" type="radio" name="rtoggle" value="light" />
-      <label for="light-v10">light</label>
-      <input id="dark-v10" type="radio" name="rtoggle" value="dark" />
-      <label for="dark-v10">dark</label>
-      <input
-        id="navigation-night-v1"
-        type="radio"
-        name="rtoggle"
-        value="night"
-      />
-      <label for="navigation-night-v1">night</label>
-      <input
-        id="satellite-streets-v11"
-        type="radio"
-        name="rtoggle"
-        value="satellite"
-      />
-      <label for="satellite-streets-v11">satellite</label>
+    <button class="openbtn" onclick="openClose()">☰ Open Sidebar</button></div>
+    <div id ="mySidebar" class="sidebar">
+      <div id="menu">
+        <input
+          id="streets-v11"
+          type="radio"
+          name="rtoggle"
+          value="streets"
+          checked="checked"
+        />
+        <!-- See a list of Mapbox-hosted public styles at -->
+        <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
+        <label for="streets-v11">streets</label>
+        <input id="light-v10" type="radio" name="rtoggle" value="light" />
+        <label for="light-v10">light</label>
+        <input id="dark-v10" type="radio" name="rtoggle" value="dark" />
+        <label for="dark-v10">dark</label>
+        <input
+          id="navigation-night-v1"
+          type="radio"
+          name="rtoggle"
+          value="night"
+        />
+        <label for="navigation-night-v1">night</label>
+        <input
+          id="satellite-streets-v11"
+          type="radio"
+          name="rtoggle"
+          value="satellite"
+        />
+        <label for="satellite-streets-v11">satellite</label>
+      </div>
+      <button id="button1" onclick="showmarker()">Grocery Stores</button>
+      <button id="button2" onclick="showmarker2()">Farmers Markets</button>
+      <button id="button3" onclick="showmarker3()">Fire Stations</button>
+  
+      <div><button id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button></div>
     </div>
+    <div id="main" style="height: 91vh;">
+      <div id="map" style="width: 100%; height: 100%; position: relative"></div>
+    <script>
+      function openNav() {
+        document.getElementById("mySidebar").style.width = "20%"
+        document.getElementById("main").style.marginLeft = "20%";
+        document.getElementById("main").style.width = "80%"
+      }
+      
+      function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("main").style.marginLeft= "0";
+        document.getElementById("main").style.width = "100%"
+      }
+
+      function openClose(){
+        if(document.getElementById("mySidebar").style.width=="20%"){
+          closeNav();
+        }else{
+          openNav();
+        }
+      }
+      </script>
+
+
 
     <script>
       const bounds = [
@@ -173,11 +204,6 @@
 
     </script>
 
-    <button id="button1" onclick="showmarker()">Grocery Stores</button>
-    <button id="button2" onclick="showmarker2()">Farmers Markets</button>
-    <button id="button3" onclick="showmarker3()">Fire Stations</button>
-
-    <div><button id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button></div>
     
     <!-- TESTING HOW TO RETURN CLOSEST COORDINATE PAIR TO A GIVEN SET OF COORDINATES -->
     
