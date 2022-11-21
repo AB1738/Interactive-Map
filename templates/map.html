@@ -127,48 +127,41 @@
       map.addControl(geocoder);
       // After the map style has loaded on the page,
       // add a source layer and default styling for a single point
-      map.on("load", () => {
-        map.addSource("single-point", {
-          type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: [],
-          },
-        });
 
-        map.addLayer({
-          id: "point",
-          source: "single-point",
-          type: "circle",
-          paint: {
-            "circle-radius": 10,
-            "circle-color": "#448ee4",
-          },
-        });
-
-
-      });
           var geolocate = new mapboxgl.GeolocateControl({
               positionOptions: {
-                enableHighAccuracy: true
-                },
-                // When active the map will receive updates to the device's location as it changes.
-                trackUserLocation: true,
-                // Draw an arrow next to the location dot to indicate which direction the device is heading.
-                showUserHeading: true
+                  {#enableHighAccuracy: true#}
+              },
+              // When active the map will receive updates to the device's location as it changes.
+              trackUserLocation: true,
+              // Draw an arrow next to the location dot to indicate which direction the device is heading.
+              showUserHeading: true,
+              showAccuracyCircle: false,
           })
       var user_location = null;
+
       geolocate.on('geolocate', (e) => {
           user_location = turf.point([e.coords.longitude, e.coords.latitude]);
+          if(typeof map.getLayer('user-radius') === 'undefined') {
+              let circle = turf.circle(user_location, 1, {units: 'miles'});
+              map.addLayer({
+                  "id": "user-radius",
+                  "type": "fill",
+                  "source": {
+                      "type": "geojson",
+                      "data": circle
+                  },
+                  "paint": {
+                      "fill-color": "green",
+                      "fill-opacity": 0.3
+                  }
+              });
+          }
       });
           map.addControl(geolocate);
             var directions = new MapboxDirections({
                     accessToken: mapboxgl.accessToken,
                     interactive: false,
-                    {#controls: {#}
-                    {#    inputs: false,#}
-                    {#    instructions: true,#}
-                    {#}#}
                 });
 
     </script>
@@ -334,24 +327,21 @@ console.log(closest) -->
           if(!directionsshowing){
               directionsshowing = true;
             let allMarkers = marker1s.concat(marker2s, marker3s);
-            let closest_marker = null;
-            let shortest_dist = Number.MAX_SAFE_INTEGER;
-            const options = {units: 'miles'};
-            for (const marker of allMarkers) {
-                let marker_point = turf.point([marker._lngLat.lng, marker._lngLat.lat]);
-                let distance = turf.distance(user_location, marker_point, options);
-                if(distance < shortest_dist)
-                {
-                    shortest_dist = distance;
-                    closest_marker = marker_point;
-                }
-            }
-
+            let radius = 100000;
+            let circle_buffer = turf.buffer(user_location, radius, {units: 'miles'});
+            var points_in_circle = allMarkers.filter(function (marker) {
+                return turf.booleanPointInPolygon(turf.point([marker._lngLat.lng, marker._lngLat.lat]), circle_buffer);
+            });
+            let points = turf.featureCollection(points_in_circle.map(marker => {
+                return turf.point([marker._lngLat.lng, marker._lngLat.lat]);
+            }));
+            let closest_marker = turf.nearestPoint(user_location, points);
               if(user_location != null && closest_marker != null)
               {
                   map.addControl(directions, "top-left");
                   directions.setOrigin(user_location.geometry.coordinates);
                   directions.setDestination(closest_marker.geometry.coordinates);
+                  {#map.removeLayer('user-radius').removeSource('user-radius');#}
               }
           }
           else{
