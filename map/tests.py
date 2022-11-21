@@ -69,7 +69,6 @@ class MapViewHTMLTestCase(LiveServerTestCase):
     def setUp(self):
         self.chromeOptions = webdriver.ChromeOptions()
         self.chromeOptions.add_argument('--no-sandbox')
-        # self.chromeOptions.add_argument('--headless')
         self.chromeOptions.add_argument('--disable-dev-shm-usage')
         self.chromeOptions.add_argument("--disable-setuid-sandbox")
         FireHouseAddresses.objects.create(lat="40.801155", long="-73.959647")
@@ -107,8 +106,11 @@ class MapViewHTMLTestCase(LiveServerTestCase):
         selenium.execute_cdp_cmd("Emulation.setGeolocationOverride", self.params)
         selenium.get('%s%s' % (self.live_server_url, '/map/'))
         selenium.find_element(By.ID, 'button1').click()
+        selenium.find_element(By.ID, 'button2').click()
+        selenium.find_element(By.ID, 'button3').click()
         selenium.find_element(By.CLASS_NAME, 'mapboxgl-ctrl-geolocate').click()
         selenium.find_element(By.ID, 'find_nearest_business_button').click()
+        time.sleep(1)
         self.assertIsNotNone(selenium.find_element(By.CLASS_NAME, "mapbox-directions-instructions"))
 
     def test_find_closest_business_with_no_markers_on_map(self):

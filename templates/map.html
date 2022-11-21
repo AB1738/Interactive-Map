@@ -74,8 +74,31 @@
       />
       <label for="satellite-streets-v11">satellite</label>
     </div>
-
+    <div class="radius-slider-container">
+        Radius: <input type="range" min="1" max="10" value="3" id="radius-slider">
+        <input id="radius-input" type="number" min="1" max="10" value="3">
+    </div>
     <script>
+        const RADIUS_LIMIT = 10;
+        let radius_slider = document.getElementById('radius-slider');
+        let radius_input = document.getElementById('radius-input');
+        radius_slider.addEventListener('change', (e) => {
+           radius_input.value = e.target.value;
+           if(user_location != null)
+           {
+               let circle = turf.circle(user_location, parseFloat(e.target.value), {units: 'miles'});
+               map.getSource('user-radius').setData(circle);
+           }
+        });
+        radius_input.addEventListener('change', (e) => {
+            radius_slider.value = e.target.value;
+            radius_input.value = e.target.value > RADIUS_LIMIT ? RADIUS_LIMIT : e.target.value;
+            if(user_location != null)
+            {
+                let circle = turf.circle(user_location, parseFloat(e.target.value), {units: 'miles'});
+                map.getSource('user-radius').setData(circle);
+            }
+        })
       const bounds = [
         [-75.323541,40.405131], // Southwest coordinates
         [-71.566392,41.411836] // Northeast coordinates
@@ -127,37 +150,37 @@
       map.addControl(geocoder);
       // After the map style has loaded on the page,
       // add a source layer and default styling for a single point
-      map.on("load", () => {
-        map.addSource("single-point", {
-          type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: [],
-          },
-        });
 
-        map.addLayer({
-          id: "point",
-          source: "single-point",
-          type: "circle",
-          paint: {
-            "circle-radius": 10,
-            "circle-color": "#448ee4",
-          },
-        });
-
-
-      });
           var geolocate = new mapboxgl.GeolocateControl({
               positionOptions: {
-                enableHighAccuracy: true
-                },
-                // When active the map will receive updates to the device's location as it changes.
-                trackUserLocation: true,
-                // Draw an arrow next to the location dot to indicate which direction the device is heading.
-                showUserHeading: true
+                  {#enableHighAccuracy: true#}
+              },
+              // When active the map will receive updates to the device's location as it changes.
+              trackUserLocation: true,
+              // Draw an arrow next to the location dot to indicate which direction the device is heading.
+              showUserHeading: true,
+              showAccuracyCircle: false,
           })
       var user_location = null;
+          function drawUserRadius(user_location) {
+              let default_radius = 1;
+              if(typeof map.getLayer('user-radius') === 'undefined') {
+              let circle = turf.circle(user_location, default_radius, {units: 'miles'});
+              map.addLayer({
+                  "id": "user-radius",
+                  "type": "fill",
+                  "source": {
+                      "type": "geojson",
+                      "data": circle
+                  },
+                  "paint": {
+                      "fill-color": "green",
+                      "fill-opacity": 0.3
+                  }
+              });
+          }
+          }
+
       geolocate.on('geolocate', (e) => {
           user_location = turf.point([e.coords.longitude, e.coords.latitude]);
       });
@@ -165,10 +188,6 @@
             var directions = new MapboxDirections({
                     accessToken: mapboxgl.accessToken,
                     interactive: false,
-                    {#controls: {#}
-                    {#    inputs: false,#}
-                    {#    instructions: true,#}
-                    {#}#}
                 });
 
     </script>
@@ -178,45 +197,6 @@
     <button id="button3" onclick="showmarker3()">Fire Stations</button>
 
     <div><button id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button></div>
-    
-    <!-- TESTING HOW TO RETURN CLOSEST COORDINATE PAIR TO A GIVEN SET OF COORDINATES -->
-    
-    <!-- <script>
-      
-        HOW TO ITERATE THROUGH THE FARMERS MARKET DATABASE AND RETRIEVE LONG,LAT OF THE ENTRIES
-        ___________________________________________________________________________
-        {% for farmer_address in farmer_addresses %} 
-
-        [{{ farmer_address.long }}, {{ farmer_address.lat }}];
-
-        {% endfor %}
-        _____________________________________________________________________________
-               
-
-
-        const haversine = ({longitude: lonA, latitude: latA}, {longitude: lonB, latitude: latB}) => {
-        const {PI, sin, cos, atan2} = Math,
-              r = PI/180,
-              R = 6371,
-              deltaLat = (latB - latA)*r,
-              deltaLon = (lonB - lonA)*r,
-              a = sin(deltaLat / 2)**2 + cos(cos(latB*r)*latA*r) * sin(deltaLon /2)**2,
-              c = 2 * atan2(a**0.5, (1 - a)**0.5),
-              d = R * c
-        return d
-      },
-      
-
-      arr = [{"latitude":55.85,"longitude":4.22},{"latitude":55.89,"longitude":4.16},{"latitude":55.88,"longitude":-4.24}],
-      
-      {closest} = arr.reduce((r,o) => {
-        const distance = haversine(o, obj)
-        distance < r.minDistance || !r.closest &&
-        (r.closest = o, r.minDistance = distance)
-        return r
-      }, {closest: null, minDistance: null})
-      
-console.log(closest) -->
 </script>
     <script>
             var marker1showing = false;
@@ -332,31 +312,35 @@ console.log(closest) -->
 
          function showdirections(){
           if(!directionsshowing){
+              drawUserRadius(user_location);
               directionsshowing = true;
             let allMarkers = marker1s.concat(marker2s, marker3s);
-            let closest_marker = null;
-            let shortest_dist = Number.MAX_SAFE_INTEGER;
-            const options = {units: 'miles'};
-            for (const marker of allMarkers) {
-                let marker_point = turf.point([marker._lngLat.lng, marker._lngLat.lat]);
-                let distance = turf.distance(user_location, marker_point, options);
-                if(distance < shortest_dist)
-                {
-                    shortest_dist = distance;
-                    closest_marker = marker_point;
-                }
-            }
-
+            let radius = parseFloat(document.getElementById('radius-input').value);
+            let circle_buffer = turf.buffer(user_location, radius, {units: 'miles'});
+            var points_in_circle = allMarkers.filter(function (marker) {
+                return turf.booleanPointInPolygon(turf.point([marker._lngLat.lng, marker._lngLat.lat]), circle_buffer);
+            });
+            if(points_in_circle.length > 0)
+            {
+                let points = turf.featureCollection(points_in_circle.map(marker => {
+                    return turf.point([marker._lngLat.lng, marker._lngLat.lat]);
+                }));
+            let closest_marker = turf.nearestPoint(user_location, points);
               if(user_location != null && closest_marker != null)
               {
                   map.addControl(directions, "top-left");
                   directions.setOrigin(user_location.geometry.coordinates);
                   directions.setDestination(closest_marker.geometry.coordinates);
               }
+            }
           }
-          else{
+          else
+          {
               directionsshowing = false;
-              map.removeControl(directions);
+              if(map.hasControl(directions))
+              {
+                  map.removeControl(directions);
+              }
           }
         }
     </script>
