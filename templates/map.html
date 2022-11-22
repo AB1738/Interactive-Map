@@ -75,8 +75,8 @@
       <label for="satellite-streets-v11">satellite</label>
     </div>
     <div class="radius-slider-container">
-        Radius: <input type="range" min="1" max="10" value="3" id="radius-slider">
-        <input id="radius-input" type="number" min="1" max="10" value="3">
+        Radius: <input type="range" min="1" max="10" value="10" id="radius-slider">
+        <input id="radius-input" type="number" min="1" max="10" value="10">
     </div>
     <script>
         const RADIUS_LIMIT = 10;
@@ -109,7 +109,7 @@
         container: "map", // container ID
         style: "mapbox://styles/mapbox/streets-v11?optimize=true", // style URL
         center: [-73.93, 40.73], // starting position [lng, lat]
-        zoom: 11, // starting zoom
+        zoom: 13, // starting zoom
         maxBounds: bounds
       });
 
@@ -162,10 +162,9 @@
               showAccuracyCircle: false,
           })
       var user_location = null;
-          function drawUserRadius(user_location) {
-              let default_radius = 1;
+          function drawUserRadius(user_location, radius) {
               if(typeof map.getLayer('user-radius') === 'undefined') {
-              let circle = turf.circle(user_location, default_radius, {units: 'miles'});
+              let circle = turf.circle(user_location, radius, {units: 'miles'});
               map.addLayer({
                   "id": "user-radius",
                   "type": "fill",
@@ -199,64 +198,6 @@
     <div><button id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button></div>
 </script>
     <script>
-            var marker1showing = false;
-            var marker2showing = false;
-            var marker3showing = false;
-            var marker1s = [];
-            var marker2s = [];
-            var marker3s = [];
-            function showmarker()
-            {
-              if(!marker1showing)
-              {
-                  marker1showing = true;
-                  document.getElementById("button1").style.background='#5A5A5A';
-                  {% for address in addresses %} var marker = new
-                            mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
-                  
-              
-              }
-              else
-              {
-                  marker1showing = false;
-                  document.getElementById("button1").style.background='#f0f0f0';
-                  marker1s.forEach((marker) => marker.remove());
-              }
-            };
-            function showmarker2(){
-            if(!marker2showing)
-            {
-                document.getElementById("button2").style.background='#5A5A5A';
-                marker2showing = true;
-                              {% for farmer_address in farmer_addresses %} var marker = new
-                            mapboxgl.Marker({
-      color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); marker2s.push(marker); {% endfor %}
-            }
-              else
-              {
-                  marker2showing = false;
-                  document.getElementById("button2").style.background='#f0f0f0';
-                  marker2s.forEach((marker) => marker.remove());
-              }
-            };
-            function showmarker3(){
-            if(!marker3showing)
-            {
-                
-                marker3showing = true;
-                document.getElementById("button3").style.background='#5A5A5A';
-                              {% for fire_address in fire_addresses %} var marker = new
-                            mapboxgl.Marker({
-      color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
-            }
-              else
-              {
-                  marker3showing = false;
-                  document.getElementById("button3").style.background='#f0f0f0';
-                  marker3s.forEach((marker) => marker.remove());
-              }
-            };
-
                var marker1showing = false;
                var marker2showing = false;
                var marker3showing = false;
@@ -312,10 +253,10 @@
 
          function showdirections(){
           if(!directionsshowing){
-              drawUserRadius(user_location);
               directionsshowing = true;
             let allMarkers = marker1s.concat(marker2s, marker3s);
             let radius = parseFloat(document.getElementById('radius-input').value);
+            drawUserRadius(user_location, radius);
             let circle_buffer = turf.buffer(user_location, radius, {units: 'miles'});
             var points_in_circle = allMarkers.filter(function (marker) {
                 return turf.booleanPointInPolygon(turf.point([marker._lngLat.lng, marker._lngLat.lat]), circle_buffer);
