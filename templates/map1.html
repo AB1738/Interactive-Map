@@ -1,0 +1,420 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css"
+      type="text/css"
+    />
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css"
+      type="text/css"
+    />
+      <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+    <link rel="stylesheet" href="{% static 'css/mapPage.css' %}" />
+    <title>Interactive Maps</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="{% url 'home' %}" class="home">
+          <div class="logo one">Ascent+</div>
+          <div class="logo two">Interactive</div>
+        </a>
+      </h1>
+      <div class="pages">
+        <a href="{% url 'home' %}" class="page-link">Home</a>
+        <a href="{% url 'map' %}" class="page-link">Map</a>
+        <a href="{% url 'aboutme' %}" class="page-link">About</a>
+      </div>
+    </header>
+
+    <button class="openbtn" onclick="openClose()">☰ Open Sidebar</button></div>
+    <div id ="mySidebar" class="sidebar">
+      <div id="menu">
+        <input
+          id="streets-v11"
+          type="radio"
+          name="rtoggle"
+          value="streets"
+          checked="checked"
+        />
+        <!-- See a list of Mapbox-hosted public styles at -->
+        <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
+        <label for="streets-v11">streets</label>
+        <input id="light-v10" type="radio" name="rtoggle" value="light" />
+        <label for="light-v10">light</label>
+        <input id="dark-v10" type="radio" name="rtoggle" value="dark" />
+        <label for="dark-v10">dark</label>
+        <input
+          id="navigation-night-v1"
+          type="radio"
+          name="rtoggle"
+          value="night"
+        />
+        <label for="navigation-night-v1">night</label>
+        <input
+          id="satellite-streets-v11"
+          type="radio"
+          name="rtoggle"
+          value="satellite"
+        />
+        <label for="satellite-streets-v11">satellite</label>
+      </div>
+
+      <div class="radius-slider-container">
+        Radius: <input type="range" min="1" max="10" value="3" id="radius-slider">
+        <input id="radius-input" type="number" min="1" max="10" value="3">
+    </div>
+    
+      <button id="button1" onclick="showmarker()">Grocery Stores</button>
+      <button id="button2" onclick="showmarker2()">Farmers Markets</button>
+      <button id="button3" onclick="showmarker3()">Fire Stations</button>
+  
+      <div><button id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button></div>
+    </div>
+    
+    
+    
+    <div id="main" style="height: 91vh;">
+      <div id="map" style="width: 100%; height: 100%; position: relative">
+      </div>
+    <script>
+      function openNav() {
+        document.getElementById("mySidebar").style.width = "20%"
+        document.getElementById("main").style.marginLeft = "20%";
+        document.getElementById("main").style.width = "80%"
+      }
+      
+      function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("main").style.marginLeft= "0";
+        document.getElementById("main").style.width = "100%"
+      }
+
+      function openClose(){
+        if(document.getElementById("mySidebar").style.width=="20%"){
+          closeNav();
+        }else{
+          openNav();
+        }
+      }
+      </script>
+
+
+
+    <script>
+        const RADIUS_LIMIT = 10;
+        let radius_slider = document.getElementById('radius-slider');
+        let radius_input = document.getElementById('radius-input');
+        radius_slider.addEventListener('change', (e) => {
+           radius_input.value = e.target.value;
+           if(user_location != null)
+           {
+               let circle = turf.circle(user_location, parseFloat(e.target.value), {units: 'miles'});
+               map.getSource('user-radius').setData(circle);
+           }
+        });
+        radius_input.addEventListener('change', (e) => {
+            radius_slider.value = e.target.value;
+            radius_input.value = e.target.value > RADIUS_LIMIT ? RADIUS_LIMIT : e.target.value;
+            if(user_location != null)
+            {
+                let circle = turf.circle(user_location, parseFloat(e.target.value), {units: 'miles'});
+                map.getSource('user-radius').setData(circle);
+            }
+        })
+      const bounds = [
+        [-75.323541,40.405131], // Southwest coordinates
+        [-71.566392,41.411836] // Northeast coordinates
+      ];
+      mapboxgl.accessToken =
+        "pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg";
+      const map = new mapboxgl.Map({
+        container: "map", // container ID
+        style: "mapbox://styles/mapbox/streets-v11?optimize=true", // style URL
+        center: [-73.93, 40.73], // starting position [lng, lat]
+        zoom: 11, // starting zoom
+        maxBounds: bounds
+      });
+
+      const layerList = document.getElementById("menu");
+      const inputs = layerList.getElementsByTagName("input");
+
+      for (const input of inputs) {
+        input.onclick = (layer) => {
+          const layerId = layer.target.id;
+          map.setStyle("mapbox://styles/mapbox/" + layerId);
+        };
+      }
+
+      const nav = new mapboxgl.NavigationControl({
+        visualizePitch: true,
+      });
+      map.addControl(nav, "bottom-right");
+
+      map.on("style.load", () => {
+        map.setFog({
+          color: "rgb(186, 210, 235)", // Lower atmosphere
+          "high-color": "rgb(36, 92, 223)", // Upper atmosphere
+          "horizon-blend": 0.02, // Atmosphere thickness (default 0.2 at low zooms)
+          "space-color": "rgb(11, 11, 25)", // Background color
+          "star-intensity": 0.6, // Background star brightness (default 0.35 at low zoooms )
+        });
+      });
+
+      var geocoder = new MapboxGeocoder({
+        // Initialize the geocoder
+        accessToken: mapboxgl.accessToken, // Set the access token
+        mapboxgl: mapboxgl, // Set the mapbox-gl instance
+        marker: false, // Do not use the default marker style
+        {#placeholder: "Enter NYC Addresses ",#}
+      });
+
+      // Add the geocoder to the map
+      map.addControl(geocoder);
+      // After the map style has loaded on the page,
+      // add a source layer and default styling for a single point
+
+          var geolocate = new mapboxgl.GeolocateControl({
+              positionOptions: {
+                  {#enableHighAccuracy: true#}
+              },
+              // When active the map will receive updates to the device's location as it changes.
+              trackUserLocation: true,
+              // Draw an arrow next to the location dot to indicate which direction the device is heading.
+              showUserHeading: true,
+              showAccuracyCircle: false,
+          })
+      var user_location = null;
+          function drawUserRadius(user_location) {
+              let default_radius = 1;
+              if(typeof map.getLayer('user-radius') === 'undefined') {
+              let circle = turf.circle(user_location, default_radius, {units: 'miles'});
+              map.addLayer({
+                  "id": "user-radius",
+                  "type": "fill",
+                  "source": {
+                      "type": "geojson",
+                      "data": circle
+                  },
+                  "paint": {
+                      "fill-color": "green",
+                      "fill-opacity": 0.3
+                  }
+              });
+          }
+          }
+
+      geolocate.on('geolocate', (e) => {
+          user_location = turf.point([e.coords.longitude, e.coords.latitude]);
+      });
+          map.addControl(geolocate);
+            var directions = new MapboxDirections({
+                    accessToken: mapboxgl.accessToken,
+                    interactive: false,
+                });
+
+    </script>
+
+    
+    <!-- TESTING HOW TO RETURN CLOSEST COORDINATE PAIR TO A GIVEN SET OF COORDINATES -->
+    
+    <!-- <script>
+      
+        HOW TO ITERATE THROUGH THE FARMERS MARKET DATABASE AND RETRIEVE LONG,LAT OF THE ENTRIES
+        ___________________________________________________________________________
+        {% for farmer_address in farmer_addresses %} 
+
+        [{{ farmer_address.long }}, {{ farmer_address.lat }}];
+
+        {% endfor %}
+        _____________________________________________________________________________
+               
+
+
+        const haversine = ({longitude: lonA, latitude: latA}, {longitude: lonB, latitude: latB}) => {
+        const {PI, sin, cos, atan2} = Math,
+              r = PI/180,
+              R = 6371,
+              deltaLat = (latB - latA)*r,
+              deltaLon = (lonB - lonA)*r,
+              a = sin(deltaLat / 2)**2 + cos(cos(latB*r)*latA*r) * sin(deltaLon /2)**2,
+              c = 2 * atan2(a**0.5, (1 - a)**0.5),
+              d = R * c
+        return d
+      },
+      
+
+      arr = [{"latitude":55.85,"longitude":4.22},{"latitude":55.89,"longitude":4.16},{"latitude":55.88,"longitude":-4.24}],
+      
+      {closest} = arr.reduce((r,o) => {
+        const distance = haversine(o, obj)
+        distance < r.minDistance || !r.closest &&
+        (r.closest = o, r.minDistance = distance)
+        return r
+      }, {closest: null, minDistance: null})
+      
+console.log(closest) -->
+</script>
+    <script>
+            var marker1showing = false;
+            var marker2showing = false;
+            var marker3showing = false;
+            var marker1s = [];
+            var marker2s = [];
+            var marker3s = [];
+            function showmarker()
+            {
+              if(!marker1showing)
+              {
+                  marker1showing = true;
+                  document.getElementById("button1").style.background='#5A5A5A';
+                  {% for address in addresses %} var marker = new
+                            mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
+                  
+              
+              }
+              else
+              {
+                  marker1showing = false;
+                  document.getElementById("button1").style.background='#f0f0f0';
+                  marker1s.forEach((marker) => marker.remove());
+              }
+            };
+            function showmarker2(){
+            if(!marker2showing)
+            {
+                document.getElementById("button2").style.background='#5A5A5A';
+                marker2showing = true;
+                              {% for farmer_address in farmer_addresses %} var marker = new
+                            mapboxgl.Marker({
+      color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); marker2s.push(marker); {% endfor %}
+            }
+              else
+              {
+                  marker2showing = false;
+                  document.getElementById("button2").style.background='#f0f0f0';
+                  marker2s.forEach((marker) => marker.remove());
+              }
+            };
+            function showmarker3(){
+            if(!marker3showing)
+            {
+                
+                marker3showing = true;
+                document.getElementById("button3").style.background='#5A5A5A';
+                              {% for fire_address in fire_addresses %} var marker = new
+                            mapboxgl.Marker({
+      color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
+            }
+              else
+              {
+                  marker3showing = false;
+                  document.getElementById("button3").style.background='#f0f0f0';
+                  marker3s.forEach((marker) => marker.remove());
+              }
+            };
+
+               var marker1showing = false;
+               var marker2showing = false;
+               var marker3showing = false;
+               var directionsshowing = false;
+               var marker1s = [];
+               var marker2s = [];
+               var marker3s = [];
+               function showmarker()
+               {
+                 if(!marker1showing)
+                 {
+                     marker1showing = true;
+                     {% for address in addresses %} var marker = new
+                               mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
+                 }
+                 else
+                 {
+                     marker1showing = false;
+                     marker1s.forEach((marker) => marker.remove());
+                     marker1s = []
+                 }
+               };
+               function showmarker2(){
+               if(!marker2showing)
+               {
+                   marker2showing = true;
+                                 {% for farmer_address in farmer_addresses %} var marker = new
+                               mapboxgl.Marker({
+         color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); marker2s.push(marker); {% endfor %}
+               }
+                 else
+                 {
+                     marker2showing = false;
+                     marker2s.forEach((marker) => marker.remove());
+                     marker2s = []
+                 }
+               };
+               function showmarker3(){
+               if(!marker3showing)
+               {
+                   marker3showing = true;
+                                 {% for fire_address in fire_addresses %} var marker = new
+                               mapboxgl.Marker({
+         color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
+               }
+                 else
+                 {
+                     marker3showing = false;
+                     marker3s.forEach((marker) => marker.remove());
+                     marker3s = []
+                 }
+               };
+
+         function showdirections(){
+          if(!directionsshowing){
+              drawUserRadius(user_location);
+              directionsshowing = true;
+            let allMarkers = marker1s.concat(marker2s, marker3s);
+            let radius = parseFloat(document.getElementById('radius-input').value);
+            let circle_buffer = turf.buffer(user_location, radius, {units: 'miles'});
+            var points_in_circle = allMarkers.filter(function (marker) {
+                return turf.booleanPointInPolygon(turf.point([marker._lngLat.lng, marker._lngLat.lat]), circle_buffer);
+            });
+            if(points_in_circle.length > 0)
+            {
+                let points = turf.featureCollection(points_in_circle.map(marker => {
+                    return turf.point([marker._lngLat.lng, marker._lngLat.lat]);
+                }));
+            let closest_marker = turf.nearestPoint(user_location, points);
+              if(user_location != null && closest_marker != null)
+              {
+                  map.addControl(directions, "top-left");
+                  directions.setOrigin(user_location.geometry.coordinates);
+                  directions.setDestination(closest_marker.geometry.coordinates);
+              }
+            }
+          }
+          else
+          {
+              directionsshowing = false;
+              if(map.hasControl(directions))
+              {
+                  map.removeControl(directions);
+              }
+          }
+        }
+    </script>
+  </body>
+</html>
