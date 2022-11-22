@@ -82,10 +82,17 @@
         const RADIUS_LIMIT = 10;
         let radius_slider = document.getElementById('radius-slider');
         let radius_input = document.getElementById('radius-input');
+        let first_change = true;
+
         radius_slider.addEventListener('change', (e) => {
            radius_input.value = e.target.value;
            if(user_location != null)
            {
+               if(first_change)
+                {
+                    first_change = false;
+                    drawUserRadius(user_location, parseFloat(e.target.value));
+                }
                let circle = turf.circle(user_location, parseFloat(e.target.value), {units: 'miles'});
                map.getSource('user-radius').setData(circle);
            }
@@ -95,6 +102,11 @@
             radius_input.value = e.target.value > RADIUS_LIMIT ? RADIUS_LIMIT : e.target.value;
             if(user_location != null)
             {
+                if(first_change)
+                {
+                    first_change = false;
+                    drawUserRadius(user_location, parseFloat(e.target.value));
+                }
                 let circle = turf.circle(user_location, parseFloat(e.target.value), {units: 'miles'});
                 map.getSource('user-radius').setData(circle);
             }
@@ -143,7 +155,7 @@
         accessToken: mapboxgl.accessToken, // Set the access token
         mapboxgl: mapboxgl, // Set the mapbox-gl instance
         marker: false, // Do not use the default marker style
-        {#placeholder: "Enter NYC Addresses ",#}
+        placeholder: " ",
       });
 
       // Add the geocoder to the map
@@ -153,7 +165,7 @@
 
           var geolocate = new mapboxgl.GeolocateControl({
               positionOptions: {
-                  {#enableHighAccuracy: true#}
+                  enableHighAccuracy: true
               },
               // When active the map will receive updates to the device's location as it changes.
               trackUserLocation: true,
@@ -184,11 +196,11 @@
           user_location = turf.point([e.coords.longitude, e.coords.latitude]);
       });
           map.addControl(geolocate);
-            var directions = new MapboxDirections({
+
+        var directions = new MapboxDirections({
                     accessToken: mapboxgl.accessToken,
                     interactive: false,
                 });
-
     </script>
 
     <button id="button1" onclick="showmarker()">Grocery Stores</button>
@@ -198,6 +210,7 @@
     <div><button id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button></div>
 </script>
     <script>
+
                var marker1showing = false;
                var marker2showing = false;
                var marker3showing = false;
@@ -256,7 +269,6 @@
               directionsshowing = true;
             let allMarkers = marker1s.concat(marker2s, marker3s);
             let radius = parseFloat(document.getElementById('radius-input').value);
-            drawUserRadius(user_location, radius);
             let circle_buffer = turf.buffer(user_location, radius, {units: 'miles'});
             var points_in_circle = allMarkers.filter(function (marker) {
                 return turf.booleanPointInPolygon(turf.point([marker._lngLat.lng, marker._lngLat.lat]), circle_buffer);
