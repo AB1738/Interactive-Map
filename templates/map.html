@@ -111,10 +111,10 @@
                 map.getSource('user-radius').setData(circle);
             }
         })
-      const bounds = [
-        [-75.323541,40.405131], // Southwest coordinates
-        [-71.566392,41.411836] // Northeast coordinates
-      ];
+      // const bounds = [
+      //   [-75.323541,40.405131], // Southwest coordinates
+      //   [-71.566392,41.411836] // Northeast coordinates
+      // ];
       mapboxgl.accessToken =
         "pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg";
       const map = new mapboxgl.Map({
@@ -122,7 +122,7 @@
         style: "mapbox://styles/mapbox/streets-v11?optimize=true", // style URL
         center: [-73.93, 40.73], // starting position [lng, lat]
         zoom: 13, // starting zoom
-        maxBounds: bounds
+        // maxBounds: bounds
       });
 
       const layerList = document.getElementById("menu");
@@ -202,7 +202,7 @@
                     interactive: false,
                 });
     </script>
-
+   
     <button id="button1" onclick="showmarker()">Grocery Stores</button>
     <button id="button2" onclick="showmarker2()">Farmers Markets</button>
     <button id="button3" onclick="showmarker3()">Fire Stations</button>
@@ -290,10 +290,12 @@
           else
           {
               directionsshowing = false;
+              
               if(map.hasControl(directions))
               {
                   map.removeControl(directions);
               }
+              console.log("There are no establishments in this radius")
           }
         }
     </script>

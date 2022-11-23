@@ -40,7 +40,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         DATA_ROOT = './map/data/'
         FARMER_MARKET_PATH = DATA_ROOT + 'farmer_market.csv'
-        GROCERY_STORE_PATH = DATA_ROOT + 'grocery_stores.csv'
+        GROCERY_STORE_PATH = DATA_ROOT + 'Retail_Food_Stores.csv'
         FIREHOUSE_PATH = DATA_ROOT + 'firehouses.csv'
         if not FarmersMarketAddresses.objects.exists():
             self.__process_csv(ObjectType=ModelType.FarmerMarket, Path=FARMER_MARKET_PATH)
