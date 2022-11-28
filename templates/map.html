@@ -44,23 +44,72 @@
 
     <button class="openbtn" onclick="openClose()">☰ Open Sidebar</button></div>
     <div id ="mySidebar" class="sidebar">
-      <div id="menu">
-        
-        <!-- See a list of Mapbox-hosted public styles at -->
-        <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
-        
-      </div>
 
-      <div class="radius-slider-container">
-        Radius: <input type="range" min="1" max="10" value="3" id="radius-slider">
-        <input id="radius-input" type="number" min="1" max="10" value="3">
-    </div>
-    
-      <button id="button1" onclick="showmarker()">Grocery Stores</button>
-      <button id="button2" onclick="showmarker2()">Farmers Markets</button>
-      <button id="button3" onclick="showmarker3()">Fire Stations</button>
+      <div class="middle">
+        <div class="radius-slider-container">
+          <div class="radius">
+            Radius: 
+          </div>
+          <input type="range" min="1" max="10" value="3" id="radius-slider" >
+          <input id="radius-input" type="number" min="1" max="10" value="3">
+        </div>
   
-      <div><button id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button></div>
+        <div class="grocery">
+            <button class="color" id="button1" onclick="showmarker()">Grocery Stores</button>
+        </div>
+        
+        <div class="farmer">
+          <button class="color1" id="button2" onclick="showmarker2()">Farmers Markets</button>
+        </div>
+  
+        <div class="fire">
+          <button class="color2" id="button3" onclick="showmarker3()">Fire Stations</button>
+        </div>
+  
+       
+      
+    
+        <div class="near">
+          <button class="color3" id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button>
+        </div>
+
+        <div id="menu">
+          <input
+            id="streets-v11"
+            type="radio"
+            name="rtoggle"
+            value="streets"
+            checked="checked"
+          />
+          <!-- See a list of Mapbox-hosted public styles at -->
+          <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
+          <label for="streets-v11">streets</label>
+          <input id="light-v10" type="radio" name="rtoggle" value="light" />
+          <label for="light-v10">light</label>
+          <input id="dark-v10" type="radio" name="rtoggle" value="dark" />
+          <label for="dark-v10">dark</label>
+          <input
+            id="navigation-night-v1"
+            type="radio"
+            name="rtoggle"
+            value="night"
+          />
+          <label for="navigation-night-v1">night</label>
+          <input
+            id="satellite-streets-v11"
+            type="radio"
+            name="rtoggle"
+            value="satellite"
+          />
+          <label for="satellite-streets-v11">satellite</label>
+        </div>
+
+      </div>
+      
+
+      
+    
+   
     </div>
     
     
