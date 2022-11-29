@@ -78,7 +78,12 @@
         Radius: <input type="range" min="1" max="10" value="10" id="radius-slider">
         <input id="radius-input" type="number" min="1" max="10" value="10">
     </div>
+    
     <script>
+
+
+
+
         const RADIUS_LIMIT = 10;
         let radius_slider = document.getElementById('radius-slider');
         let radius_input = document.getElementById('radius-input');
@@ -111,19 +116,49 @@
                 map.getSource('user-radius').setData(circle);
             }
         })
+<<<<<<< HEAD
       // const bounds = [
       //   [-75.323541,40.405131], // Southwest coordinates
       //   [-71.566392,41.411836] // Northeast coordinates
       // ];
+=======
+        
+      const bounds = [
+        [-75.323541,40.405131], // Southwest coordinates
+        [-71.566392,41.411836] // Northeast coordinates
+      ];
+>>>>>>> b8270f703fdb8103bffd2e52b6a23355a1430690
       mapboxgl.accessToken =
-        "pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg";
+        "pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA";
       const map = new mapboxgl.Map({
         container: "map", // container ID
         style: "mapbox://styles/mapbox/streets-v11?optimize=true", // style URL
         center: [-73.93, 40.73], // starting position [lng, lat]
+<<<<<<< HEAD
         zoom: 13, // starting zoom
+=======
+        zoom: 11, // starting zoom
+>>>>>>> b8270f703fdb8103bffd2e52b6a23355a1430690
         // maxBounds: bounds
       });
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
       const layerList = document.getElementById("menu");
       const inputs = layerList.getElementsByTagName("input");
@@ -191,7 +226,9 @@
               });
           }
           }
-
+          
+          
+ 
       geolocate.on('geolocate', (e) => {
           user_location = turf.point([e.coords.longitude, e.coords.latitude]);
       });
@@ -206,10 +243,13 @@
     <button id="button1" onclick="showmarker()">Grocery Stores</button>
     <button id="button2" onclick="showmarker2()">Farmers Markets</button>
     <button id="button3" onclick="showmarker3()">Fire Stations</button>
+    <button id="button4" onclick="showmarker4()">Supermarkets</button>
+    <button id="button5" onclick="showmarker5()">Supercenters</button>
 
     <div><button id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button></div>
 </script>
     <script>
+      
 
                var marker1showing = false;
                var marker2showing = false;
@@ -223,38 +263,94 @@
                  if(!marker1showing)
                  {
                      marker1showing = true;
-                     {% for address in addresses %} var marker = new
-                               mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
+
+                     map.addSource('grocery-stores', {
+        type: 'vector',
+        url: 'mapbox://arielb1.38i7mvbz'
+    });
+    map.addLayer({
+        'id': 'circles',
+        'type': 'circle',
+        'source': 'grocery-stores',
+        'layout': {
+            'visibility': 'visible'
+        },
+        'paint': {
+            'circle-radius': 3,
+            'circle-color': 'rgba(0,0,255,1)',
+            // 'stroke-color':'#FF0000',
+            // 'stroke-width': 1.5
+        },
+        'source-layer': 'Total_grocery_stores-6tzhl7'
+    });
+                    //  {% for address in addresses %} var marker = new
+                    //            mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
                  }
-                 else
-                 {
-                     marker1showing = false;
-                     marker1s.forEach((marker) => marker.remove());
-                     marker1s = []
-                 }
+                //  else
+                //  {
+                //      marker1showing = false;
+                //      marker1s.forEach((marker) => marker.remove());
+                //      marker1s = []
+                //  }
                };
                function showmarker2(){
                if(!marker2showing)
                {
                    marker2showing = true;
-                                 {% for farmer_address in farmer_addresses %} var marker = new
-                               mapboxgl.Marker({
-         color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); marker2s.push(marker); {% endfor %}
-               }
-                 else
-                 {
-                     marker2showing = false;
-                     marker2s.forEach((marker) => marker.remove());
-                     marker2s = []
-                 }
+        //                          {% for farmer_address in farmer_addresses %} var marker = new
+        //                        mapboxgl.Marker({
+        //  color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); marker2s.push(marker); {% endfor %}
+        //        }
+        map.addSource('farmers-markets', {
+        type: 'vector',
+        url: 'mapbox://arielb1.af9vybob'
+    });
+    map.addLayer({
+        'id': 'circles2',
+        'type': 'circle',
+        'source': 'farmers-markets',
+        'layout': {
+            'visibility': 'visible'
+        },
+        'paint': {
+            'circle-radius': 3,
+            'circle-color': 'rgba(0,128,0,1)'
+        },
+        'source-layer': 'DOHMH_Farmers_Markets-ccwyus'
+    });
+    
+                //  else
+                //  {
+                //      marker2showing = false;
+                //      marker2s.forEach((marker) => marker.remove());
+                //      marker2s = []
+                //  }
                };
+              };
                function showmarker3(){
                if(!marker3showing)
                {
                    marker3showing = true;
-                                 {% for fire_address in fire_addresses %} var marker = new
-                               mapboxgl.Marker({
-         color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
+                   map.addSource('fire-houses', {
+        type: 'vector',
+        url: 'mapbox://arielb1.388xpmrj'
+    });
+    map.addLayer({
+        'id': 'fire-houses',
+        'type': 'circle',
+        'source': 'fire-houses',
+        'layout': {
+            'visibility': 'visible'
+        },
+        'paint': {
+            'circle-radius': 3,
+            'circle-color': 'rgba(255,0,0,1)'
+        },
+        'source-layer': 'FDNY_Firehouse_Listing-4hvksv'
+    });
+        //                          {% for fire_address in fire_addresses %} var marker = new
+        //                        mapboxgl.Marker({
+        //  color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
                }
                  else
                  {
@@ -263,6 +359,47 @@
                      marker3s = []
                  }
                };
+
+              function showmarker4(){
+                map.addSource('super-markets', {
+        type: 'vector',
+        url: 'mapbox://arielb1.dftl2j6f'
+    });
+    map.addLayer({
+        'id': 'super-markets',
+        'type': 'circle',
+        'source': 'super-markets',
+        'layout': {
+            'visibility': 'visible'
+        },
+        'paint': {
+            'circle-radius': 3,
+            'circle-color': 'rgba(255,0,255,1)',
+            
+        },
+        'source-layer': 'Supermarkets-52ltms'
+    });
+               }
+               function showmarker5(){
+                map.addSource('super-centers', {
+        type: 'vector',
+        url: 'mapbox://arielb1.bx5tiqmq'
+    });
+    map.addLayer({
+        'id': 'super-centers',
+        'type': 'circle',
+        'source': 'super-centers',
+        'layout': {
+            'visibility': 'visible'
+        },
+        'paint': {
+            'circle-radius': 3,
+            'circle-color': 'rgba(220,88,42,1)',
+            
+        },
+        'source-layer': 'Supercenters-49gbzn'
+    });
+               }
 
          function showdirections(){
           if(!directionsshowing){
@@ -298,6 +435,13 @@
               console.log("There are no establishments in this radius")
           }
         }
+
+
+
+
+
+
+        
     </script>
   </body>
 </html>

@@ -2,7 +2,7 @@ from django.db import models
 import geocoder
 
 
-access_token='pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg'
+access_token='pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA'
 class GroceryStoreAddresses(models.Model):
     address=models.TextField()
     lat=models.FloatField(blank=True,null=True)
