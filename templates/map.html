@@ -389,9 +389,26 @@
                if(!marker3showing)
                {
                    marker3showing = true;
-                                 {% for fire_address in fire_addresses %} var marker = new
-                               mapboxgl.Marker({
-         color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
+                   map.addSource('fire-houses', {
+        type: 'vector',
+        url: 'mapbox://arielb1.388xpmrj'
+    });
+    map.addLayer({
+        'id': 'fire-houses',
+        'type': 'circle',
+        'source': 'fire-houses',
+        'layout': {
+            'visibility': 'visible'
+        },
+        'paint': {
+            'circle-radius': 3,
+            'circle-color': 'rgba(255,0,0,1)'
+        },
+        'source-layer': 'FDNY_Firehouse_Listing-4hvksv'
+    });
+        //                          {% for fire_address in fire_addresses %} var marker = new
+        //                        mapboxgl.Marker({
+        //  color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
                }
                  else
                  {
