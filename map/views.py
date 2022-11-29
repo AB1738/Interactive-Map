@@ -24,7 +24,7 @@ class MapView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context[
-            "access_token"] = 'pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg'
+            "access_token"] = 'pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA'
         context['addresses'] = GroceryStoreAddresses.objects.all()
         context['farmer_addresses'] = FarmersMarketAddresses.objects.all()
         context['fire_addresses'] = FireHouseAddresses.objects.all()
