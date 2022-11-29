@@ -12,11 +12,21 @@
     color: white;
     padding: 10px 15px;
     border: none;
+
   }
   
   .openbtn:hover {
     background-color: #444;
   }
+
+  .sidebar-button{
+    position: absolute;
+    left: 0;
+    font-size: 36px;
+    margin-left: 5px;
+    z-index: 2;
+  }
+
 
 .sidebar {
     height: 100%;
