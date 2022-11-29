@@ -303,29 +303,27 @@
       <div id="map" style="width: 100%; height: 100%; position: relative">
       </div>
     <script>
-      function openNav() {
-        document.getElementById("mySidebar").style.width = "20%"
-        document.getElementById("main").style.marginLeft = "20%";
-        document.getElementById("main").style.width = "80%"
-        
-        
-      }
-      
-      function closeNav() {
-        document.getElementById("mySidebar").style.width = "0";
-        document.getElementById("main").style.marginLeft= "0";
-        document.getElementById("main").style.width = "100%"
-      }
+      let isopen = false;
 
       function openClose(){
+        
+        
+        isopen= !isopen
+        console.log(isopen);
         var d = document.getElementById("canvas");
         d.classList.toggle("menuOff");
-
-        // if(document.getElementById("mySidebar").style.width=="20%"){
-        //   closeNav();
-        // }else{
-        //   openNav();
-        // }
+        const directionsBox = document.querySelector('.mapboxgl-ctrl-directions');
+        
+        if(directionsBox!= null){
+          if(isopen){
+            directionsBox.style.marginLeft = '20px';
+          }else{
+            directionsBox.style.marginLeft = '320px';
+            
+          }
+          
+        }
+ 
       }
       </script>
 
@@ -652,6 +650,11 @@ console.log(closest) -->
                   map.removeControl(directions);
               }
           }
+          
+        const directionsBox = document.querySelector('.mapboxgl-ctrl-directions');
+        directionsBox.style.marginLeft = '320px';
+          
+        
         }
     </script>
   </body>
