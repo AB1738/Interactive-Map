@@ -287,14 +287,6 @@
           </button>
         </div>
       </div>
-
-
-
-      
-    
-      
-  
-      
     </div>
     
     
@@ -333,10 +325,17 @@
         const RADIUS_LIMIT = 10;
         let radius_slider = document.getElementById('radius-slider');
         let radius_input = document.getElementById('radius-input');
+        let first_change = true;
+
         radius_slider.addEventListener('change', (e) => {
            radius_input.value = e.target.value;
            if(user_location != null)
            {
+               if(first_change)
+                {
+                    first_change = false;
+                    drawUserRadius(user_location, parseFloat(e.target.value));
+                }
                let circle = turf.circle(user_location, parseFloat(e.target.value), {units: 'miles'});
                map.getSource('user-radius').setData(circle);
            }
@@ -346,6 +345,11 @@
             radius_input.value = e.target.value > RADIUS_LIMIT ? RADIUS_LIMIT : e.target.value;
             if(user_location != null)
             {
+                if(first_change)
+                {
+                    first_change = false;
+                    drawUserRadius(user_location, parseFloat(e.target.value));
+                }
                 let circle = turf.circle(user_location, parseFloat(e.target.value), {units: 'miles'});
                 map.getSource('user-radius').setData(circle);
             }
@@ -360,7 +364,7 @@
         container: "map", // container ID
         style: "mapbox://styles/mapbox/streets-v11?optimize=true", // style URL
         center: [-73.93, 40.73], // starting position [lng, lat]
-        zoom: 11, // starting zoom
+        zoom: 13, // starting zoom
         maxBounds: bounds
       });
 
@@ -394,7 +398,7 @@
         accessToken: mapboxgl.accessToken, // Set the access token
         mapboxgl: mapboxgl, // Set the mapbox-gl instance
         marker: false, // Do not use the default marker style
-        {#placeholder: "Enter NYC Addresses ",#}
+        placeholder: " ",
       });
 
       // Add the geocoder to the map
@@ -404,7 +408,7 @@
 
           var geolocate = new mapboxgl.GeolocateControl({
               positionOptions: {
-                  {#enableHighAccuracy: true#}
+                  enableHighAccuracy: true
               },
               // When active the map will receive updates to the device's location as it changes.
               trackUserLocation: true,
@@ -413,10 +417,9 @@
               showAccuracyCircle: false,
           })
       var user_location = null;
-          function drawUserRadius(user_location) {
-              let default_radius = 1;
+          function drawUserRadius(user_location, radius) {
               if(typeof map.getLayer('user-radius') === 'undefined') {
-              let circle = turf.circle(user_location, default_radius, {units: 'miles'});
+              let circle = turf.circle(user_location, radius, {units: 'miles'});
               map.addLayer({
                   "id": "user-radius",
                   "type": "fill",
@@ -436,11 +439,11 @@
           user_location = turf.point([e.coords.longitude, e.coords.latitude]);
       });
           map.addControl(geolocate);
-            var directions = new MapboxDirections({
+
+        var directions = new MapboxDirections({
                     accessToken: mapboxgl.accessToken,
                     interactive: false,
                 });
-
     </script>
 
     
@@ -484,65 +487,6 @@
 console.log(closest) -->
 </script>
     <script>
-            var marker1showing = false;
-            var marker2showing = false;
-            var marker3showing = false;
-            var marker1s = [];
-            var marker2s = [];
-            var marker3s = [];
-            function showmarker()
-            {
-              if(!marker1showing)
-              {
-                  marker1showing = true;
-                  document.getElementById("button1").style.background='#5A5A5A';
-                  {% for address in addresses %} var marker = new
-                            mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
-                  
-              
-              }
-              else
-              {
-                  marker1showing = false;
-                  document.getElementById("button1").style.background='#f0f0f0';
-                  marker1s.forEach((marker) => marker.remove());
-              }
-              
-            };
-            function showmarker2(){
-            if(!marker2showing)
-            {
-                document.getElementById("button2").style.background='#5A5A5A';
-                marker2showing = true;
-                              {% for farmer_address in farmer_addresses %} var marker = new
-                            mapboxgl.Marker({
-      color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); marker2s.push(marker); {% endfor %}
-            }
-              else
-              {
-                  marker2showing = false;
-                  document.getElementById("button2").style.background='#f0f0f0';
-                  marker2s.forEach((marker) => marker.remove());
-              }
-            };
-            function showmarker3(){
-            if(!marker3showing)
-            {
-                
-                marker3showing = true;
-                document.getElementById("button3").style.background='#5A5A5A';
-                              {% for fire_address in fire_addresses %} var marker = new
-                            mapboxgl.Marker({
-      color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
-            }
-              else
-              {
-                  marker3showing = false;
-                  document.getElementById("button3").style.background='#f0f0f0';
-                  marker3s.forEach((marker) => marker.remove());
-              }
-            };
-
                var marker1showing = false;
                var marker2showing = false;
                var marker3showing = false;
@@ -620,7 +564,6 @@ console.log(closest) -->
 
          function showdirections(){
           if(!directionsshowing){
-              drawUserRadius(user_location);
               directionsshowing = true;
             let allMarkers = marker1s.concat(marker2s, marker3s);
             let radius = parseFloat(document.getElementById('radius-input').value);
