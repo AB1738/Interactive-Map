@@ -141,26 +141,6 @@
 
 
 
-  map.on('load', function () {
-      map.addSource('museums', {
-        type: 'vector',
-        url: 'mapbox://arielb1.af9vybob'
-    });
-    map.addLayer({
-        'id': 'circles',
-        'type': 'circle',
-        'source': 'museums',
-        'layout': {
-            'visibility': 'visible'
-        },
-        'paint': {
-            'circle-radius': 8,
-            'circle-color': 'rgba(55,148,179,1)'
-        },
-        'source-layer': 'DOHMH_Farmers_Markets-ccwyus'
-    });
-  });
-
 
 
 
@@ -341,31 +321,70 @@
                  if(!marker1showing)
                  {
                      marker1showing = true;
-                     {% for address in addresses %} var marker = new
-                               mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
+
+                     map.addSource('grocery-stores', {
+        type: 'vector',
+        url: 'mapbox://arielb1.38i7mvbz'
+    });
+    map.addLayer({
+        'id': 'circles',
+        'type': 'circle',
+        'source': 'grocery-stores',
+        'layout': {
+            'visibility': 'visible'
+        },
+        'paint': {
+            'circle-radius': 3,
+            'circle-color': 'rgba(0,0,255,1)',
+            // 'stroke-color':'#FF0000',
+            // 'stroke-width': 1.5
+        },
+        'source-layer': 'Total_grocery_stores-6tzhl7'
+    });
+                    //  {% for address in addresses %} var marker = new
+                    //            mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
                  }
-                 else
-                 {
-                     marker1showing = false;
-                     marker1s.forEach((marker) => marker.remove());
-                     marker1s = []
-                 }
+                //  else
+                //  {
+                //      marker1showing = false;
+                //      marker1s.forEach((marker) => marker.remove());
+                //      marker1s = []
+                //  }
                };
                function showmarker2(){
                if(!marker2showing)
                {
                    marker2showing = true;
-                                 {% for farmer_address in farmer_addresses %} var marker = new
-                               mapboxgl.Marker({
-         color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); marker2s.push(marker); {% endfor %}
-               }
-                 else
-                 {
-                     marker2showing = false;
-                     marker2s.forEach((marker) => marker.remove());
-                     marker2s = []
-                 }
+        //                          {% for farmer_address in farmer_addresses %} var marker = new
+        //                        mapboxgl.Marker({
+        //  color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); marker2s.push(marker); {% endfor %}
+        //        }
+        map.addSource('farmers-markets', {
+        type: 'vector',
+        url: 'mapbox://arielb1.af9vybob'
+    });
+    map.addLayer({
+        'id': 'circles2',
+        'type': 'circle',
+        'source': 'farmers-markets',
+        'layout': {
+            'visibility': 'visible'
+        },
+        'paint': {
+            'circle-radius': 3,
+            'circle-color': 'rgba(0,128,0,1)'
+        },
+        'source-layer': 'DOHMH_Farmers_Markets-ccwyus'
+    });
+    
+                //  else
+                //  {
+                //      marker2showing = false;
+                //      marker2s.forEach((marker) => marker.remove());
+                //      marker2s = []
+                //  }
                };
+              };
                function showmarker3(){
                if(!marker3showing)
                {
