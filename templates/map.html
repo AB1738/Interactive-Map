@@ -181,80 +181,7 @@
         marker: false, // Do not use the default marker style
         placeholder: " ",
       });
-//       map.on('load', function () {
-//     map.addSource('museums', {
-//         type: 'vector',
-//         url: 'mapbox://mapbox.2opop9hr'
-//     });
-//     map.addLayer({
-//         'id': 'museums',
-//         'type': 'circle',
-//         'source': 'museums',
-//         'layout': {
-//             'visibility': 'visible'
-//         },
-//         'paint': {
-//             'circle-radius': 8,
-//             'circle-color': 'rgba(55,148,179,1)'
-//         },
-//         'source-layer': 'museum-cusco'
-//     });
 
-//     map.addSource('contours', {
-//         type: 'vector',
-//         url: 'mapbox://mapbox.mapbox-terrain-v2'
-//     });
-//     map.addLayer({
-//         'id': 'contours',
-//         'type': 'line',
-//         'source': 'contours',
-//         'source-layer': 'contour',
-//         'layout': {
-//             'visibility': 'visible',
-//             'line-join': 'round',
-//             'line-cap': 'round'
-//         },
-//         'paint': {
-//             'line-color': '#877b59',
-//             'line-width': 1
-//         }
-//     });
-// });
-
-// var toggleableLayerIds = [ 'contours', 'museums' ];
-
-// for (var i = 0; i < toggleableLayerIds.length; i++) {
-//     var id = toggleableLayerIds[i];
-
-//     var link = document.createElement('a');
-//     link.href = '#';
-//     link.className = 'active';
-//     link.textContent = id;
-
-//     link.onclick = function (e) {
-//         var clickedLayer = this.textContent;
-//         e.preventDefault();
-//         e.stopPropagation();
-
-//         var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
-
-//         if (visibility === 'visible') {
-//             map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-//             this.className = '';
-//         } else {
-//             this.className = 'active';
-//             map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
-//         }
-//     };
-
-//     var layers = document.getElementById('menu');
-//     layers.appendChild(link);
-// }
-
-
-
-
-//-------------------------------------------------
       // Add the geocoder to the map
       map.addControl(geocoder);
       // After the map style has loaded on the page,
@@ -288,7 +215,9 @@
               });
           }
           }
-
+          
+          
+ 
       geolocate.on('geolocate', (e) => {
           user_location = turf.point([e.coords.longitude, e.coords.latitude]);
       });
@@ -303,6 +232,8 @@
     <button id="button1" onclick="showmarker()">Grocery Stores</button>
     <button id="button2" onclick="showmarker2()">Farmers Markets</button>
     <button id="button3" onclick="showmarker3()">Fire Stations</button>
+    <button id="button4" onclick="showmarker4()">Supermarkets</button>
+    <button id="button5" onclick="showmarker5()">Supercenters</button>
 
     <div><button id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button></div>
 </script>
@@ -417,6 +348,47 @@
                      marker3s = []
                  }
                };
+
+              function showmarker4(){
+                map.addSource('super-markets', {
+        type: 'vector',
+        url: 'mapbox://arielb1.dftl2j6f'
+    });
+    map.addLayer({
+        'id': 'super-markets',
+        'type': 'circle',
+        'source': 'super-markets',
+        'layout': {
+            'visibility': 'visible'
+        },
+        'paint': {
+            'circle-radius': 3,
+            'circle-color': 'rgba(255,0,255,1)',
+            
+        },
+        'source-layer': 'Supermarkets-52ltms'
+    });
+               }
+               function showmarker5(){
+                map.addSource('super-centers', {
+        type: 'vector',
+        url: 'mapbox://arielb1.bx5tiqmq'
+    });
+    map.addLayer({
+        'id': 'super-centers',
+        'type': 'circle',
+        'source': 'super-centers',
+        'layout': {
+            'visibility': 'visible'
+        },
+        'paint': {
+            'circle-radius': 3,
+            'circle-color': 'rgba(220,88,42,1)',
+            
+        },
+        'source-layer': 'Supercenters-49gbzn'
+    });
+               }
 
          function showdirections(){
           if(!directionsshowing){
