@@ -24,59 +24,184 @@
     />
       <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
     <link rel="stylesheet" href="{% static 'css/mapPage.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>Interactive Maps</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style>
+      * {
+        transition: all 0.3s ease;
+      }
+      body {
+        font-family: 'Poppins';
+      }
+      
+      .modeItem {
+        display:flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        border:1px solid #eeeeee;
+        border-radius:8px;
+        padding:10px 15px;
+        margin-bottom:10px;
+      }
+      .modeItem div {
+        font-size:14px;
+      }
+      .sidebarLabel {
+        font-size:12px;
+        font-weight:600;
+        margin-bottom:10px;
+      }
+      .specialAdd {
+        display:flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top:20px;
+      }
+      input[type="range"] {
+        width:100%;
+      }
+      .locationItem {
+        padding:10px 15px;
+        border:1px solid #eeeeee;
+        border-radius:8px;
+        margin-bottom:10px;
+        display:block;
+        width:100%;
+        text-align: left;
+        position:relative;
+      }
+
+      .findButton {
+        background-color:#000000;
+        border-radius:8px;
+        margin-top:0px;
+        color:#FFFFFF;
+        width:100%;
+        padding:0px 20px;
+        border-width:0px;
+        display:flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+      .sidebar {
+        padding: 20px;
+        padding-top: 0px;
+        width: 300px;
+        box-shadow: 0px 15px 6px rgb(0 0 0 / 30%);
+        border-top: 1px solid #eee;
+        opacity:1;
+      }
+      .menuOff .sidebar {
+        opacity:0;
+        pointer-events: none;
+      }
+      .locationItem.active {
+        border:2px solid #0275ff;
+        background-color:#FFFFFF;
+        color: #0275ff;
+      }
+      .locationItem.active .locationDecor {
+        position:absolute;
+        right:12px;
+        top:0px;
+        bottom:0px;
+        margin:auto;
+        border-radius:999px;
+        background-color:#0275ff;
+        width:16px;
+        height:16px;
+        
+      }
+      .locationItem.active .locationDecor div {
+        background-image:url('https://i.ibb.co/d4vdxNh/check.png');
+        background-repeat: no-repeat;
+        width: 16px;
+        height: 16px;
+        border-radius: 999px;
+        background-size: 10px;
+        background-position: center;
+      }
+
+      .findDecor {
+        width:30px;height:40px;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        position:relative;
+      }
+      .fdGroup {
+        display:flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width:12px;
+        height:18px;
+        position:absolute;
+      }
+      .find.one , .find.two {
+        width:4px;
+        height:1px;
+        border-radius:1px;
+        background-color:#FFFFFF;;
+      }
+      .fdGroup.two {
+        transform:rotate(90deg);
+      }
+      .menuLine {
+        width:20px;height:1px;background-color:#000000;
+        transform:rotate(45deg);
+        margin-top:1px;
+      }
+      .menuLine.two {
+        transform:rotate(-45deg);
+        margin-top:-1px;
+      }
+      .menuOff .menuLine {
+        margin-top:0px;
+        transform:rotate(0deg);
+      }
+      .menuOff .menuLine.two {
+        margin-top:8px;
+        transform:rotate(0deg);
+      }
+      
+
+    </style>
   </head>
-  <body>
-    <header>
+  <body id="canvas">
+    <header style="padding:20px;align-items: center;height:initial;position">
+      
+      <div style="display:flex;align-items: center;">
+        <button id="openMenu" class="openbtn" onclick="openClose()" style="background-color:#FFFFFF;border-width:0px;width:40px;height:40px;box-shadow:0px 0px 6px rgba(0,0,0,0.15);display:flex;flex-direction: column;justify-content: center;align-items: center;position:initial;margin-right:20px;">
+          <div class="menuLine one"></div>
+          <div class="menuLine two"></div>
+        </button>
       <h1>
         <a href="{% url 'home' %}" class="home">
           <div class="logo one">Ascent+</div>
           <div class="logo two">Interactive</div>
         </a>
       </h1>
+      </div>
       <div class="pages">
         <a href="{% url 'home' %}" class="page-link">Home</a>
         <a href="{% url 'map' %}" class="page-link">Map</a>
         <a href="{% url 'aboutme' %}" class="page-link">About</a>
       </div>
+    
     </header>
 
-    <div class="sidebar-button">
-      <button class="openbtn" onclick="openClose()">☰ Open Sidebar</button>
-    </div>
     
-    <div id ="mySidebar" class="sidebar">
+    <div id ="mySidebar" class="sidebar" style="padding:20px;padding-top:0px;width:300px;">
+      <div id="menu">
+        <div class="sidebarLabel" style="margin-top:15px;">Map Mode</div>
 
-      <div class="middle">
-        <div class="radius-slider-container">
-          <div class="radius">
-            Radius: 
-          </div>
-          <input type="range" min="1" max="10" value="3" id="radius-slider" >
-          <input id="radius-input" type="number" min="1" max="10" value="3">
-        </div>
-  
-        <div class="grocery">
-            <button class="color" id="button1" onclick="showmarker()">Grocery Stores</button>
-        </div>
-        
-        <div class="farmer">
-          <button class="color1" id="button2" onclick="showmarker2()">Farmers Markets</button>
-        </div>
-  
-        <div class="fire">
-          <button class="color2" id="button3" onclick="showmarker3()">Fire Stations</button>
-        </div>
-  
-       
-      
-    
-        <div class="near">
-          <button class="color3" id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button>
-        </div>
-
-        <div id="menu">
+        <label for="streets-v11" class="modeItem">
+          <div>Streets</div>
           <input
             id="streets-v11"
             type="radio"
@@ -84,40 +209,97 @@
             value="streets"
             checked="checked"
           />
-          <!-- See a list of Mapbox-hosted public styles at -->
-          <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
-          <label for="streets-v11">streets</label>
+        <!-- See a list of Mapbox-hosted public styles at -->
+        <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
+        </label>
+
+        <label for="light-v10" class="modeItem">
+          <div>Light</div>
           <input id="light-v10" type="radio" name="rtoggle" value="light" />
-          <label for="light-v10">light</label>
+        </label>
+
+        <label for="dark-v10" class="modeItem">
+          
+          <div>Dark</div>
           <input id="dark-v10" type="radio" name="rtoggle" value="dark" />
-          <label for="dark-v10">dark</label>
+        </label>
+
+        <label for="navigation-night-v1" class="modeItem">
+          <div>Night</div>
           <input
             id="navigation-night-v1"
             type="radio"
             name="rtoggle"
             value="night"
           />
-          <label for="navigation-night-v1">night</label>
+        </label>
+
+        
+        <label for="satellite-streets-v11" class="modeItem">
+          <div>Satellite</div>
           <input
-            id="satellite-streets-v11"
-            type="radio"
-            name="rtoggle"
-            value="satellite"
-          />
-          <label for="satellite-streets-v11">satellite</label>
+          id="satellite-streets-v11"
+          type="radio"
+          name="rtoggle"
+          value="satellite"
+        />
+        </label>
+
+        <div class="specialAdd">
+          <div class="sidebarLabel">Search Radius</div>
+          <div style="display:flex;flex-direction: row;align-items: center;">
+            <input id="radius-input" type="number" min="1" max="10" value="3" style="border-color:transparent;padding:0px;height:initial;text-align:right;appearance: none;margin-right:-10px;">
+            <div style="font-size:12px;"> km</div>
+          </div>
+        </div>
+        
+        <div class="radius-slider-container">
+          <input type="range" min="1" max="10" value="3" id="radius-slider">
         </div>
 
+        <div class="sidebarLabel" style="margin-top:10px;">Location</div>
+        <button id="button1" class="locationItem" onclick="showmarker()">Grocery Stores
+          <div class="locationDecor"><div class="locationDecorInner"></div></div>
+        </button>
+        <button id="button2" class="locationItem" onclick="showmarker2()">Farmers Markets
+          <div class="locationDecor"><div class="locationDecorInner"></div></div>
+        </button>
+        <button id="button3" class="locationItem" onclick="showmarker3()">Fire Stations
+          <div class="locationDecor"><div class="locationDecorInner"></div></div>
+        </button>
+
+       
+
+        <div style="border-top:1px solid #eeeeee;padding-top:20px;margin-top:20px;">
+          <button id="find_nearest_business_button" class="findButton" onclick="showdirections()">
+            <div class="findDecor">
+              <div class="fdGroup">
+                <div class="find one"></div>
+                <div class="find two"></div>
+              </div>
+              
+              <div class="fdGroup two">
+                <div class="find one"></div>
+                <div class="find two"></div>
+              </div>
+            </div>
+            Find Nearest
+          </button>
+        </div>
       </div>
-      
+
+
 
       
     
-   
+      
+  
+      
     </div>
     
     
     
-    <div id="main" style="height: 91vh;">
+    <div id="main" style="height:calc(100vh - 89px);">
       <div id="map" style="width: 100%; height: 100%; position: relative">
       </div>
     <script>
@@ -125,6 +307,8 @@
         document.getElementById("mySidebar").style.width = "20%"
         document.getElementById("main").style.marginLeft = "20%";
         document.getElementById("main").style.width = "80%"
+        
+        
       }
       
       function closeNav() {
@@ -134,11 +318,14 @@
       }
 
       function openClose(){
-        if(document.getElementById("mySidebar").style.width=="20%"){
-          closeNav();
-        }else{
-          openNav();
-        }
+        var d = document.getElementById("canvas");
+        d.classList.toggle("menuOff");
+
+        // if(document.getElementById("mySidebar").style.width=="20%"){
+        //   closeNav();
+        // }else{
+        //   openNav();
+        // }
       }
       </script>
 
@@ -322,6 +509,7 @@ console.log(closest) -->
                   document.getElementById("button1").style.background='#f0f0f0';
                   marker1s.forEach((marker) => marker.remove());
               }
+              
             };
             function showmarker2(){
             if(!marker2showing)
@@ -365,7 +553,15 @@ console.log(closest) -->
                var marker2s = [];
                var marker3s = [];
                function showmarker()
+               
+
                {
+
+                var buttonOne = document.getElementById("button1");
+                buttonOne.classList.toggle("active")
+
+                
+
                  if(!marker1showing)
                  {
                      marker1showing = true;
@@ -380,6 +576,15 @@ console.log(closest) -->
                  }
                };
                function showmarker2(){
+
+                
+
+                var buttonTwo = document.getElementById("button2");
+                buttonTwo.classList.toggle("active")
+                
+                
+
+
                if(!marker2showing)
                {
                    marker2showing = true;
@@ -395,6 +600,11 @@ console.log(closest) -->
                  }
                };
                function showmarker3(){
+
+                var buttonThree = document.getElementById("button3");
+                buttonThree.classList.toggle("active")
+
+
                if(!marker3showing)
                {
                    marker3showing = true;
