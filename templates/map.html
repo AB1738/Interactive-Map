@@ -116,29 +116,24 @@
                 map.getSource('user-radius').setData(circle);
             }
         })
-<<<<<<< HEAD
       // const bounds = [
       //   [-75.323541,40.405131], // Southwest coordinates
       //   [-71.566392,41.411836] // Northeast coordinates
       // ];
-=======
-        
+
       const bounds = [
         [-75.323541,40.405131], // Southwest coordinates
         [-71.566392,41.411836] // Northeast coordinates
       ];
->>>>>>> b8270f703fdb8103bffd2e52b6a23355a1430690
+
       mapboxgl.accessToken =
         "pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA";
       const map = new mapboxgl.Map({
         container: "map", // container ID
         style: "mapbox://styles/mapbox/streets-v11?optimize=true", // style URL
         center: [-73.93, 40.73], // starting position [lng, lat]
-<<<<<<< HEAD
         zoom: 13, // starting zoom
-=======
         zoom: 11, // starting zoom
->>>>>>> b8270f703fdb8103bffd2e52b6a23355a1430690
         // maxBounds: bounds
       });
       
@@ -231,6 +226,10 @@
  
       geolocate.on('geolocate', (e) => {
           user_location = turf.point([e.coords.longitude, e.coords.latitude]);
+          map.flyTo({
+              center:[e.coords.longitude, e.coords.latitude],
+              zoom: 11
+          });
       });
           map.addControl(geolocate);
 
@@ -260,162 +259,316 @@
                var marker3s = [];
                function showmarker()
                {
-                 if(!marker1showing)
-                 {
-                     marker1showing = true;
+                   if (typeof map.getSource('grocery-stores') === 'undefined') {
+                       map.addSource('grocery-stores', {
+                           type: 'vector',
+                           url: 'mapbox://arielb1.38i7mvbz'
+                       });
+                       map.addLayer({
+                           'id': 'grocery-stores',
+                           'type': 'circle',
+                           'source': 'grocery-stores',
+                           'layout': {
+                               'visibility': 'visible'
+                           },
+                           'paint': {
+                               'circle-radius': 3,
+                               'circle-color': 'rgba(0,0,255,1)',
+                               // 'stroke-color':'#FF0000',
+                               // 'stroke-width': 1.5
+                           },
+                           'source-layer': 'Total_grocery_stores-6tzhl7'
+                       });
+                       const popup = new mapboxgl.Popup({
+                        closeButton : false,
+                        closeOnClick: false
+                    });
+    map.on('mouseover', 'grocery-stores', (e) => {
+            map.getCanvas().style.cursor = 'pointer';
+            const coordinates = e.features[0].geometry.coordinates.slice();
+            const properties = e.features[0].properties;
+            const name = properties['Entity Name'];
+            const city = properties['City'];
+            const county = properties['County'];
+            const address = properties['Street Address'];
+            const state = properties['State'];
+            const dba_name = properties['DBA Name'];
+            const establishment_type = properties['Establishment Type'];
+            const operation_type = properties['Operation Type'];
+            const sq_ft = properties['Square Footage'];
+            const zip = properties['Zip Code'];
+            const license_number = properties['License Number'];
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+            const html = "<b><u>Name:</b></u> " + name + '<br>' +
+                        "<b><u>City:</b></u> " + city + '<br>' +
+                        "<b><u>County:</b></u> " + county + '<br>' +
+                        "<b><u>Address:</b></u> " + address + '<br>' +
+                        "<b><u>State:</b></u> " + state + '<br>' +
+                        "<b><u>DBA Name:</b></u> " + dba_name + '<br>' +
+                        "<b><u>Establishment Type:</b></u> " + establishment_type + '<br>' +
+                        "<b><u>Operation Type:</b></u> " + operation_type + '<br>' +
+                        "<b><u>Square feet:</b></u> " + sq_ft + '<br>' +
+                        "<b><u>Zipcode:</b></u> " + zip + '<br>' +
+                        "<b><u>License Number:</b></u> " + license_number + '<br>'
+            popup.setLngLat(coordinates).setHTML(html).addTo(map);
+        })
+             map.on('mouseleave', 'grocery-stores', () => {
+                 map.getCanvas().style.cursor = '';
+                 popup.remove();
+             });
+                   }
+                   else {
+                       const visibility = map.getLayoutProperty('grocery-stores', 'visibility');
+                        if(visibility === "none")
+                        {
+                            map.setLayoutProperty('grocery-stores', 'visibility', 'visible');
+                        }
+                        else
+                        {
+                            map.setLayoutProperty('grocery-stores', 'visibility', 'none');
+                        }
+                   }
+                 }
+               function showmarker2() {
+                   if (typeof map.getSource('farmers-markets') === 'undefined') {
+                       map.addSource('farmers-markets', {
+                            type: 'vector',
+                            url: 'mapbox://arielb1.af9vybob'
+                        });
+                        map.addLayer({
+                            'id': 'farmers-markets',
+                            'type': 'circle',
+                            'source': 'farmers-markets',
+                            'layout': {
+                                'visibility': 'visible'
+                            },
+                            'paint': {
+                                'circle-radius': 3,
+                                'circle-color': 'rgba(0,128,0,1)'
+                            },
+                            'source-layer': 'DOHMH_Farmers_Markets-ccwyus'
+                        });
+                        let popup = new mapboxgl.Popup({
+                            closeButton: false,
+                            closeOnClick: false
+                        });
 
-                     map.addSource('grocery-stores', {
-        type: 'vector',
-        url: 'mapbox://arielb1.38i7mvbz'
-    });
-    map.addLayer({
-        'id': 'circles',
-        'type': 'circle',
-        'source': 'grocery-stores',
-        'layout': {
-            'visibility': 'visible'
-        },
-        'paint': {
-            'circle-radius': 3,
-            'circle-color': 'rgba(0,0,255,1)',
-            // 'stroke-color':'#FF0000',
-            // 'stroke-width': 1.5
-        },
-        'source-layer': 'Total_grocery_stores-6tzhl7'
-    });
-                    //  {% for address in addresses %} var marker = new
-                    //            mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
-                 }
-                //  else
-                //  {
-                //      marker1showing = false;
-                //      marker1s.forEach((marker) => marker.remove());
-                //      marker1s = []
-                //  }
-               };
-               function showmarker2(){
-               if(!marker2showing)
-               {
-                   marker2showing = true;
-        //                          {% for farmer_address in farmer_addresses %} var marker = new
-        //                        mapboxgl.Marker({
-        //  color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); marker2s.push(marker); {% endfor %}
-        //        }
-        map.addSource('farmers-markets', {
-        type: 'vector',
-        url: 'mapbox://arielb1.af9vybob'
-    });
-    map.addLayer({
-        'id': 'circles2',
-        'type': 'circle',
-        'source': 'farmers-markets',
-        'layout': {
-            'visibility': 'visible'
-        },
-        'paint': {
-            'circle-radius': 3,
-            'circle-color': 'rgba(0,128,0,1)'
-        },
-        'source-layer': 'DOHMH_Farmers_Markets-ccwyus'
-    });
-    
-                //  else
-                //  {
-                //      marker2showing = false;
-                //      marker2s.forEach((marker) => marker.remove());
-                //      marker2s = []
-                //  }
-               };
-              };
-               function showmarker3(){
-               if(!marker3showing)
-               {
-                   marker3showing = true;
-                   map.addSource('fire-houses', {
-        type: 'vector',
-        url: 'mapbox://arielb1.388xpmrj'
-    });
-    map.addLayer({
-        'id': 'fire-houses',
-        'type': 'circle',
-        'source': 'fire-houses',
-        'layout': {
-            'visibility': 'visible'
-        },
-        'paint': {
-            'circle-radius': 3,
-            'circle-color': 'rgba(255,0,0,1)'
-        },
-        'source-layer': 'FDNY_Firehouse_Listing-4hvksv'
-    });
-        //                          {% for fire_address in fire_addresses %} var marker = new
-        //                        mapboxgl.Marker({
-        //  color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
+                        map.on('mouseenter', 'farmers-markets', (e) => {
+                            map.getCanvas().style.cursor = 'pointer';
+                            const coordinates = e.features[0].geometry.coordinates.slice();
+                            let properties = e.features[0].properties;
+                            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                            }
+                            properties = JSON.stringify(properties).replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '').replaceAll();
+                            console.log(properties);
+                            popup.setLngLat(coordinates).setHTML(properties).addTo(map);
+                        });
+                        map.on('mouseleave', 'farmers-markets', (e) => {
+                            map.getCanvas().style.cursor = '';
+                            popup.remove();
+                        });
+                   }
+                   else
+                   {
+                       const visibility = map.getLayoutProperty('farmers-markets', 'visibility');
+                        if(visibility === "none")
+                        {
+                            map.setLayoutProperty('farmers-markets', 'visibility', 'visible');
+                        }
+                        else
+                        {
+                            map.setLayoutProperty('farmers-markets', 'visibility', 'none');
+                        }
+                   }
                }
-                 else
-                 {
-                     marker3showing = false;
-                     marker3s.forEach((marker) => marker.remove());
-                     marker3s = []
-                 }
-               };
+               function showmarker3() {
+                       if (typeof map.getSource('fire-houses') === 'undefined') {
+                           map.addSource('fire-houses', {
+                           type: 'vector',
+                           url: 'mapbox://arielb1.388xpmrj'
+                       });
+                           map.addLayer({
+                           'id': 'fire-houses',
+                           'type': 'circle',
+                           'source': 'fire-houses',
+                           'layout': {
+                               'visibility': 'visible'
+                           },
+                           'paint': {
+                               'circle-radius': 3,
+                               'circle-color': 'rgba(255,0,0,1)'
+                           },
+                           'source-layer': 'FDNY_Firehouse_Listing-4hvksv'
+                       });
+                       let popup = new mapboxgl.Popup({
+                            closeButton: false,
+                            closeOnClick: false
+                        });
+                           map.on('mouseenter', 'fire-houses', (e) => {
+                                map.getCanvas().style.cursor = 'pointer';
+                                const coordinates = e.features[0].geometry.coordinates.slice();
+                                let properties = e.features[0].properties;
+                                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                                }
+                                properties = JSON.stringify(properties).replaceAll('\"', '').replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '');
+                                popup.setLngLat(coordinates).setHTML(properties).addTo(map);
+                            });
+                           map.on('mouseleave', 'fire-houses', (e) => {
+                                map.getCanvas().style.cursor = '';
+                                popup.remove();
+                            });
+                       }
+                       else
+                       {
+                           const visibility = map.getLayoutProperty('fire-houses', 'visibility');
+                            if(visibility === "none")
+                            {
+                                map.setLayoutProperty('fire-houses', 'visibility', 'visible');
+                            }
+                            else
+                            {
+                                map.setLayoutProperty('fire-houses', 'visibility', 'none');
+                            }
+                       }
+               }
+
 
               function showmarker4(){
-                map.addSource('super-markets', {
-        type: 'vector',
-        url: 'mapbox://arielb1.dftl2j6f'
-    });
-    map.addLayer({
-        'id': 'super-markets',
-        'type': 'circle',
-        'source': 'super-markets',
-        'layout': {
-            'visibility': 'visible'
-        },
-        'paint': {
-            'circle-radius': 3,
-            'circle-color': 'rgba(255,0,255,1)',
-            
-        },
-        'source-layer': 'Supermarkets-52ltms'
-    });
+                   if(typeof map.getSource('super-markets') === 'undefined')
+                   {
+                       map.addSource('super-markets', {
+                            type: 'vector',
+                            url: 'mapbox://arielb1.dftl2j6f'
+                        });
+                       map.addLayer({
+                        'id': 'super-markets',
+                        'type': 'circle',
+                        'source': 'super-markets',
+                        'layout': {
+                            'visibility': 'visible'
+                        },
+                        'paint': {
+                            'circle-radius': 3,
+                            'circle-color': 'rgba(255,0,255,1)',
+
+                        },
+                        'source-layer': 'Supermarkets-52ltms'
+                    });
+                                              let popup = new mapboxgl.Popup({
+                            closeButton: false,
+                            closeOnClick: false
+                        });
+                           map.on('mouseenter', 'super-markets', (e) => {
+                                map.getCanvas().style.cursor = 'pointer';
+                                const coordinates = e.features[0].geometry.coordinates.slice();
+                                let properties = e.features[0].properties;
+                                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                                }
+                                properties = JSON.stringify(properties).replaceAll('\"', '').replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '');
+                                popup.setLngLat(coordinates).setHTML(properties).addTo(map);
+                            });
+                           map.on('mouseleave', 'super-markets', (e) => {
+                                map.getCanvas().style.cursor = '';
+                                popup.remove();
+                            });
+                   }
+                   else
+                   {
+                       const visibility = map.getLayoutProperty('super-markets', 'visibility');
+                        if(visibility === "none")
+                        {
+                            map.setLayoutProperty('super-markets', 'visibility', 'visible');
+                        }
+                        else
+                        {
+                            map.setLayoutProperty('super-markets', 'visibility', 'none');
+                        }
+                   }
                }
                function showmarker5(){
-                map.addSource('super-centers', {
-        type: 'vector',
-        url: 'mapbox://arielb1.bx5tiqmq'
-    });
-    map.addLayer({
-        'id': 'super-centers',
-        'type': 'circle',
-        'source': 'super-centers',
-        'layout': {
-            'visibility': 'visible'
-        },
-        'paint': {
-            'circle-radius': 3,
-            'circle-color': 'rgba(220,88,42,1)',
-            
-        },
-        'source-layer': 'Supercenters-49gbzn'
-    });
+                   if(typeof map.getSource('super-centers') === 'undefined')
+                   {
+                       map.addSource('super-centers', {
+                            type: 'vector',
+                            url: 'mapbox://arielb1.bx5tiqmq'
+                        });
+                       map.addLayer({
+                        'id': 'super-centers',
+                        'type': 'circle',
+                        'source': 'super-centers',
+                        'layout': {
+                            'visibility': 'visible'
+                        },
+                        'paint': {
+                            'circle-radius': 3,
+                            'circle-color': 'rgba(220,88,42,1)',
+
+                        },
+                        'source-layer': 'Supercenters-49gbzn'
+                    });
+                                                                     let popup = new mapboxgl.Popup({
+                            closeButton: false,
+                            closeOnClick: false
+                        });
+                           map.on('mouseenter', 'super-centers', (e) => {
+                                map.getCanvas().style.cursor = 'pointer';
+                                const coordinates = e.features[0].geometry.coordinates.slice();
+                                let properties = e.features[0].properties;
+                                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                                }
+                                properties = JSON.stringify(properties).replaceAll('\"', '').replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '');
+                                popup.setLngLat(coordinates).setHTML(properties).addTo(map);
+                            });
+                           map.on('mouseleave', 'super-centers', (e) => {
+                                map.getCanvas().style.cursor = '';
+                                popup.remove();
+                            });
+                   }
+                   else
+                   {
+                       const visibility = map.getLayoutProperty('super-centers', 'visibility');
+                        if(visibility === "none")
+                        {
+                            map.setLayoutProperty('super-centers', 'visibility', 'visible');
+                        }
+                        else
+                        {
+                            map.setLayoutProperty('super-centers', 'visibility', 'none');
+                        }
+                   }
                }
 
          function showdirections(){
+             let possible_layers = ['fire-houses', 'grocery-stores', 'super-centers', 'farmers-markets'];
           if(!directionsshowing){
+              let existing_layers = []
+              for (layer of possible_layers)
+              {
+                  if(typeof map.getLayer(layer) !== 'undefined' && map.getLayoutProperty(layer, 'visibility') === 'visible')
+                  {
+                      existing_layers.push(layer);
+                  }
+              }
+              let points = map.queryRenderedFeatures(
+                 {
+                     layers: existing_layers
+                 }
+             );
               directionsshowing = true;
-            let allMarkers = marker1s.concat(marker2s, marker3s);
             let radius = parseFloat(document.getElementById('radius-input').value);
             let circle_buffer = turf.buffer(user_location, radius, {units: 'miles'});
-            var points_in_circle = allMarkers.filter(function (marker) {
-                return turf.booleanPointInPolygon(turf.point([marker._lngLat.lng, marker._lngLat.lat]), circle_buffer);
+            var points_in_circle = points.filter(function (marker) {
+                return turf.booleanPointInPolygon(marker, circle_buffer);
             });
             if(points_in_circle.length > 0)
             {
-                let points = turf.featureCollection(points_in_circle.map(marker => {
-                    return turf.point([marker._lngLat.lng, marker._lngLat.lat]);
-                }));
-            let closest_marker = turf.nearestPoint(user_location, points);
+            let closest_marker = turf.nearestPoint(user_location, turf.featureCollection(points));
               if(user_location != null && closest_marker != null)
               {
                   map.addControl(directions, "top-left");
@@ -427,7 +580,7 @@
           else
           {
               directionsshowing = false;
-              
+              map.setZoom(11);
               if(map.hasControl(directions))
               {
                   map.removeControl(directions);
