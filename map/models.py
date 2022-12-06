@@ -20,12 +20,7 @@ class FarmersMarketAddresses(models.Model):
         self.long=g[1]
         super(FarmersMarketAddresses,self).save(*args,**kwargs)
 
-class FireHouseAddresses(models.Model):
-    fire_address=models.TextField()
-    lat=models.FloatField(blank=True,null=True)
-    long=models.FloatField(blank=True,null=True)
-
-class SuperCenterAddresses(models.Model):
+class Super_CenterAddresses(models.Model):
     supercenter_address=models.TextField()
     lat=models.FloatField(blank=True,null=True)
     long=models.FloatField(blank=True,null=True)
@@ -35,5 +30,12 @@ class SuperCenterAddresses(models.Model):
         g=g.latlng
         self.lat=g[0]
         self.long=g[1]
-        super(SuperCenterAddresses,self).save(*args,**kwargs)
+        super(Super_CenterAddresses,self).save(*args,**kwargs)
+        
+class FireHouseAddresses(models.Model):
+    fire_address=models.TextField()
+    lat=models.FloatField(blank=True,null=True)
+    long=models.FloatField(blank=True,null=True)
+
+
 

@@ -267,6 +267,9 @@
         <button id="button3" class="locationItem" onclick="showmarker3()">Fire Stations
           <div class="locationDecor"><div class="locationDecorInner"></div></div>
         </button>
+        <button id="button4" class="locationItem" onclick="showmarker4()">Super Centers
+          <div class="locationDecor"><div class="locationDecorInner"></div></div>
+        </button>
 
        
 
@@ -452,10 +455,12 @@
                var marker1showing = false;
                var marker2showing = false;
                var marker3showing = false;
+               var marker4showing = false;
                var directionsshowing = false;
                var marker1s = [];
                var marker2s = [];
                var marker3s = [];
+               var marker4s = [];
                function showmarker()
                
 
@@ -523,11 +528,32 @@
                      marker3s = []
                  }
                };
+               function showmarker4(){
+
+var buttonFour = document.getElementById("button4");
+buttonThree.classList.toggle("active")
+
+
+if(!marker4showing)
+{
+   marker4showing = true;
+                 {% for supercenter_address in supercenter_addresses %} var marker = new
+               mapboxgl.Marker({
+color: "#A020F0 "}).setLngLat([{{ supercenter_address.long }}, {{ supercenter_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
+}
+ else
+ {
+     marker4showing = false;
+     marker4s.forEach((marker) => marker.remove());
+     marker4s = []
+ }
+};
+               
 
          function showdirections(){
           if(!directionsshowing){
               directionsshowing = true;
-            let allMarkers = marker1s.concat(marker2s, marker3s);
+            let allMarkers = marker1s.concat(marker2s, marker3s,marker4s);
             let radius = parseFloat(document.getElementById('radius-input').value);
             let circle_buffer = turf.buffer(user_location, radius, {units: 'miles'});
             var points_in_circle = allMarkers.filter(function (marker) {

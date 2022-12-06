@@ -1,6 +1,6 @@
 from django.shortcuts import render  # noqa: F401
 from django.views.generic import TemplateView, CreateView
-from .models import GroceryStoreAddresses, FarmersMarketAddresses, FireHouseAddresses,SuperCenterAddresses
+from .models import GroceryStoreAddresses, FarmersMarketAddresses, FireHouseAddresses,Super_CenterAddresses
 
 
 class HomePageView(TemplateView):
@@ -15,7 +15,7 @@ class MapView(CreateView):
     model = GroceryStoreAddresses
     model = FarmersMarketAddresses
     model = FireHouseAddresses
-    model = SuperCenterAddresses
+    model = Super_CenterAddresses
     fields = ['address']
     fields = ['farmer_address']
     fields = ['fire_address']
@@ -30,5 +30,5 @@ class MapView(CreateView):
         context['addresses'] = GroceryStoreAddresses.objects.all()
         context['farmer_addresses'] = FarmersMarketAddresses.objects.all()
         context['fire_addresses'] = FireHouseAddresses.objects.all()
-        context['supercenter_addresses'] = SuperCenterAddresses.objects.all()
+        context['supercenter_addresses'] = Super_CenterAddresses.objects.all()
         return context
