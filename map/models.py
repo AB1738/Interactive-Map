@@ -25,3 +25,15 @@ class FireHouseAddresses(models.Model):
     lat=models.FloatField(blank=True,null=True)
     long=models.FloatField(blank=True,null=True)
 
+class SuperCenterAddresses(models.Model):
+    supercenter_address=models.TextField()
+    lat=models.FloatField(blank=True,null=True)
+    long=models.FloatField(blank=True,null=True)
+
+    def save(self, *args, **kwargs):
+        g=geocoder.mapbox(self.supercenter_address,key=access_token)
+        g=g.latlng
+        self.lat=g[0]
+        self.long=g[1]
+        super(SuperCenterAddresses,self).save(*args,**kwargs)
+
