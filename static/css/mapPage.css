@@ -93,3 +93,10 @@ header {
     display: none;
 }
 
+.farmerMarket{
+    background-image: url("farmerMarket.png");
+}
+
+.fireStation{
+    background-image: url("firestation.png");
+}

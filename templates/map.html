@@ -508,7 +508,12 @@ console.log(closest) -->
                  {
                      marker1showing = true;
                      {% for address in addresses %} var marker = new
-                               mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]).addTo(map); marker1s.push(marker); {% endfor %}
+                               mapboxgl.Marker().setLngLat([{{ address.long }}, {{ address.lat }}]); marker.setPopup(
+    new mapboxgl.Popup({ offset: 25 }) // add popups
+      .setHTML(
+        `<h3>This is a test</h3><p>This is a test2</p>`
+      )
+  ).addTo(map); marker1s.push(marker); {% endfor %}
                  }
                  else
                  {
@@ -532,7 +537,7 @@ console.log(closest) -->
                    marker2showing = true;
                                  {% for farmer_address in farmer_addresses %} var marker = new
                                mapboxgl.Marker({
-         color: "#228B22"}).setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); marker2s.push(marker); {% endfor %}
+         color: "#228B22"}); marker.getElement().classList.add("farmerMarket"); marker.setLngLat([{{ farmer_address.long }}, {{ farmer_address.lat }}]).addTo(map); marker2s.push(marker); {% endfor %}
                }
                  else
                  {
@@ -552,7 +557,7 @@ console.log(closest) -->
                    marker3showing = true;
                                  {% for fire_address in fire_addresses %} var marker = new
                                mapboxgl.Marker({
-         color: "#FF0000 "}).setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
+         color: "#FF0000 "});marker.getElement().classList.add("fireStation");marker.setLngLat([{{ fire_address.long }}, {{ fire_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
                }
                  else
                  {
