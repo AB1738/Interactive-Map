@@ -530,8 +530,8 @@
                };
                function showmarker4(){
 
-// var buttonFour = document.getElementById("button4");
-// buttonThree.classList.toggle("active")
+var buttonFour = document.getElementById("button4");
+buttonFour.classList.toggle("active")
 
 
 if(!marker4showing)
@@ -539,7 +539,7 @@ if(!marker4showing)
    marker4showing = true;
                  {% for supercenter_address in supercenter_addresses %} var marker = new
                mapboxgl.Marker({
-color: "#A020F0 "}).setLngLat([{{ supercenter_address.long }}, {{ supercenter_address.lat }}]).addTo(map); marker3s.push(marker); {% endfor %}
+color: "#A020F0 "}).setLngLat([{{ supercenter_address.long }}, {{ supercenter_address.lat }}]).addTo(map); marker4s.push(marker); {% endfor %}
 }
  else
  {
