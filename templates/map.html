@@ -362,7 +362,7 @@
                             while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                                 coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                             }
-                            properties = JSON.stringify(properties).replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '').replaceAll();
+                            properties = JSON.stringify(properties).replaceAll('\"', '').replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '').replaceAll();
                             console.log(properties);
                             popup.setLngLat(coordinates).setHTML(properties).addTo(map);
                         });
