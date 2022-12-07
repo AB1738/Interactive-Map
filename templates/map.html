@@ -903,195 +903,195 @@ map.addLayer(
 );
 }
 
-// function groceryheatmap(){
+function supercenterheatmap(){
 
 
 
 
-// map.addSource('grocery-stores-heatmap', {
-// 'type': 'vector',
-// 'url': 'mapbox://arielb1.38i7mvbz'
-// });
+map.addSource('super-markets-heatmap', {
+'type': 'vector',
+'url': 'mapbox://arielb1.dftl2j6f'
+});
  
-// map.addLayer(
-// {
-// 'id': 'grocery-stores-heat',
-// 'type': 'heatmap',
-// 'source': 'grocery-stores-heatmap',
-// 'source-layer': 'Total_grocery_stores-6tzhl7',
-// 'maxzoom': 16,
-// 'paint': {
+map.addLayer(
+{
+'id': 'super-markets-heat',
+'type': 'heatmap',
+'source': 'super-markets-heatmap',
+'source-layer': 'Supermarkets-52ltms',
+'maxzoom': 16,
+'paint': {
 
-// 'heatmap-weight': .8,
-// 'heatmap-intensity': 1.1,
-// // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-// // Begin color ramp at 0-stop with a 0-transparancy color
-// // to create a blur-like effect.
-// 'heatmap-color': [
-//       "interpolate",
-//       ["linear"],
-//       ["heatmap-density"],
-//       0,
-//       "rgba(0, 0, 255, 0)",
-//       0.1,
-//       "royalblue",
-//       0.3,
-//       "cyan",
-//       0.5,
-//       "lime",
-//       0.7,
-//       "yellow",
-//       1,
-//       "red"
-//     ],
-// 'heatmap-radius': [
-//       "interpolate",
-//       ["linear"],
-//       ["zoom"],
-//       0,
-//       5,
-//       22,
-//       30
-//     ],
-// // Transition from heatmap to circle layer by zoom level
-// 'heatmap-opacity':1
-// }
-// },
+'heatmap-weight': .8,
+'heatmap-intensity': 1.1,
+// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+// Begin color ramp at 0-stop with a 0-transparancy color
+// to create a blur-like effect.
+'heatmap-color': [
+      "interpolate",
+      ["linear"],
+      ["heatmap-density"],
+      0,
+      "rgba(0, 0, 255, 0)",
+      0.1,
+      "royalblue",
+      0.3,
+      "cyan",
+      0.5,
+      "lime",
+      0.7,
+      "yellow",
+      1,
+      "red"
+    ],
+'heatmap-radius': [
+      "interpolate",
+      ["linear"],
+      ["zoom"],
+      0,
+      5,
+      22,
+      30
+    ],
+// Transition from heatmap to circle layer by zoom level
+'heatmap-opacity':1
+}
+},
 
-// );
+);
  
-// map.addLayer(
-// {
-// 'id': 'grocery-stores-point',
-// 'type': 'circle',
-// 'source': 'grocery-stores-heatmap',
-// 'source-layer': 'Total_grocery_stores-6tzhl7',
-// 'minzoom': 1,
-// 'paint': {
+map.addLayer(
+{
+'id': 'super-markets-point',
+'type': 'circle',
+'source': 'super-markets-heatmap',
+'source-layer': 'Supermarkets-52ltms',
+'minzoom': 1,
+'paint': {
 
-// 'circle-radius': 3,
+'circle-radius': 3,
 
-// 'circle-color': [
-// 'interpolate',
-// ['linear'],
-// ['get', 'Square Footage'],
-// 1,
-// 'rgba(33,102,172,0)',
-// 2,
-// 'rgb(103,169,207)',
-// 3,
-// 'rgb(209,229,240)',
-// 4,
-// 'rgb(253,219,199)',
-// 5,
-// 'rgb(239,138,98)',
-// 6,
-// 'rgb(178,24,43)'
-// ],
-// 'circle-stroke-color': 'white',
-// 'circle-stroke-width': 1,
-// // Transition from heatmap to circle layer by zoom level
-// 'circle-opacity':2
-// }
-//  },
+'circle-color': [
+'interpolate',
+['linear'],
+['get', 'Square Footage'],
+1,
+'rgba(33,102,172,0)',
+2,
+'rgb(103,169,207)',
+3,
+'rgb(209,229,240)',
+4,
+'rgb(253,219,199)',
+5,
+'rgb(239,138,98)',
+6,
+'rgb(178,24,43)'
+],
+'circle-stroke-color': 'white',
+'circle-stroke-width': 1,
+// Transition from heatmap to circle layer by zoom level
+'circle-opacity':2
+}
+ },
 
-// );
-// }
+);
+}
 
-// function groceryheatmap(){
-
-
+function supercenterheatmap(){
 
 
-// map.addSource('grocery-stores-heatmap', {
-// 'type': 'vector',
-// 'url': 'mapbox://arielb1.38i7mvbz'
-// });
+
+
+map.addSource('super-center-heatmap', {
+'type': 'vector',
+'url': 'mapbox://arielb1.bx5tiqmq'
+});
  
-// map.addLayer(
-// {
-// 'id': 'grocery-stores-heat',
-// 'type': 'heatmap',
-// 'source': 'grocery-stores-heatmap',
-// 'source-layer': 'Total_grocery_stores-6tzhl7',
-// 'maxzoom': 16,
-// 'paint': {
+map.addLayer(
+{
+'id': 'super-center-heat',
+'type': 'heatmap',
+'source': 'super-center-heatmap',
+'source-layer': 'Supercenters-49gbzn',
+'maxzoom': 16,
+'paint': {
 
-// 'heatmap-weight': .8,
-// 'heatmap-intensity': 1.1,
-// // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-// // Begin color ramp at 0-stop with a 0-transparancy color
-// // to create a blur-like effect.
-// 'heatmap-color': [
-//       "interpolate",
-//       ["linear"],
-//       ["heatmap-density"],
-//       0,
-//       "rgba(0, 0, 255, 0)",
-//       0.1,
-//       "royalblue",
-//       0.3,
-//       "cyan",
-//       0.5,
-//       "lime",
-//       0.7,
-//       "yellow",
-//       1,
-//       "red"
-//     ],
-// 'heatmap-radius': [
-//       "interpolate",
-//       ["linear"],
-//       ["zoom"],
-//       0,
-//       5,
-//       22,
-//       30
-//     ],
-// // Transition from heatmap to circle layer by zoom level
-// 'heatmap-opacity':1
-// }
-// },
+'heatmap-weight': .8,
+'heatmap-intensity': 1.1,
+// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+// Begin color ramp at 0-stop with a 0-transparancy color
+// to create a blur-like effect.
+'heatmap-color': [
+      "interpolate",
+      ["linear"],
+      ["heatmap-density"],
+      0,
+      "rgba(0, 0, 255, 0)",
+      0.1,
+      "royalblue",
+      0.3,
+      "cyan",
+      0.5,
+      "lime",
+      0.7,
+      "yellow",
+      1,
+      "red"
+    ],
+'heatmap-radius': [
+      "interpolate",
+      ["linear"],
+      ["zoom"],
+      0,
+      5,
+      22,
+      30
+    ],
+// Transition from heatmap to circle layer by zoom level
+'heatmap-opacity':1
+}
+},
 
-// );
+);
  
-// map.addLayer(
-// {
-// 'id': 'grocery-stores-point',
-// 'type': 'circle',
-// 'source': 'grocery-stores-heatmap',
-// 'source-layer': 'Total_grocery_stores-6tzhl7',
-// 'minzoom': 1,
-// 'paint': {
+map.addLayer(
+{
+'id': 'super-center-point',
+'type': 'circle',
+'source': 'super-center-heatmap',
+'source-layer': 'Supercenters-49gbzn',
+'minzoom': 1,
+'paint': {
 
-// 'circle-radius': 3,
+'circle-radius': 3,
 
-// 'circle-color': [
-// 'interpolate',
-// ['linear'],
-// ['get', 'Square Footage'],
-// 1,
-// 'rgba(33,102,172,0)',
-// 2,
-// 'rgb(103,169,207)',
-// 3,
-// 'rgb(209,229,240)',
-// 4,
-// 'rgb(253,219,199)',
-// 5,
-// 'rgb(239,138,98)',
-// 6,
-// 'rgb(178,24,43)'
-// ],
-// 'circle-stroke-color': 'white',
-// 'circle-stroke-width': 1,
-// // Transition from heatmap to circle layer by zoom level
-// 'circle-opacity':2
-// }
-//  },
+'circle-color': [
+'interpolate',
+['linear'],
+['get', 'Square Footage'],
+1,
+'rgba(33,102,172,0)',
+2,
+'rgb(103,169,207)',
+3,
+'rgb(209,229,240)',
+4,
+'rgb(253,219,199)',
+5,
+'rgb(239,138,98)',
+6,
+'rgb(178,24,43)'
+],
+'circle-stroke-color': 'white',
+'circle-stroke-width': 1,
+// Transition from heatmap to circle layer by zoom level
+'circle-opacity':2
+}
+ },
 
-// );
-// }
+);
+}
 
 
 
