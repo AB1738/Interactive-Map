@@ -244,6 +244,7 @@
     <button id="button3" onclick="showmarker3()">Fire Stations</button>
     <button id="button4" onclick="showmarker4()">Supermarkets</button>
     <button id="button5" onclick="showmarker5()">Supercenters</button>
+    <button id="heatmap" onclick="groceryheatmap()">Grocery Store Heatmap</button>
 
     <div><button id="find_nearest_business_button" onclick="showdirections()">Find Nearest</button></div>
 </script>
@@ -601,8 +602,6 @@
 
 
 
-
-
         
     </script>
 
@@ -613,11 +612,14 @@
 <script>
 
 
+function groceryheatmap(){
 
-map.on('load', () => {
+
+
+// map.on('load', () => {
 // Add a geojson point source.
 // Heatmap layers also work with a vector tile source.
-map.addSource('grocery-stores', {
+map.addSource('grocery-stores-heatmap', {
 'type': 'vector',
 'url': 'mapbox://arielb1.38i7mvbz'
 });
@@ -626,31 +628,25 @@ map.addLayer(
 {
 'id': 'grocery-stores-heat',
 'type': 'heatmap',
-'source': 'grocery-stores',
+'source': 'grocery-stores-heatmap',
 'source-layer': 'Total_grocery_stores-6tzhl7',
 'maxzoom': 9,
 'paint': {
 // Increase the heatmap weight based on frequency and property magnitude
-'heatmap-weight': [
-'interpolate',
-['linear'],
-['get', 'mag'],
-0,
-0,
-6,
-1
-],
-// Increase the heatmap color weight weight by zoom level
-// heatmap-intensity is a multiplier on top of heatmap-weight
-'heatmap-intensity': [
-'interpolate',
-['linear'],
-['zoom'],
-0,
-1,
-9,
-3
-],
+'heatmap-weight': {
+property:'Square-Footage',
+type: 'exponential',
+stops: [
+          [1, 0],
+          [62, 1]
+        ]
+},
+'heatmap-intensity': {
+        stops: [
+          [11, 1],
+          [15, 3]
+        ]
+      },
 // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
 // Begin color ramp at 0-stop with a 0-transparancy color
 // to create a blur-like effect.
@@ -693,14 +689,14 @@ map.addLayer(
 ]
 }
 },
-// 'waterway-label'
+
 );
  
 map.addLayer(
 {
 'id': 'grocery-stores-point',
 'type': 'circle',
-'source': 'grocery-stores',
+'source': 'grocery-stores-heatmap',
 'source-layer': 'Total_grocery_stores-6tzhl7',
 'minzoom': 7,
 'paint': {
@@ -746,9 +742,16 @@ map.addLayer(
 ]
 }
  },
-// 'waterway-label'
+
 );
-});
+}
+
+
+
+
+
+
+
 </script>
   </body>
 </html>
