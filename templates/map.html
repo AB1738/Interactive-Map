@@ -617,16 +617,17 @@
 map.on('load', () => {
 // Add a geojson point source.
 // Heatmap layers also work with a vector tile source.
-map.addSource('earthquakes', {
-'type': 'geojson',
-'data': 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
+map.addSource('grocery-stores', {
+'type': 'vector',
+'url': 'mapbox://arielb1.38i7mvbz'
 });
  
 map.addLayer(
 {
-'id': 'earthquakes-heat',
+'id': 'grocery-stores-heat',
 'type': 'heatmap',
-'source': 'earthquakes',
+'source': 'grocery-stores',
+'source-layer': 'Total_grocery_stores-6tzhl7',
 'maxzoom': 9,
 'paint': {
 // Increase the heatmap weight based on frequency and property magnitude
@@ -677,8 +678,8 @@ map.addLayer(
 ['zoom'],
 0,
 2,
-9,
-20
+1,
+29
 ],
 // Transition from heatmap to circle layer by zoom level
 'heatmap-opacity': [
@@ -692,14 +693,15 @@ map.addLayer(
 ]
 }
 },
-'waterway-label'
+// 'waterway-label'
 );
  
 map.addLayer(
 {
-'id': 'earthquakes-point',
+'id': 'grocery-stores-point',
 'type': 'circle',
-'source': 'earthquakes',
+'source': 'grocery-stores',
+'source-layer': 'Total_grocery_stores-6tzhl7',
 'minzoom': 7,
 'paint': {
 // Size circle radius by earthquake magnitude and zoom level
@@ -743,8 +745,8 @@ map.addLayer(
 1
 ]
 }
-},
-'waterway-label'
+ },
+// 'waterway-label'
 );
 });
 </script>
