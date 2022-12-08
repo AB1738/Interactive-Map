@@ -133,7 +133,6 @@
         style: "mapbox://styles/mapbox/streets-v11?optimize=true", // style URL
         center: [-73.93, 40.73], // starting position [lng, lat]
         zoom: 13, // starting zoom
-        zoom: 11, // starting zoom
         // maxBounds: bounds
       });
       
@@ -226,10 +225,6 @@
  
       geolocate.on('geolocate', (e) => {
           user_location = turf.point([e.coords.longitude, e.coords.latitude]);
-          map.flyTo({
-              center:[e.coords.longitude, e.coords.latitude],
-              zoom: 11
-          });
       });
           map.addControl(geolocate);
 
@@ -249,14 +244,8 @@
 </script>
     <script>
       
-
-               var marker1showing = false;
-               var marker2showing = false;
-               var marker3showing = false;
                var directionsshowing = false;
-               var marker1s = [];
-               var marker2s = [];
-               var marker3s = [];
+
                function showmarker()
                {
                    if (typeof map.getSource('grocery-stores') === 'undefined') {
@@ -286,33 +275,12 @@
     map.on('mouseover', 'grocery-stores', (e) => {
             map.getCanvas().style.cursor = 'pointer';
             const coordinates = e.features[0].geometry.coordinates.slice();
-            const properties = e.features[0].properties;
-            const name = properties['Entity Name'];
-            const city = properties['City'];
-            const county = properties['County'];
-            const address = properties['Street Address'];
-            const state = properties['State'];
-            const dba_name = properties['DBA Name'];
-            const establishment_type = properties['Establishment Type'];
-            const operation_type = properties['Operation Type'];
-            const sq_ft = properties['Square Footage'];
-            const zip = properties['Zip Code'];
-            const license_number = properties['License Number'];
+            let properties = e.features[0].properties;
             while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
             }
-            const html = "<b><u>Name:</b></u> " + name + '<br>' +
-                        "<b><u>City:</b></u> " + city + '<br>' +
-                        "<b><u>County:</b></u> " + county + '<br>' +
-                        "<b><u>Address:</b></u> " + address + '<br>' +
-                        "<b><u>State:</b></u> " + state + '<br>' +
-                        "<b><u>DBA Name:</b></u> " + dba_name + '<br>' +
-                        "<b><u>Establishment Type:</b></u> " + establishment_type + '<br>' +
-                        "<b><u>Operation Type:</b></u> " + operation_type + '<br>' +
-                        "<b><u>Square feet:</b></u> " + sq_ft + '<br>' +
-                        "<b><u>Zipcode:</b></u> " + zip + '<br>' +
-                        "<b><u>License Number:</b></u> " + license_number + '<br>'
-            popup.setLngLat(coordinates).setHTML(html).addTo(map);
+            properties = JSON.stringify(properties).replaceAll('\"', '').replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '').replaceAll();
+            popup.setLngLat(coordinates).setHTML(properties).addTo(map);
         })
              map.on('mouseleave', 'grocery-stores', () => {
                  map.getCanvas().style.cursor = '';
@@ -362,8 +330,7 @@
                             while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                                 coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                             }
-                            properties = JSON.stringify(properties).replaceAll('\"', '').replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '').replaceAll();
-                            console.log(properties);
+                            properties = JSON.stringify(properties).replaceAll('\"', '').replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '')
                             popup.setLngLat(coordinates).setHTML(properties).addTo(map);
                         });
                         map.on('mouseleave', 'farmers-markets', (e) => {
@@ -511,7 +478,7 @@
                         },
                         'source-layer': 'Supercenters-49gbzn'
                     });
-                                                                     let popup = new mapboxgl.Popup({
+                        let popup = new mapboxgl.Popup({
                             closeButton: false,
                             closeOnClick: false
                         });
@@ -545,8 +512,10 @@
                }
 
          function showdirections(){
-             let possible_layers = ['fire-houses', 'grocery-stores', 'super-centers', 'farmers-markets'];
-          if(!directionsshowing){
+          let possible_layers = ['fire-houses', 'grocery-stores', 'super-centers', 'farmers-markets', 'super-markets'];
+          if(!directionsshowing) {
+              console.log(map.getSource('fire-houses'));
+              directionsshowing = true;
               let existing_layers = []
               for (layer of possible_layers)
               {
@@ -560,32 +529,30 @@
                      layers: existing_layers
                  }
              );
-              directionsshowing = true;
             let radius = parseFloat(document.getElementById('radius-input').value);
             let circle_buffer = turf.buffer(user_location, radius, {units: 'miles'});
-            var points_in_circle = points.filter(function (marker) {
+            let points_in_circle = points.filter(function (marker) {
                 return turf.booleanPointInPolygon(marker, circle_buffer);
             });
             if(points_in_circle.length > 0)
             {
-            let closest_marker = turf.nearestPoint(user_location, turf.featureCollection(points));
-              if(user_location != null && closest_marker != null)
-              {
-                  map.addControl(directions, "top-left");
-                  directions.setOrigin(user_location.geometry.coordinates);
-                  directions.setDestination(closest_marker.geometry.coordinates);
-              }
+                let closest_marker = turf.nearestPoint(user_location, turf.featureCollection(points));
+                  if(user_location != null && closest_marker != null)
+                  {
+                      map.addControl(directions, "top-left");
+                      directions.setOrigin(user_location.geometry.coordinates);
+                      directions.setDestination(closest_marker.geometry.coordinates);
+                  }
             }
           }
           else
           {
               directionsshowing = false;
-              map.setZoom(11);
               if(map.hasControl(directions))
               {
                   map.removeControl(directions);
               }
-              console.log("There are no establishments in this radius")
+              console.log("There are no establishments in this radius");
           }
         }
 
