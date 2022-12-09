@@ -81,8 +81,20 @@
     
     <script>
 
-
-
+        var layers_showing = {
+            'grocery-stores' : false,
+            'farmers-markets' : false,
+            'fire-houses' : false,
+            'super-centers' : false,
+            'super-markets' : false
+        };
+        var db_map = {
+            'grocery-stores' : {{ addresses | safe }},
+            'farmers-markets' : {{ farmer_addresses | safe}},
+            'fire-houses' : {{ fire_addresses | safe}},
+            'super-centers' : {{ supercenter_addresses | safe}},
+            'super-markets' : {{ supermarket_addresses | safe}}
+        };
 
         const RADIUS_LIMIT = 10;
         let radius_slider = document.getElementById('radius-slider');
@@ -218,7 +230,7 @@
                       "fill-opacity": 0.3
                   }
               });
-          }
+            }
           }
           
           
@@ -232,6 +244,7 @@
                     accessToken: mapboxgl.accessToken,
                     interactive: false,
                 });
+
     </script>
    
     <button id="button1" onclick="showmarker()">Grocery Stores</button>
@@ -263,8 +276,6 @@
                            'paint': {
                                'circle-radius': 3,
                                'circle-color': 'rgba(0,0,255,1)',
-                               // 'stroke-color':'#FF0000',
-                               // 'stroke-width': 1.5
                            },
                            'source-layer': 'Total_grocery_stores-6tzhl7'
                        });
@@ -272,16 +283,16 @@
                         closeButton : false,
                         closeOnClick: false
                     });
-    map.on('mouseover', 'grocery-stores', (e) => {
-            map.getCanvas().style.cursor = 'pointer';
-            const coordinates = e.features[0].geometry.coordinates.slice();
-            let properties = e.features[0].properties;
-            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-            }
-            properties = JSON.stringify(properties).replaceAll('\"', '').replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '').replaceAll();
-            popup.setLngLat(coordinates).setHTML(properties).addTo(map);
-        })
+            map.on('mouseover', 'grocery-stores', (e) => {
+                    map.getCanvas().style.cursor = 'pointer';
+                    const coordinates = e.features[0].geometry.coordinates.slice();
+                    let properties = e.features[0].properties;
+                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                    }
+                    properties = JSON.stringify(properties).replaceAll('\"', '').replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '').replaceAll();
+                    popup.setLngLat(coordinates).setHTML(properties).addTo(map);
+                })
              map.on('mouseleave', 'grocery-stores', () => {
                  map.getCanvas().style.cursor = '';
                  popup.remove();
@@ -298,6 +309,7 @@
                             map.setLayoutProperty('grocery-stores', 'visibility', 'none');
                         }
                    }
+                   layers_showing['grocery-stores'] = !layers_showing['grocery-stores']
                  }
                function showmarker2() {
                    if (typeof map.getSource('farmers-markets') === 'undefined') {
@@ -350,6 +362,7 @@
                             map.setLayoutProperty('farmers-markets', 'visibility', 'none');
                         }
                    }
+                   layers_showing['farmers-markets'] = !layers_showing['farmers-markets']
                }
                function showmarker3() {
                        if (typeof map.getSource('fire-houses') === 'undefined') {
@@ -401,6 +414,7 @@
                                 map.setLayoutProperty('fire-houses', 'visibility', 'none');
                             }
                        }
+                       layers_showing['fire-houses'] = !layers_showing['fire-houses']
                }
 
 
@@ -456,6 +470,7 @@
                             map.setLayoutProperty('super-markets', 'visibility', 'none');
                         }
                    }
+                   layers_showing['super-markets'] = !layers_showing['super-markets']
                }
                function showmarker5(){
                    if(typeof map.getSource('super-centers') === 'undefined')
@@ -509,26 +524,23 @@
                             map.setLayoutProperty('super-centers', 'visibility', 'none');
                         }
                    }
+                   layers_showing['super-centers'] = !layers_showing['super-centers']
                }
 
          function showdirections(){
-          let possible_layers = ['fire-houses', 'grocery-stores', 'super-centers', 'farmers-markets', 'super-markets'];
           if(!directionsshowing) {
-              console.log(map.getSource('fire-houses'));
               directionsshowing = true;
-              let existing_layers = []
-              for (layer of possible_layers)
+              let layers_to_search = [];
+              for (const [layer, layerVisible] of Object.entries(layers_showing))
               {
-                  if(typeof map.getLayer(layer) !== 'undefined' && map.getLayoutProperty(layer, 'visibility') === 'visible')
+                  if(layerVisible)
                   {
-                      existing_layers.push(layer);
+                      layers_to_search = layers_to_search.concat(db_map[layer]);
                   }
               }
-              let points = map.queryRenderedFeatures(
-                 {
-                     layers: existing_layers
-                 }
-             );
+              let points = layers_to_search.map( (point) => {
+                  return turf.point([point.long, point.lat]);
+              });
             let radius = parseFloat(document.getElementById('radius-input').value);
             let circle_buffer = turf.buffer(user_location, radius, {units: 'miles'});
             let points_in_circle = points.filter(function (marker) {

@@ -16,8 +16,14 @@ class ModelType(Enum):
 class Command(BaseCommand):
     model = GroceryStoreAddresses
     model = FarmersMarketAddresses
+    model = FireHouseAddresses
+    model = SupercenterAddresses
+    model = SuperMarketAddresses
     fields = ['address']
     fields = ['farmer_address']
+    fields = ['fire_address']
+    fields = ['supercenter_address']
+    fields = ['supermarket_address']
     template_name = 'map.html'
     success_url = '/'
 
@@ -54,11 +60,16 @@ class Command(BaseCommand):
         SUPERMARKETS_PATH = DATA_ROOT + 'supermarkets.csv'
         if not FarmersMarketAddresses.objects.exists():
             self.__process_csv(ObjectType=ModelType.FarmerMarket, Path=FARMER_MARKET_PATH)
+            print("Success!")
         if not GroceryStoreAddresses.objects.exists():
             self.__process_csv(ObjectType=ModelType.GroceryStore, Path=GROCERY_STORE_PATH)
+            print("Success!")
         if not FireHouseAddresses.objects.exists():
             self.__process_csv(ObjectType=ModelType.Firehouses, Path=FIREHOUSE_PATH)
+            print("Success!")
         if not SuperMarketAddresses.objects.exists():
             self.__process_csv(ObjectType=ModelType.Supermarkets, Path=SUPERMARKETS_PATH)
+            print("Success!")
         if not SupercenterAddresses.objects.exists():
             self.__process_csv(ObjectType=ModelType.Supercenters, Path=SUPERCENTERS_PATH)
+            print("Success!")
