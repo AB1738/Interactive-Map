@@ -548,7 +548,17 @@
             });
             if(points_in_circle.length > 0)
             {
-                let closest_marker = turf.nearestPoint(user_location, turf.featureCollection(points));
+                let closest_marker_distance = Number.MAX_SAFE_INTEGER;
+                let closest_marker = null;
+                for(point of points)
+                {
+                    let distance = turf.distance(user_location, point, {units: 'miles'});
+                    if(distance < closest_marker_distance)
+                    {
+                        closest_marker_distance = distance;
+                        closest_marker = point;
+                    }
+                }
                   if(user_location != null && closest_marker != null)
                   {
                       map.addControl(directions, "top-left");
