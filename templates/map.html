@@ -1134,294 +1134,343 @@ function farmerheatmap(){
 
 function fireheatmap(){
 
+  if(typeof map.getSource('fire-station-heatmap') === 'undefined')
+    {
+      map.addSource('fire-station-heatmap', {
+      'type': 'vector',
+      'url': 'mapbox://arielb1.388xpmrj'
+      });
+      
+      map.addLayer(
+      {
+      'id': 'fire-station-heat',
+      'type': 'heatmap',
+      'source': 'fire-station-heatmap',
+      'source-layer': 'FDNY_Firehouse_Listing-4hvksv',
+      'maxzoom': 22,
+      'paint': {
 
+      'heatmap-weight': .8,
+      'heatmap-intensity': 1.1,
+      // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+      // Begin color ramp at 0-stop with a 0-transparancy color
+      // to create a blur-like effect.
+      'heatmap-color': [
+            "interpolate",
+            ["linear"],
+            ["heatmap-density"],
+            0,
+            "rgba(0, 0, 255, 0)",
+            0.1,
+            "royalblue",
+            0.3,
+            "cyan",
+            0.5,
+            "lime",
+            0.7,
+            "yellow",
+            1,
+            "red"
+          ],
+      'heatmap-radius': [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            0,
+            5,
+            22,
+            30
+          ],
+      // Transition from heatmap to circle layer by zoom level
+      'heatmap-opacity':1
+      }
+      },
 
+      );
+      
+      map.addLayer(
+      {
+      'id': 'fire-station-point',
+      'type': 'circle',
+      'source': 'fire-station-heatmap',
+      'source-layer': 'FDNY_Firehouse_Listing-4hvksv',
+      'minzoom': 1,
+      'paint': {
 
-map.addSource('fire-station-heatmap', {
-'type': 'vector',
-'url': 'mapbox://arielb1.388xpmrj'
-});
- 
-map.addLayer(
-{
-'id': 'fire-station-heat',
-'type': 'heatmap',
-'source': 'fire-station-heatmap',
-'source-layer': 'FDNY_Firehouse_Listing-4hvksv',
-'maxzoom': 22,
-'paint': {
+      'circle-radius': 3,
 
-'heatmap-weight': .8,
-'heatmap-intensity': 1.1,
-// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-// Begin color ramp at 0-stop with a 0-transparancy color
-// to create a blur-like effect.
-'heatmap-color': [
-      "interpolate",
-      ["linear"],
-      ["heatmap-density"],
-      0,
-      "rgba(0, 0, 255, 0)",
-      0.1,
-      "royalblue",
-      0.3,
-      "cyan",
-      0.5,
-      "lime",
-      0.7,
-      "yellow",
+      'circle-color': [
+      'interpolate',
+      ['linear'],
+      ['get', 'Square Footage'],
       1,
-      "red"
-    ],
-'heatmap-radius': [
-      "interpolate",
-      ["linear"],
-      ["zoom"],
-      0,
+      'rgba(33,102,172,0)',
+      2,
+      'rgb(103,169,207)',
+      3,
+      'rgb(209,229,240)',
+      4,
+      'rgb(253,219,199)',
       5,
-      22,
-      30
-    ],
-// Transition from heatmap to circle layer by zoom level
-'heatmap-opacity':1
-}
-},
+      'rgb(239,138,98)',
+      6,
+      'rgb(178,24,43)'
+      ],
+      'circle-stroke-color': 'white',
+      'circle-stroke-width': 1,
+      // Transition from heatmap to circle layer by zoom level
+      'circle-opacity':2
+      }
+      },
 
-);
- 
-map.addLayer(
-{
-'id': 'fire-station-point',
-'type': 'circle',
-'source': 'fire-station-heatmap',
-'source-layer': 'FDNY_Firehouse_Listing-4hvksv',
-'minzoom': 1,
-'paint': {
+      );
+    }
+    else
+    {
+        const visibility = map.getLayoutProperty('fire-station-heat', 'visibility');
+        if(visibility === "none")
+        {
+            map.setLayoutProperty('fire-station-heatmap', 'visibility', 'visible');
+            map.setLayoutProperty('fire-station-point', 'visibility', 'visible');
+            map.setLayoutProperty('fire-station-heat', 'visibility', 'visible');
+        }
+        else
+        {
+            map.setLayoutProperty('fire-station-heatmap', 'visibility', 'none');
+            map.setLayoutProperty('fire-station-point', 'visibility', 'none');
+            map.setLayoutProperty('fire-station-heat', 'visibility', 'none');
+        }
+    }
+    layers_showing['fire-station-heatmap'] = !layers_showing['fire-station-heatmap']
 
-'circle-radius': 3,
-
-'circle-color': [
-'interpolate',
-['linear'],
-['get', 'Square Footage'],
-1,
-'rgba(33,102,172,0)',
-2,
-'rgb(103,169,207)',
-3,
-'rgb(209,229,240)',
-4,
-'rgb(253,219,199)',
-5,
-'rgb(239,138,98)',
-6,
-'rgb(178,24,43)'
-],
-'circle-stroke-color': 'white',
-'circle-stroke-width': 1,
-// Transition from heatmap to circle layer by zoom level
-'circle-opacity':2
-}
- },
-
-);
 }
 
 function supermarketheatmap(){
 
+  if(typeof map.getSource('super-markets-heatmap') === 'undefined')
+    {
+      map.addSource('super-markets-heatmap', {
+      'type': 'vector',
+      'url': 'mapbox://arielb1.dftl2j6f'
+      });
+      
+      map.addLayer(
+      {
+      'id': 'super-markets-heat',
+      'type': 'heatmap',
+      'source': 'super-markets-heatmap',
+      'source-layer': 'Supermarkets-52ltms',
+      'maxzoom': 22,
+      'paint': {
 
+      'heatmap-weight': .8,
+      'heatmap-intensity': 1.1,
+      // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+      // Begin color ramp at 0-stop with a 0-transparancy color
+      // to create a blur-like effect.
+      'heatmap-color': [
+            "interpolate",
+            ["linear"],
+            ["heatmap-density"],
+            0,
+            "rgba(0, 0, 255, 0)",
+            0.1,
+            "royalblue",
+            0.3,
+            "cyan",
+            0.5,
+            "lime",
+            0.7,
+            "yellow",
+            1,
+            "red"
+          ],
+      'heatmap-radius': [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            0,
+            5,
+            22,
+            30
+          ],
+      // Transition from heatmap to circle layer by zoom level
+      'heatmap-opacity':1
+      }
+      },
 
+      );
+      
+      map.addLayer(
+      {
+      'id': 'super-markets-point',
+      'type': 'circle',
+      'source': 'super-markets-heatmap',
+      'source-layer': 'Supermarkets-52ltms',
+      'minzoom': 1,
+      'paint': {
 
-map.addSource('super-markets-heatmap', {
-'type': 'vector',
-'url': 'mapbox://arielb1.dftl2j6f'
-});
- 
-map.addLayer(
-{
-'id': 'super-markets-heat',
-'type': 'heatmap',
-'source': 'super-markets-heatmap',
-'source-layer': 'Supermarkets-52ltms',
-'maxzoom': 22,
-'paint': {
+      'circle-radius': 3,
 
-'heatmap-weight': .8,
-'heatmap-intensity': 1.1,
-// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-// Begin color ramp at 0-stop with a 0-transparancy color
-// to create a blur-like effect.
-'heatmap-color': [
-      "interpolate",
-      ["linear"],
-      ["heatmap-density"],
-      0,
-      "rgba(0, 0, 255, 0)",
-      0.1,
-      "royalblue",
-      0.3,
-      "cyan",
-      0.5,
-      "lime",
-      0.7,
-      "yellow",
+      'circle-color': [
+      'interpolate',
+      ['linear'],
+      ['get', 'Square Footage'],
       1,
-      "red"
-    ],
-'heatmap-radius': [
-      "interpolate",
-      ["linear"],
-      ["zoom"],
-      0,
+      'rgba(33,102,172,0)',
+      2,
+      'rgb(103,169,207)',
+      3,
+      'rgb(209,229,240)',
+      4,
+      'rgb(253,219,199)',
       5,
-      22,
-      30
-    ],
-// Transition from heatmap to circle layer by zoom level
-'heatmap-opacity':1
-}
-},
+      'rgb(239,138,98)',
+      6,
+      'rgb(178,24,43)'
+      ],
+      'circle-stroke-color': 'white',
+      'circle-stroke-width': 1,
+      // Transition from heatmap to circle layer by zoom level
+      'circle-opacity':2
+      }
+      },
 
-);
- 
-map.addLayer(
-{
-'id': 'super-markets-point',
-'type': 'circle',
-'source': 'super-markets-heatmap',
-'source-layer': 'Supermarkets-52ltms',
-'minzoom': 1,
-'paint': {
+      );
+    }
+    else
+    {
+        const visibility = map.getLayoutProperty('super-markets-heat', 'visibility');
+        if(visibility === "none")
+        {
+            map.setLayoutProperty('super-markets-heatmap', 'visibility', 'visible');
+            map.setLayoutProperty('super-markets-point', 'visibility', 'visible');
+            map.setLayoutProperty('super-markets-heat', 'visibility', 'visible');
+        }
+        else
+        {
+            map.setLayoutProperty('super-markets-heatmap', 'visibility', 'none');
+            map.setLayoutProperty('super-markets-point', 'visibility', 'none');
+            map.setLayoutProperty('super-markets-heat', 'visibility', 'none');
+        }
+    }
+    layers_showing['super-markets-heatmap'] = !layers_showing['super-markets-heatmap']
 
-'circle-radius': 3,
-
-'circle-color': [
-'interpolate',
-['linear'],
-['get', 'Square Footage'],
-1,
-'rgba(33,102,172,0)',
-2,
-'rgb(103,169,207)',
-3,
-'rgb(209,229,240)',
-4,
-'rgb(253,219,199)',
-5,
-'rgb(239,138,98)',
-6,
-'rgb(178,24,43)'
-],
-'circle-stroke-color': 'white',
-'circle-stroke-width': 1,
-// Transition from heatmap to circle layer by zoom level
-'circle-opacity':2
-}
- },
-
-);
 }
 
 function supercenterheatmap(){
 
+  if(typeof map.getSource('super-center-heatmap') === 'undefined')
+    {
+      
+    map.addSource('super-center-heatmap', {
+    'type': 'vector',
+    'url': 'mapbox://arielb1.bx5tiqmq'
+    });
+    
+    map.addLayer(
+    {
+    'id': 'super-center-heat',
+    'type': 'heatmap',
+    'source': 'super-center-heatmap',
+    'source-layer': 'Supercenters-49gbzn',
+    'maxzoom': 22,
+    'paint': {
 
+    'heatmap-weight': .8,
+    'heatmap-intensity': 1.1,
+    // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+    // Begin color ramp at 0-stop with a 0-transparancy color
+    // to create a blur-like effect.
+    'heatmap-color': [
+          "interpolate",
+          ["linear"],
+          ["heatmap-density"],
+          0,
+          "rgba(0, 0, 255, 0)",
+          0.1,
+          "royalblue",
+          0.3,
+          "cyan",
+          0.5,
+          "lime",
+          0.7,
+          "yellow",
+          1,
+          "red"
+        ],
+    'heatmap-radius': [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          0,
+          5,
+          22,
+          30
+        ],
+    // Transition from heatmap to circle layer by zoom level
+    'heatmap-opacity':1
+    }
+    },
 
+    );
+    
+    map.addLayer(
+    {
+    'id': 'super-center-point',
+    'type': 'circle',
+    'source': 'super-center-heatmap',
+    'source-layer': 'Supercenters-49gbzn',
+    'minzoom': 1,
+    'paint': {
 
-map.addSource('super-center-heatmap', {
-'type': 'vector',
-'url': 'mapbox://arielb1.bx5tiqmq'
-});
- 
-map.addLayer(
-{
-'id': 'super-center-heat',
-'type': 'heatmap',
-'source': 'super-center-heatmap',
-'source-layer': 'Supercenters-49gbzn',
-'maxzoom': 22,
-'paint': {
+    'circle-radius': 3,
 
-'heatmap-weight': .8,
-'heatmap-intensity': 1.1,
-// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-// Begin color ramp at 0-stop with a 0-transparancy color
-// to create a blur-like effect.
-'heatmap-color': [
-      "interpolate",
-      ["linear"],
-      ["heatmap-density"],
-      0,
-      "rgba(0, 0, 255, 0)",
-      0.1,
-      "royalblue",
-      0.3,
-      "cyan",
-      0.5,
-      "lime",
-      0.7,
-      "yellow",
-      1,
-      "red"
+    'circle-color': [
+    'interpolate',
+    ['linear'],
+    ['get', 'Square Footage'],
+    1,
+    'rgba(33,102,172,0)',
+    2,
+    'rgb(103,169,207)',
+    3,
+    'rgb(209,229,240)',
+    4,
+    'rgb(253,219,199)',
+    5,
+    'rgb(239,138,98)',
+    6,
+    'rgb(178,24,43)'
     ],
-'heatmap-radius': [
-      "interpolate",
-      ["linear"],
-      ["zoom"],
-      0,
-      5,
-      22,
-      30
-    ],
-// Transition from heatmap to circle layer by zoom level
-'heatmap-opacity':1
+    'circle-stroke-color': 'white',
+    'circle-stroke-width': 1,
+    // Transition from heatmap to circle layer by zoom level
+    'circle-opacity':2
+    }
+    },
+
+    );
+    }
+    else
+    {
+        const visibility = map.getLayoutProperty('super-center-heat', 'visibility');
+        if(visibility === "none")
+        {
+            map.setLayoutProperty('super-center-heatmap', 'visibility', 'visible');
+            map.setLayoutProperty('super-center-point', 'visibility', 'visible');
+            map.setLayoutProperty('super-center-heat', 'visibility', 'visible');
+        }
+        else
+        {
+            map.setLayoutProperty('super-center-heatmap', 'visibility', 'none');
+            map.setLayoutProperty('super-center-point', 'visibility', 'none');
+            map.setLayoutProperty('super-center-heat', 'visibility', 'none');
+        }
+    }
+    layers_showing['super-center-heatmap'] = !layers_showing['super-center-heatmap']
+
 }
-},
-
-);
- 
-map.addLayer(
-{
-'id': 'super-center-point',
-'type': 'circle',
-'source': 'super-center-heatmap',
-'source-layer': 'Supercenters-49gbzn',
-'minzoom': 1,
-'paint': {
-
-'circle-radius': 3,
-
-'circle-color': [
-'interpolate',
-['linear'],
-['get', 'Square Footage'],
-1,
-'rgba(33,102,172,0)',
-2,
-'rgb(103,169,207)',
-3,
-'rgb(209,229,240)',
-4,
-'rgb(253,219,199)',
-5,
-'rgb(239,138,98)',
-6,
-'rgb(178,24,43)'
-],
-'circle-stroke-color': 'white',
-'circle-stroke-width': 1,
-// Transition from heatmap to circle layer by zoom level
-'circle-opacity':2
-}
- },
-
-);
-}
-
-
-
-
-
-
 
 </script>
 
