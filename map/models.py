@@ -25,3 +25,13 @@ class FireHouseAddresses(models.Model):
     lat=models.FloatField(blank=True,null=True)
     long=models.FloatField(blank=True,null=True)
 
+class SuperMarketAddresses(models.Model):
+    supermarket_address = models.TextField()
+    lat=models.FloatField(blank=True,null=True)
+    long=models.FloatField(blank=True,null=True)
+
+class SupercenterAddresses(models.Model):
+    supercenter_address = models.TextField()
+    lat=models.FloatField(blank=True,null=True)
+    long=models.FloatField(blank=True,null=True)
+
