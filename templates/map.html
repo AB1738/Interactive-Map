@@ -175,6 +175,24 @@
         transform:rotate(0deg);
       }
       
+  .my-popup {
+  /* The popup itself */
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+      }
+  /* The arrow */
+  .my-popup::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -8px;
+    border-top: 8px solid #fff;
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+  }
 
     </style>
   </head>
@@ -581,7 +599,8 @@ console.log(closest) -->
                        });
                        const popup = new mapboxgl.Popup({
                         closeButton : false,
-                        closeOnClick: false
+                        closeOnClick: false,
+                        className:'my-popup'
                     });
             map.on('mouseover', 'grocery-stores', (e) => {
                     map.getCanvas().style.cursor = 'pointer';
@@ -634,7 +653,8 @@ console.log(closest) -->
                         });
                         let popup = new mapboxgl.Popup({
                             closeButton: false,
-                            closeOnClick: false
+                            closeOnClick: false,
+                            className:'my-popup'
                         });
 
                         map.on('mouseenter', 'farmers-markets', (e) => {
@@ -689,7 +709,8 @@ console.log(closest) -->
                        });
                        let popup = new mapboxgl.Popup({
                             closeButton: false,
-                            closeOnClick: false
+                            closeOnClick: false,
+                            className:'my-popup'
                         });
                            map.on('mouseenter', 'fire-houses', (e) => {
                                 map.getCanvas().style.cursor = 'pointer';
@@ -747,7 +768,8 @@ console.log(closest) -->
                     });
                                               let popup = new mapboxgl.Popup({
                             closeButton: false,
-                            closeOnClick: false
+                            closeOnClick: false,
+                            className:'my-popup'
                         });
                            map.on('mouseenter', 'super-markets', (e) => {
                                 map.getCanvas().style.cursor = 'pointer';
@@ -804,7 +826,8 @@ console.log(closest) -->
                     });
                         let popup = new mapboxgl.Popup({
                             closeButton: false,
-                            closeOnClick: false
+                            closeOnClick: false,
+                            className:'my-popup'
                         });
                            map.on('mouseenter', 'super-centers', (e) => {
                                 map.getCanvas().style.cursor = 'pointer';
