@@ -177,7 +177,7 @@
   <body id="canvas">
     <header style="padding:20px;align-items: center;height:initial;position">
       
-      <div style="display:flex;align-items: center;">
+      <div style="display: flex; align-items: center;">
         <button id="openMenu" class="openbtn" onclick="openClose()" style="background-color:#FFFFFF;border-width:0px;width:40px;height:40px;box-shadow:0px 0px 6px rgba(0,0,0,0.15);display:flex;flex-direction: column;justify-content: center;align-items: center;position:initial;margin-right:20px;">
           <div class="menuLine one"></div>
           <div class="menuLine two"></div>
@@ -242,36 +242,36 @@
         </div>
 
         <div class="sidebarLabel" style="margin-top:10px;">Location</div>
-        <button id="button1" class="locationItem" onclick="showmarker()">Grocery Stores
+        <button id="button1" class="locationItem" onclick="showmarker();onClickToggleEffect(this)">Grocery Stores
           <div class="locationDecor"><div class="locationDecorInner"></div></div>
         </button>
-        <button id="button2" class="locationItem" onclick="showmarker2()">Farmers Markets
+        <button id="button2" class="locationItem" onclick="showmarker2();onClickToggleEffect(this)">Farmers Markets
           <div class="locationDecor"><div class="locationDecorInner"></div></div>
         </button>
-        <button id="button3" class="locationItem" onclick="showmarker3()">Fire Stations
+        <button id="button3" class="locationItem" onclick="showmarker3();onClickToggleEffect(this)">Fire Stations
           <div class="locationDecor"><div class="locationDecorInner"></div></div>
         </button>
-        <button id="button4" class="locationItem" onclick="showmarker4()">Supermarkets
+        <button id="button4" class="locationItem" onclick="showmarker4();onClickToggleEffect(this)">Supermarkets
           <div class="locationDecor"><div class="locationDecorInner"></div></div>
         </button>
-        <button id="button5" class="locationItem" onclick="showmarker5()">Supercenters
+        <button id="button5" class="locationItem" onclick="showmarker5();onClickToggleEffect(this)">Supercenters
           <div class="locationDecor"><div class="locationDecorInner"></div></div>
         </button>
 
        <div class="sidebarLabel" style="margin-top:10px;">HeatMap</div>
-       <button id="heatmap1"  class="locationItem" onclick="groceryheatmap()">Grocery Store Heatmap
+       <button id="heatmap1"  class="locationItem" onclick="groceryheatmap();onClickToggleEffect(this)">Grocery Store Heatmap
         <div class="locationDecor"><div class="locationDecorInner"></div></div>
       </button>
-       <button id="heatmap2" class="locationItem" onclick="farmerheatmap()">Farmers Markets Heatmap
+       <button id="heatmap2" class="locationItem" onclick="farmerheatmap();onClickToggleEffect(this)">Farmers Markets Heatmap
         <div class="locationDecor"><div class="locationDecorInner"></div></div>
       </button>
-       <button id="heatmap3" class="locationItem" onclick="fireheatmap()">Fire Stations Heatmap
+       <button id="heatmap3" class="locationItem" onclick="fireheatmap();onClickToggleEffect(this)">Fire Stations Heatmap
         <div class="locationDecor"><div class="locationDecorInner"></div></div>
       </button>
-       <button id="heatmap4"  class="locationItem" onclick="supermarketheatmap()">Supermarkets Heatmap
+       <button id="heatmap4"  class="locationItem" onclick="supermarketheatmap();onClickToggleEffect(this)">Supermarkets Heatmap
         <div class="locationDecor"><div class="locationDecorInner"></div></div>
       </button>
-       <button id="heatmap5" class="locationItem" onclick="supercenterheatmap()">Supercenters Heatmap
+       <button id="heatmap5" class="locationItem" onclick="supercenterheatmap();onClickToggleEffect(this)">Supercenters Heatmap
         <div class="locationDecor"><div class="locationDecorInner"></div></div>
       </button>
 
@@ -324,6 +324,14 @@
           
         }
  
+      }
+
+      function onClickToggleEffect(el){
+        if(el.classList.contains("active")){
+          el.classList.remove("active");
+        }else{
+          el.classList.add("active");
+        }
       }
       </script>
 
@@ -542,7 +550,6 @@ console.log(closest) -->
 
                function showmarker()
                
-
                {
                    if (typeof map.getSource('grocery-stores') === 'undefined') {
                        map.addSource('grocery-stores', {
