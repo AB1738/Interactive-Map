@@ -72,6 +72,10 @@
         width:100%;
         text-align: left;
         position:relative;
+
+      }
+      .locationItem:hover{
+        cursor: pointer;
       }
 
       .findButton {
@@ -900,192 +904,232 @@ console.log(closest) -->
 
 function groceryheatmap(){
 
+  if(typeof map.getSource('grocery-stores-heatmap') === 'undefined')
+    {
+      map.addSource('grocery-stores-heatmap', {
+      'type': 'vector',
+      'url': 'mapbox://arielb1.38i7mvbz'
+      });
+      
+      map.addLayer(
+      {
+      'id': 'grocery-stores-heat',
+      'type': 'heatmap',
+      'source': 'grocery-stores-heatmap',
+      'source-layer': 'Total_grocery_stores-6tzhl7',
+      'maxzoom': 22,
+      'paint': {
 
+      'heatmap-weight': .8,
+      'heatmap-intensity': 1.1,
+      // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+      // Begin color ramp at 0-stop with a 0-transparancy color
+      // to create a blur-like effect.
+      'heatmap-color': [
+            "interpolate",
+            ["linear"],
+            ["heatmap-density"],
+            0,
+            "rgba(0, 0, 255, 0)",
+            0.1,
+            "royalblue",
+            0.3,
+            "cyan",
+            0.5,
+            "lime",
+            0.7,
+            "yellow",
+            1,
+            "red"
+          ],
+      'heatmap-radius': [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            0,
+            5,
+            22,
+            30
+          ],
+      // Transition from heatmap to circle layer by zoom level
+      'heatmap-opacity':1
+      }
+      },
 
+      );
+      
+      map.addLayer(
+      {
+      'id': 'grocery-stores-point',
+      'type': 'circle',
+      'source': 'grocery-stores-heatmap',
+      'source-layer': 'Total_grocery_stores-6tzhl7',
+      'minzoom': 1,
+      'paint': {
 
-map.addSource('grocery-stores-heatmap', {
-'type': 'vector',
-'url': 'mapbox://arielb1.38i7mvbz'
-});
- 
-map.addLayer(
-{
-'id': 'grocery-stores-heat',
-'type': 'heatmap',
-'source': 'grocery-stores-heatmap',
-'source-layer': 'Total_grocery_stores-6tzhl7',
-'maxzoom': 22,
-'paint': {
+      'circle-radius': 3,
 
-'heatmap-weight': .8,
-'heatmap-intensity': 1.1,
-// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-// Begin color ramp at 0-stop with a 0-transparancy color
-// to create a blur-like effect.
-'heatmap-color': [
-      "interpolate",
-      ["linear"],
-      ["heatmap-density"],
-      0,
-      "rgba(0, 0, 255, 0)",
-      0.1,
-      "royalblue",
-      0.3,
-      "cyan",
-      0.5,
-      "lime",
-      0.7,
-      "yellow",
+      'circle-color': [
+      'interpolate',
+      ['linear'],
+      ['get', 'Square Footage'],
       1,
-      "red"
-    ],
-'heatmap-radius': [
-      "interpolate",
-      ["linear"],
-      ["zoom"],
-      0,
+      'rgba(33,102,172,0)',
+      2,
+      'rgb(103,169,207)',
+      3,
+      'rgb(209,229,240)',
+      4,
+      'rgb(253,219,199)',
       5,
-      22,
-      30
-    ],
-// Transition from heatmap to circle layer by zoom level
-'heatmap-opacity':1
+      'rgb(239,138,98)',
+      6,
+      'rgb(178,24,43)'
+      ],
+      'circle-stroke-color': 'white',
+      'circle-stroke-width': 1,
+      // Transition from heatmap to circle layer by zoom level
+      'circle-opacity':2
+      }
+      },
+
+      );
+      
+    }
+    else
+    {
+        const visibility = map.getLayoutProperty('grocery-stores-heat', 'visibility');
+        if(visibility === "none")
+        {
+            map.setLayoutProperty('grocery-stores-heatmap', 'visibility', 'visible');
+            map.setLayoutProperty('grocery-stores-point', 'visibility', 'visible');
+            map.setLayoutProperty('grocery-stores-heat', 'visibility', 'visible');
+        }
+        else
+        {
+            map.setLayoutProperty('grocery-stores-heatmap', 'visibility', 'none');
+            map.setLayoutProperty('grocery-stores-point', 'visibility', 'none');
+            map.setLayoutProperty('grocery-stores-heat', 'visibility', 'none');
+        }
+    }
+    layers_showing['grocery-stores-heatmap'] = !layers_showing['grocery-stores-heatmap']
 }
-},
 
-);
- 
-map.addLayer(
-{
-'id': 'grocery-stores-point',
-'type': 'circle',
-'source': 'grocery-stores-heatmap',
-'source-layer': 'Total_grocery_stores-6tzhl7',
-'minzoom': 1,
-'paint': {
-
-'circle-radius': 3,
-
-'circle-color': [
-'interpolate',
-['linear'],
-['get', 'Square Footage'],
-1,
-'rgba(33,102,172,0)',
-2,
-'rgb(103,169,207)',
-3,
-'rgb(209,229,240)',
-4,
-'rgb(253,219,199)',
-5,
-'rgb(239,138,98)',
-6,
-'rgb(178,24,43)'
-],
-'circle-stroke-color': 'white',
-'circle-stroke-width': 1,
-// Transition from heatmap to circle layer by zoom level
-'circle-opacity':2
-}
- },
-
-);
-}
 
 function farmerheatmap(){
 
+  if(typeof map.getSource('farmers-markets-heatmap') === 'undefined')
+    {
+      map.addSource('farmers-markets-heatmap', {
+      'type': 'vector',
+      'url': 'mapbox://arielb1.af9vybob'
+      });
+      
+      map.addLayer(
+      {
+      'id': 'farmers-markets-heat',
+      'type': 'heatmap',
+      'source': 'farmers-markets-heatmap',
+      'source-layer': 'DOHMH_Farmers_Markets-ccwyus',
+      'maxzoom': 22,
+      'paint': {
 
+      'heatmap-weight': .8,
+      'heatmap-intensity': 1.1,
+      // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+      // Begin color ramp at 0-stop with a 0-transparancy color
+      // to create a blur-like effect.
+      'heatmap-color': [
+            "interpolate",
+            ["linear"],
+            ["heatmap-density"],
+            0,
+            "rgba(0, 0, 255, 0)",
+            0.1,
+            "royalblue",
+            0.3,
+            "cyan",
+            0.5,
+            "lime",
+            0.7,
+            "yellow",
+            1,
+            "red"
+          ],
+      'heatmap-radius': [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            0,
+            5,
+            22,
+            30
+          ],
+      // Transition from heatmap to circle layer by zoom level
+      'heatmap-opacity':1
+      }
+      },
 
+      );
+      
+      map.addLayer(
+      {
+      'id': 'farmers-markets-point',
+      'type': 'circle',
+      'source': 'farmers-markets-heatmap',
+      'source-layer': 'DOHMH_Farmers_Markets-ccwyus',
+      'minzoom': 1,
+      'paint': {
 
-map.addSource('farmers-markets-heatmap', {
-'type': 'vector',
-'url': 'mapbox://arielb1.af9vybob'
-});
- 
-map.addLayer(
-{
-'id': 'farmers-markets-heat',
-'type': 'heatmap',
-'source': 'farmers-markets-heatmap',
-'source-layer': 'DOHMH_Farmers_Markets-ccwyus',
-'maxzoom': 22,
-'paint': {
+      'circle-radius': 3,
 
-'heatmap-weight': .8,
-'heatmap-intensity': 1.1,
-// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-// Begin color ramp at 0-stop with a 0-transparancy color
-// to create a blur-like effect.
-'heatmap-color': [
-      "interpolate",
-      ["linear"],
-      ["heatmap-density"],
-      0,
-      "rgba(0, 0, 255, 0)",
-      0.1,
-      "royalblue",
-      0.3,
-      "cyan",
-      0.5,
-      "lime",
-      0.7,
-      "yellow",
+      'circle-color': [
+      'interpolate',
+      ['linear'],
+      ['get', 'Square Footage'],
       1,
-      "red"
-    ],
-'heatmap-radius': [
-      "interpolate",
-      ["linear"],
-      ["zoom"],
-      0,
+      'rgba(33,102,172,0)',
+      2,
+      'rgb(103,169,207)',
+      3,
+      'rgb(209,229,240)',
+      4,
+      'rgb(253,219,199)',
       5,
-      22,
-      30
-    ],
-// Transition from heatmap to circle layer by zoom level
-'heatmap-opacity':1
-}
-},
+      'rgb(239,138,98)',
+      6,
+      'rgb(178,24,43)'
+      ],
+      'circle-stroke-color': 'white',
+      'circle-stroke-width': 1,
+      // Transition from heatmap to circle layer by zoom level
+      'circle-opacity':2
+      }
+      },
 
-);
- 
-map.addLayer(
-{
-'id': 'farmers-markets-point',
-'type': 'circle',
-'source': 'farmers-markets-heatmap',
-'source-layer': 'DOHMH_Farmers_Markets-ccwyus',
-'minzoom': 1,
-'paint': {
+      );
+      
+    }
+    else
+    {
+        const visibility = map.getLayoutProperty('farmers-markets-heat', 'visibility');
+        if(visibility === "none")
+        {
+            map.setLayoutProperty('farmers-markets-heatmap', 'visibility', 'visible');
+            map.setLayoutProperty('farmers-markets-point', 'visibility', 'visible');
+            map.setLayoutProperty('farmers-markets-heat', 'visibility', 'visible');
+        }
+        else
+        {
+            map.setLayoutProperty('farmers-markets-heatmap', 'visibility', 'none');
+            map.setLayoutProperty('farmers-markets-point', 'visibility', 'none');
+            map.setLayoutProperty('farmers-markets-heat', 'visibility', 'none');
+        }
+    }
+    layers_showing['farmers-markets-heatmap'] = !layers_showing['farmers-markets-heatmap']
 
-'circle-radius': 3,
 
-'circle-color': [
-'interpolate',
-['linear'],
-['get', 'Square Footage'],
-1,
-'rgba(33,102,172,0)',
-2,
-'rgb(103,169,207)',
-3,
-'rgb(209,229,240)',
-4,
-'rgb(253,219,199)',
-5,
-'rgb(239,138,98)',
-6,
-'rgb(178,24,43)'
-],
-'circle-stroke-color': 'white',
-'circle-stroke-width': 1,
-// Transition from heatmap to circle layer by zoom level
-'circle-opacity':2
-}
- },
 
-);
 }
 
 function fireheatmap(){
