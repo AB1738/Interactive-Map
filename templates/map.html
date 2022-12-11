@@ -254,8 +254,8 @@
         <div class="specialAdd">
           <div class="sidebarLabel">Search Radius</div>
           <div style="display:flex;flex-direction: row;align-items: center;">
-            <input id="radius-input" type="number" min="1" max="10" value="3" style="border-color:transparent;padding:0px;height:initial;text-align:right;appearance: none;margin-right:-10px;">
-            <div style="font-size:12px;"> km</div>
+            <input id="radius-input" type="number" min="1" max="10" value="3" style="width: 30px; padding:0px; margin-right: 5px; height:initial;text-align:right;appearance: none;">
+            <div style="font-size:15px;"> Miles</div>
           </div>
         </div>
         
@@ -263,37 +263,40 @@
           <input type="range" min="1" max="10" value="3" id="radius-slider">
         </div>
 
-        <div class="sidebarLabel" style="margin-top:10px;">Location</div>
-        <button id="button1" class="locationItem" onclick="showmarker();onClickToggleEffect(this)">Grocery Stores
-          <div class="locationDecor"><div class="locationDecorInner"></div></div>
-        </button>
-        <button id="button2" class="locationItem" onclick="showmarker2();onClickToggleEffect(this)">Farmers Markets
-          <div class="locationDecor"><div class="locationDecorInner"></div></div>
-        </button>
-        <button id="button3" class="locationItem" onclick="showmarker3();onClickToggleEffect(this)">Fire Stations
-          <div class="locationDecor"><div class="locationDecorInner"></div></div>
-        </button>
-        <button id="button4" class="locationItem" onclick="showmarker4();onClickToggleEffect(this)">Supermarkets
-          <div class="locationDecor"><div class="locationDecorInner"></div></div>
-        </button>
-        <button id="button5" class="locationItem" onclick="showmarker5();onClickToggleEffect(this)">Supercenters
-          <div class="locationDecor"><div class="locationDecorInner"></div></div>
-        </button>
+        <div class="sidebarLabel" style="margin-top:10px;">Business Types</div>
 
-       <div class="sidebarLabel" style="margin-top:10px;">HeatMap</div>
-       <button id="heatmap1"  class="locationItem" onclick="groceryheatmap();onClickToggleEffect(this)">Grocery Store Heatmap
+          <div id='business_types' class="glower">
+                <button id="button1" class="locationItem" onclick="showmarker();onClickToggleEffect(this)">Grocery Stores
+                  <div class="locationDecor"><div class="locationDecorInner"></div></div>
+                </button>
+                <button id="button2" class="locationItem" onclick="showmarker2();onClickToggleEffect(this)">Farmers Markets
+                  <div class="locationDecor"><div class="locationDecorInner"></div></div>
+                </button>
+                <button id="button3" class="locationItem" onclick="showmarker3();onClickToggleEffect(this)">Fire Stations
+                  <div class="locationDecor"><div class="locationDecorInner"></div></div>
+                </button>
+                <button id="button4" class="locationItem" onclick="showmarker4();onClickToggleEffect(this)">Supermarkets
+                  <div class="locationDecor"><div class="locationDecorInner"></div></div>
+                </button>
+                <button id="button5" class="locationItem" onclick="showmarker5();onClickToggleEffect(this)">Supercenters
+                  <div class="locationDecor"><div class="locationDecorInner"></div></div>
+                </button>
+          </div>
+
+       <div class="sidebarLabel" style="margin-top:10px;">Heatmaps</div>
+       <button id="heatmap1"  class="locationItem" onclick="groceryheatmap();onClickToggleEffect(this)">Grocery Store
         <div class="locationDecor"><div class="locationDecorInner"></div></div>
       </button>
-       <button id="heatmap2" class="locationItem" onclick="farmerheatmap();onClickToggleEffect(this)">Farmers Markets Heatmap
+       <button id="heatmap2" class="locationItem" onclick="farmerheatmap();onClickToggleEffect(this)">Farmers Markets
         <div class="locationDecor"><div class="locationDecorInner"></div></div>
       </button>
-       <button id="heatmap3" class="locationItem" onclick="fireheatmap();onClickToggleEffect(this)">Fire Stations Heatmap
+       <button id="heatmap3" class="locationItem" onclick="fireheatmap();onClickToggleEffect(this)">Fire Stations
         <div class="locationDecor"><div class="locationDecorInner"></div></div>
       </button>
-       <button id="heatmap4"  class="locationItem" onclick="supermarketheatmap();onClickToggleEffect(this)">Supermarkets Heatmap
+       <button id="heatmap4"  class="locationItem" onclick="supermarketheatmap();onClickToggleEffect(this)">Supermarkets
         <div class="locationDecor"><div class="locationDecorInner"></div></div>
       </button>
-       <button id="heatmap5" class="locationItem" onclick="supercenterheatmap();onClickToggleEffect(this)">Supercenters Heatmap
+       <button id="heatmap5" class="locationItem" onclick="supercenterheatmap();onClickToggleEffect(this)">Supercenters
         <div class="locationDecor"><div class="locationDecorInner"></div></div>
       </button>
 
@@ -324,6 +327,7 @@
     <div id="main" style="height:calc(100vh - 89px);">
       <div id="map" style="width: 100%; height: 100%; position: relative">
       </div>
+    </div>
     <script>
       let isopen = false;
 
@@ -862,7 +866,20 @@ console.log(closest) -->
 
          function showdirections(){
           if(!directionsshowing) {
-              directionsshowing = true;
+              if(user_location == null)
+              {
+                  alert("Please click the highlighted button to allow location search.");
+                  let button = document.querySelector('[aria-label="Find my location"]');
+                  button.classList.add('glower');
+                  var timer = window.setInterval(() => {
+                      button.classList.toggle('glower_active');
+                  }, 1000);
+                  button.addEventListener('mouseenter', function () {
+                     clearInterval(timer);
+                     button.classList.remove('glower_active');
+                  });
+                  return;
+              }
               let layers_to_search = [];
               for (const [layer, layerVisible] of Object.entries(layers_showing))
               {
@@ -870,6 +887,19 @@ console.log(closest) -->
                   {
                       layers_to_search = layers_to_search.concat(db_map[layer]);
                   }
+              }
+              if(layers_to_search.length <= 0)
+              {
+                alert("Please select a business type");
+                let location_div = document.getElementById('business_types');
+                var timer = window.setInterval(() => {
+                    location_div.classList.toggle('glower_active');
+                }, 1000);
+                location_div.addEventListener('mouseenter', function() {
+                   clearInterval(timer);
+                   location_div.classList.remove('glower_active');
+                });
+                return;
               }
               let points = layers_to_search.map( (point) => {
                   return turf.point([point.long, point.lat]);
@@ -892,11 +922,15 @@ console.log(closest) -->
                         closest_marker = point;
                     }
                 }
-                  if(user_location != null && closest_marker != null)
-                  {
+                  if(closest_marker != null) {
                       map.addControl(directions, "top-left");
                       directions.setOrigin(user_location.geometry.coordinates);
                       directions.setDestination(closest_marker.geometry.coordinates);
+                      directionsshowing = true;
+                  }
+                  else
+                  {
+                      alert("No businesses within radius found.");
                   }
             }
           }
@@ -907,7 +941,6 @@ console.log(closest) -->
               {
                   map.removeControl(directions);
               }
-              console.log("There are no establishments in this radius");
           }
           
         const directionsBox = document.querySelector('.mapboxgl-ctrl-directions');
@@ -1496,6 +1529,5 @@ function supercenterheatmap(){
 }
 
 </script>
-
   </body>
 </html>
