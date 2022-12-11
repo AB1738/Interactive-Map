@@ -48,6 +48,7 @@ class Command(BaseCommand):
                             SupercenterAddresses.objects.create(lat=row['Latitude'], long=row['Longitude'])
                     else:
                         return
+            print(GroceryStoreAddresses.objects.all().count())
         except Exception:
             traceback.print_exc()
 
