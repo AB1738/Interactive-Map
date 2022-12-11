@@ -93,7 +93,6 @@ header {
     display: none;
 }
 
-<<<<<<< HEAD
 * {
     transition: all 0.3s ease;
   }
@@ -240,7 +239,6 @@ header {
     transform:rotate(0deg);
   }
   
-=======
 .glower {
     border: 1px solid transparent !important;
     -webkit-transition: border 0.1s linear, box-shadow 0.1s linear !important;
@@ -261,4 +259,3 @@ header {
 
 
 
->>>>>>> 60dc72504b39a84e4e4687f3e1e1878aad634e8e
