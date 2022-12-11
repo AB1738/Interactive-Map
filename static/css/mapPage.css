@@ -93,7 +93,6 @@ header {
     display: none;
 }
 
-<<<<<<< HEAD
 * {
     transition: all 0.3s ease;
   }
@@ -240,7 +239,6 @@ header {
     transform:rotate(0deg);
   }
   
-=======
 .glower {
     border: 1px solid transparent !important;
     -webkit-transition: border 0.1s linear, box-shadow 0.1s linear !important;
@@ -259,6 +257,23 @@ header {
     overflow: hidden !important;
 }
 
+.my-popup {
+  /* The popup itself */
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+      }
+  /* The arrow */
+  .my-popup::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -8px;
+    border-top: 8px solid #fff;
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+  }
 
 
->>>>>>> 60dc72504b39a84e4e4687f3e1e1878aad634e8e
