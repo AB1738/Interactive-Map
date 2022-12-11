@@ -93,3 +93,17 @@ header {
     display: none;
 }
 
+.glower {
+    border: 1px solid transparent !important;
+    -webkit-transition: border 0.1s linear, box-shadow 0.1s linear !important;
+       -moz-transition: border 0.1s linear, box-shadow 0.1s linear !important;
+            transition: border 0.1s linear, box-shadow 0.1s linear !important;
+}
+
+.glower_active {
+    border-color: blue !important;
+    -webkit-box-shadow: 0 0 5px blue !important;
+       -moz-box-shadow: 0 0 5px blue !important;
+            box-shadow: 0 0 5px blue !important;
+}
+
