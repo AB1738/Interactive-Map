@@ -528,57 +528,18 @@
 
         var directions = new MapboxDirections({
                     accessToken: mapboxgl.accessToken,
-                    interactive: false,
+                    interactive: false
                 });
 
 
     </script>
-   
 
-
-    <!-- TESTING HOW TO RETURN CLOSEST COORDINATE PAIR TO A GIVEN SET OF COORDINATES -->
-    
-    <!-- <script>
-      
-        HOW TO ITERATE THROUGH THE FARMERS MARKET DATABASE AND RETRIEVE LONG,LAT OF THE ENTRIES
-        ___________________________________________________________________________
-        {% for farmer_address in farmer_addresses %} 
-
-        [{{ farmer_address.long }}, {{ farmer_address.lat }}];
-
-        {% endfor %}
-        _____________________________________________________________________________
-               
-
-        const haversine = ({longitude: lonA, latitude: latA}, {longitude: lonB, latitude: latB}) => {
-        const {PI, sin, cos, atan2} = Math,
-              r = PI/180,
-              R = 6371,
-              deltaLat = (latB - latA)*r,
-              deltaLon = (lonB - lonA)*r,
-              a = sin(deltaLat / 2)**2 + cos(cos(latB*r)*latA*r) * sin(deltaLon /2)**2,
-              c = 2 * atan2(a**0.5, (1 - a)**0.5),
-              d = R * c
-        return d
-      },
-      
-
-      arr = [{"latitude":55.85,"longitude":4.22},{"latitude":55.89,"longitude":4.16},{"latitude":55.88,"longitude":-4.24}],
-      
-      {closest} = arr.reduce((r,o) => {
-        const distance = haversine(o, obj)
-        distance < r.minDistance || !r.closest &&
-        (r.closest = o, r.minDistance = distance)
-        return r
-      }, {closest: null, minDistance: null})
-      
-console.log(closest) -->
 </script>
     <script>
                var directionsshowing = false;
 
                function showmarker()
-               
+
                {
                    if (typeof map.getSource('grocery-stores') === 'undefined') {
                        map.addSource('grocery-stores', {
@@ -818,7 +779,7 @@ console.log(closest) -->
                         'layout': {
                             'visibility': 'visible'
                         },
-                        
+
                         'paint': {
                             'circle-radius': 4,
                             'circle-color': 'rgba(220,88,42,1)',
@@ -864,7 +825,7 @@ console.log(closest) -->
 
                }
 
-         function showdirections(){
+         async function showdirections(){
           if(!directionsshowing) {
               if(user_location == null)
               {
@@ -913,25 +874,32 @@ console.log(closest) -->
             {
                 let closest_marker_distance = Number.MAX_SAFE_INTEGER;
                 let closest_marker = null;
-                for(point of points)
+                for(point of points_in_circle)
                 {
-                    let distance = turf.distance(user_location, point, {units: 'miles'});
-                    if(distance < closest_marker_distance)
-                    {
+                    let user_location_coords = user_location.geometry.coordinates[0] + "," + user_location.geometry.coordinates[1];
+                      let marker_coords = point.geometry.coordinates[0] + "," + point.geometry.coordinates[1];
+                      let url = "https://api.mapbox.com/directions/v5/mapbox/driving/" + user_location_coords + ";" + marker_coords + "?access_token=pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA";
+                      const response = await fetch(url);
+                      const data = await response.json();
+                      let distance = data.routes[0].duration;
+                      if(distance < closest_marker_distance)
+                      {
                         closest_marker_distance = distance;
                         closest_marker = point;
-                    }
+                      }
                 }
                   if(closest_marker != null) {
                       map.addControl(directions, "top-left");
                       directions.setOrigin(user_location.geometry.coordinates);
                       directions.setDestination(closest_marker.geometry.coordinates);
                       directionsshowing = true;
+                      const directionsBox = document.querySelector('.mapboxgl-ctrl-directions');
+                      directionsBox.style.marginLeft = '320px';
                   }
-                  else
-                  {
-                      alert("No businesses within radius found.");
-                  }
+            }
+            else
+            {
+                alert("No businesses within radius found.");
             }
           }
           else
@@ -942,11 +910,6 @@ console.log(closest) -->
                   map.removeControl(directions);
               }
           }
-          
-        const directionsBox = document.querySelector('.mapboxgl-ctrl-directions');
-        directionsBox.style.marginLeft = '320px';
-          
-        
         }
 
 
