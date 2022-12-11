@@ -276,4 +276,11 @@ header {
     border-left: 8px solid transparent;
   }
 
+  .loading-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+  }
 
