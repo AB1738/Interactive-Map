@@ -529,50 +529,13 @@
         var directions = new MapboxDirections({
                     accessToken: mapboxgl.accessToken,
                     interactive: false,
+                    congestion: true,
+                    alternatives: true
                 });
 
 
     </script>
    
-
-
-    <!-- TESTING HOW TO RETURN CLOSEST COORDINATE PAIR TO A GIVEN SET OF COORDINATES -->
-    
-    <!-- <script>
-      
-        HOW TO ITERATE THROUGH THE FARMERS MARKET DATABASE AND RETRIEVE LONG,LAT OF THE ENTRIES
-        ___________________________________________________________________________
-        {% for farmer_address in farmer_addresses %} 
-
-        [{{ farmer_address.long }}, {{ farmer_address.lat }}];
-
-        {% endfor %}
-        _____________________________________________________________________________
-               
-
-        const haversine = ({longitude: lonA, latitude: latA}, {longitude: lonB, latitude: latB}) => {
-        const {PI, sin, cos, atan2} = Math,
-              r = PI/180,
-              R = 6371,
-              deltaLat = (latB - latA)*r,
-              deltaLon = (lonB - lonA)*r,
-              a = sin(deltaLat / 2)**2 + cos(cos(latB*r)*latA*r) * sin(deltaLon /2)**2,
-              c = 2 * atan2(a**0.5, (1 - a)**0.5),
-              d = R * c
-        return d
-      },
-      
-
-      arr = [{"latitude":55.85,"longitude":4.22},{"latitude":55.89,"longitude":4.16},{"latitude":55.88,"longitude":-4.24}],
-      
-      {closest} = arr.reduce((r,o) => {
-        const distance = haversine(o, obj)
-        distance < r.minDistance || !r.closest &&
-        (r.closest = o, r.minDistance = distance)
-        return r
-      }, {closest: null, minDistance: null})
-      
-console.log(closest) -->
 </script>
     <script>
                var directionsshowing = false;
