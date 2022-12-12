@@ -52,8 +52,8 @@
     </header>
 
 
-    <div class="loading-icon">
-      <img src="https://i.gifer.com/origin/e0/e0ea055299e92297b2ec0ef1c80696bf_w200.gif" alt="Loading icon">
+    <div id="loading" class="loading-icon">
+      <img style="width: 25%; height: 25%;" src="{% static 'css/loading.gif' %}" alt="Loading icon">
     </div>
 
 
@@ -723,6 +723,8 @@
             });
             if(points_in_circle.length > 0)
             {
+                let loading_div = document.getElementById('loading');
+                loading_div.style.display = 'block';
                 let closest_marker_distance = Number.MAX_SAFE_INTEGER;
                 let closest_marker = null;
                 for(point of points_in_circle)
@@ -739,6 +741,7 @@
                         closest_marker = point;
                       }
                 }
+                loading_div.style.display = 'none';
                   if(closest_marker != null) {
                       map.addControl(directions, "top-left");
                       directions.setOrigin(user_location.geometry.coordinates);

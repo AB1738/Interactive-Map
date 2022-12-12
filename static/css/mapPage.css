@@ -275,12 +275,13 @@ header {
     border-right: 8px solid transparent;
     border-left: 8px solid transparent;
   }
-
   .loading-icon {
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 65%;
     transform: translate(-50%, -50%);
-    
+    z-index: 100;
+    display: none;
+
   }
 
