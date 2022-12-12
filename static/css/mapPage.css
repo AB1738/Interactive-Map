@@ -271,14 +271,14 @@ header {
     border-right: 8px solid transparent;
     border-left: 8px solid transparent;
   }
-  /*.loading-icon {*/
-  /*  position: absolute;*/
-  /*  top: 50%;*/
-  /*  left: 60%;*/
-  /*  transform: translate(-50%, -50%);*/
-  /*  z-index: 100;*/
-  /*  display: none;*/
-  /*}*/
+  .loading-icon {
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    display: none;
+  }
 
   @media (max-width: 768px) {
     .banner {
@@ -451,9 +451,9 @@ animation-delay: -0.252s;
 }
 }
 
-#loading {
-  display: flex; align-items: center; justify-content: center; background-color: #000000; z-index: 999999; position: absolute; top: 89px; left: 0px; right: 0px; height: calc(100vh - 89px);transform:none;display:none;height:50px;bottom:0px;top:initial;
-}
+/*#loading {*/
+/*  display: flex; align-items: center; justify-content: center; background-color: #000000; z-index: 999999; position: absolute; top: 89px; left: 0px; right: 0px; height: calc(100vh - 89px);transform:none;display:none;height:50px;bottom:0px;top:initial;*/
+/*}*/
 
 .optionBox {
   display:flex;
