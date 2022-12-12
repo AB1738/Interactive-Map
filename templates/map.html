@@ -145,10 +145,10 @@
       
        <div style="border-top:1px solid #eeeeee;padding-top:20px;margin-top:20px;padding-bottom: 100px;">
         
-        <div class="optionBox">
-          <button class="optionItem directionOption" onclick="directionOptionOnClick(this)">Cycling</button>
+        <div id="options" class="optionBox">
+          <button class="optionItem directionOption active" onclick="directionOptionOnClick(this)">Driving</button>
           <button class="optionItem directionOption" onclick="directionOptionOnClick(this)">Walking</button>
-          <button class="optionItem directionOption" onclick="directionOptionOnClick(this)">Driving</button>
+          <button class="optionItem directionOption" onclick="directionOptionOnClick(this)">Cycling</button>
         </div>
         <button id="find_nearest_business_button" class="findButton" onclick="showdirections()">
           <div class="findDecor">
@@ -180,8 +180,7 @@
       let isopen = false;
 
       function openClose(){
-        
-        
+
         isopen= !isopen
         console.log(isopen);
         var d = document.getElementById("canvas");
@@ -292,7 +291,7 @@
         style: "mapbox://styles/mapbox/streets-v11?optimize=true", // style URL
         center: [-73.93, 40.73], // starting position [lng, lat]
 
-        zoom: 11, // starting zoom
+        zoom: 13, // starting zoom
         maxZoom: 21
 
         // maxBounds: bounds
@@ -373,12 +372,7 @@
       });
           map.addControl(geolocate);
 
-        var directions = new MapboxDirections({
-                    accessToken: mapboxgl.accessToken,
-                    interactive: false,
-                    congestion: true,
-                    alternatives: true
-                });
+
 
 
     </script>
@@ -387,6 +381,8 @@
 </script>
     <script>
                var directionsshowing = false;
+
+
 
                function showmarker()
 
@@ -674,7 +670,11 @@
                    layers_showing['super-centers'] = !layers_showing['super-centers']
 
                }
-
+            var directions = new MapboxDirections({
+                accessToken: mapboxgl.accessToken,
+                interactive: false,
+                controls: { inputs: false},
+            });
          async function showdirections(){
           if(!directionsshowing) {
               if(user_location == null)
@@ -726,11 +726,28 @@
                 loading_div.style.display = 'block';
                 let closest_marker_distance = Number.MAX_SAFE_INTEGER;
                 let closest_marker = null;
+                let options = document.getElementById('options').children;
+                let find_shortest_option = "driving";
+                for(let i = 0; i < options.length; i++)
+                {
+                    let button = options[i];
+                    if(button.classList.contains('active'))
+                    {
+                        find_shortest_option = button.textContent.toLowerCase() || button.innerText.toLowerCase();
+                        break;
+                    }
+                }
+                directions = new MapboxDirections({
+                    accessToken: mapboxgl.accessToken,
+                    interactive: false,
+                    controls: { inputs: false},
+                    profile: "mapbox/" + find_shortest_option
+                });
                 for(point of points_in_circle)
                 {
                     let user_location_coords = user_location.geometry.coordinates[0] + "," + user_location.geometry.coordinates[1];
                       let marker_coords = point.geometry.coordinates[0] + "," + point.geometry.coordinates[1];
-                      let url = "https://api.mapbox.com/directions/v5/mapbox/driving/" + user_location_coords + ";" + marker_coords + "?access_token=pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA";
+                      let url = "https://api.mapbox.com/directions/v5/mapbox/" + find_shortest_option + "/" + user_location_coords + ";" + marker_coords + "?access_token=pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA";
                       const response = await fetch(url);
                       const data = await response.json();
                       let distance = data.routes[0].duration;
@@ -761,6 +778,7 @@
               if(map.hasControl(directions))
               {
                   map.removeControl(directions);
+                  directions = null;
               }
           }
         }
