@@ -29,7 +29,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body id="canvas">
-    <header style="padding:20px;align-items: center;height:initial;position">
+    <header style="padding:20px;align-items: center;height:initial;">
       
       <div style="display: flex; align-items: center;">
         <button id="openMenu" class="openbtn" onclick="openClose()" style="background-color:#FFFFFF;border-width:0px;width:40px;height:40px;box-shadow:0px 0px 6px rgba(0,0,0,0.15);display:flex;flex-direction: column;justify-content: center;align-items: center;position:initial;margin-right:20px;">
@@ -50,6 +50,12 @@
       </div>
     
     </header>
+
+
+    <div id="loading" class="loading-icon">
+      <img style="width: 25%; height: 25%;" src="{% static 'css/loading.gif' %}" alt="Loading icon">
+    </div>
+
 
     
     <div id ="mySidebar" class="sidebar" style="padding:20px;padding-top:0px;width:300px;">
@@ -253,10 +259,6 @@
                 map.getSource('user-radius').setData(circle);
             }
         })
-      // const bounds = [
-      //   [-75.323541,40.405131], // Southwest coordinates
-      //   [-71.566392,41.411836] // Northeast coordinates
-      // ];
 
       const bounds = [
         [-75.323541,40.405131], // Southwest coordinates
@@ -276,23 +278,6 @@
         // maxBounds: bounds
       });
       
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 
       const layerList = document.getElementById("menu");
       const inputs = layerList.getElementsByTagName("input");
@@ -377,18 +362,19 @@
 
 
     </script>
-   
+
+
 </script>
     <script>
                var directionsshowing = false;
 
                function showmarker()
-               
+
                {
                    if (typeof map.getSource('grocery-stores') === 'undefined') {
                        map.addSource('grocery-stores', {
                            type: 'vector',
-                           url: 'mapbox://arielb1.38i7mvbz'
+                           url: 'mapbox://arielb1.a1c5oocq'
                        });
                        map.addLayer({
                            'id': 'grocery-stores',
@@ -401,10 +387,10 @@
                                'circle-radius': 4,
                                'circle-color': 'rgba(0,0,255,1)',
                                'circle-stroke-color': 'black',
-                        'circle-stroke-width':3,
+                                'circle-stroke-width':3,
 
                            },
-                           'source-layer': 'Total_grocery_stores-6tzhl7'
+                           'source-layer': 'out-b46o3a'
                        });
                        const popup = new mapboxgl.Popup({
                         closeButton : false,
@@ -418,7 +404,7 @@
                     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                     }
-                    properties = JSON.stringify(properties).replaceAll('\"', '').replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '').replaceAll();
+                    properties = properties['DBA Name'] + "<hr>" + properties['Street Address'];
                     popup.setLngLat(coordinates).setHTML(properties).addTo(map);
                 })
              map.on('mouseleave', 'grocery-stores', () => {
@@ -473,8 +459,8 @@
                             while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                                 coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                             }
-                            properties = JSON.stringify(properties).replaceAll('\"', '').replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '')
-                            popup.setLngLat(coordinates).setHTML(properties).addTo(map);
+                                properties = properties['Market Name'] + "<hr>" + properties['Street Address'];
+                                popup.setLngLat(coordinates).setHTML(properties).addTo(map);
                         });
                         map.on('mouseleave', 'farmers-markets', (e) => {
                             map.getCanvas().style.cursor = '';
@@ -528,7 +514,7 @@
                                 while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                                     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                                 }
-                                properties = JSON.stringify(properties).replaceAll('\"', '').replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '');
+                                properties = properties['FacilityName'] + "<hr>" + properties['FacilityAddress'];
                                 popup.setLngLat(coordinates).setHTML(properties).addTo(map);
                             });
                            map.on('mouseleave', 'fire-houses', (e) => {
@@ -587,7 +573,7 @@
                                 while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                                     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                                 }
-                                properties = JSON.stringify(properties).replaceAll('\"', '').replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '');
+                                properties = properties['DBA Name'] + "<hr>" + properties['Street Address'];
                                 popup.setLngLat(coordinates).setHTML(properties).addTo(map);
                             });
                            map.on('mouseleave', 'super-markets', (e) => {
@@ -623,7 +609,7 @@
                         'layout': {
                             'visibility': 'visible'
                         },
-                        
+
                         'paint': {
                             'circle-radius': 4,
                             'circle-color': 'rgba(220,88,42,1)',
@@ -645,7 +631,7 @@
                                 while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                                     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                                 }
-                                properties = JSON.stringify(properties).replaceAll('\"', '').replaceAll(',', '<br>').replaceAll('{', '').replaceAll('}', '');
+                                properties = properties['DBA Name'] + "<hr>" + properties['Street Address'];
                                 popup.setLngLat(coordinates).setHTML(properties).addTo(map);
                             });
                            map.on('mouseleave', 'super-centers', (e) => {
@@ -669,7 +655,7 @@
 
                }
 
-         function showdirections(){
+         async function showdirections(){
           if(!directionsshowing) {
               if(user_location == null)
               {
@@ -716,27 +702,37 @@
             });
             if(points_in_circle.length > 0)
             {
+                let loading_div = document.getElementById('loading');
+                loading_div.style.display = 'block';
                 let closest_marker_distance = Number.MAX_SAFE_INTEGER;
                 let closest_marker = null;
-                for(point of points)
+                for(point of points_in_circle)
                 {
-                    let distance = turf.distance(user_location, point, {units: 'miles'});
-                    if(distance < closest_marker_distance)
-                    {
+                    let user_location_coords = user_location.geometry.coordinates[0] + "," + user_location.geometry.coordinates[1];
+                      let marker_coords = point.geometry.coordinates[0] + "," + point.geometry.coordinates[1];
+                      let url = "https://api.mapbox.com/directions/v5/mapbox/driving/" + user_location_coords + ";" + marker_coords + "?access_token=pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA";
+                      const response = await fetch(url);
+                      const data = await response.json();
+                      let distance = data.routes[0].duration;
+                      if(distance < closest_marker_distance)
+                      {
                         closest_marker_distance = distance;
                         closest_marker = point;
-                    }
+                      }
                 }
+                loading_div.style.display = 'none';
                   if(closest_marker != null) {
                       map.addControl(directions, "top-left");
                       directions.setOrigin(user_location.geometry.coordinates);
                       directions.setDestination(closest_marker.geometry.coordinates);
                       directionsshowing = true;
+                      const directionsBox = document.querySelector('.mapboxgl-ctrl-directions');
+                      directionsBox.style.marginLeft = '320px';
                   }
-                  else
-                  {
-                      alert("No businesses within radius found.");
-                  }
+            }
+            else
+            {
+                alert("No businesses within radius found.");
             }
           }
           else
@@ -747,11 +743,6 @@
                   map.removeControl(directions);
               }
           }
-          
-        const directionsBox = document.querySelector('.mapboxgl-ctrl-directions');
-        directionsBox.style.marginLeft = '320px';
-          
-        
         }
 
 
@@ -769,7 +760,7 @@ function groceryheatmap(){
     {
       map.addSource('grocery-stores-heatmap', {
       'type': 'vector',
-      'url': 'mapbox://arielb1.38i7mvbz'
+      'url': 'mapbox://arielb1.a1c5oocq'
       });
       
       map.addLayer(
@@ -777,7 +768,7 @@ function groceryheatmap(){
       'id': 'grocery-stores-heat',
       'type': 'heatmap',
       'source': 'grocery-stores-heatmap',
-      'source-layer': 'Total_grocery_stores-6tzhl7',
+      'source-layer': 'out-b46o3a',
       'maxzoom': 22,
       'paint': {
 
@@ -824,7 +815,7 @@ function groceryheatmap(){
       'id': 'grocery-stores-point',
       'type': 'circle',
       'source': 'grocery-stores-heatmap',
-      'source-layer': 'Total_grocery_stores-6tzhl7',
+      'source-layer': 'out-b46o3a',
       'minzoom': 1,
       'paint': {
 
