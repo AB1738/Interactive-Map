@@ -141,7 +141,15 @@ header {
   .locationItem:hover{
     cursor: pointer;
   }
+  .directionOption:hover{
+    cursor: pointer;
+  }
 
+  .directionOption{
+    padding: 0;
+    border: none;
+    background: none;
+  }
   .findButton {
     background-color:#000000;
     border-radius:8px;

@@ -146,9 +146,9 @@
        <div style="border-top:1px solid #eeeeee;padding-top:20px;margin-top:20px;padding-bottom: 100px;">
         
         <div class="optionBox">
-          <div class="optionItem">Cycling</div>
-          <div class="optionItem active">Walking</div>
-          <div class="optionItem">Driving</div>
+          <button class="optionItem directionOption" onclick="directionOptionOnClick(this)">Cycling</button>
+          <button class="optionItem directionOption" onclick="directionOptionOnClick(this)">Walking</button>
+          <button class="optionItem directionOption" onclick="directionOptionOnClick(this)">Driving</button>
         </div>
         <button id="find_nearest_business_button" class="findButton" onclick="showdirections()">
           <div class="findDecor">
@@ -216,6 +216,16 @@
           }
         }
 
+      }
+
+      function directionOptionOnClick(el){
+        var Buttons = document.querySelectorAll('.directionOption');
+        for(var button of Buttons){
+          if(button.classList.contains("active")){
+            button.classList.remove("active");
+          }
+        }
+        el.classList.add("active");
       }
       </script>
 
