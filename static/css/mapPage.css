@@ -278,7 +278,7 @@ header {
   .loading-icon {
     position: absolute;
     top: 50%;
-    left: 65%;
+    left: 60%;
     transform: translate(-50%, -50%);
     z-index: 100;
     display: none;
