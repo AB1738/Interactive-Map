@@ -9,7 +9,7 @@ import time
 
 class FarmerMarketAddressProcessingTestCase(TestCase):
     def setUp(self):
-        self.access_token = 'pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg'
+        self.access_token = 'pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA'
         self.address_model = FarmersMarketAddresses(farmer_address="535 MARCY AVE")
         self.invalid_address_model = FarmersMarketAddresses(farmer_address="!@#@!#@!$!!$@$@$@$@")
 
@@ -61,7 +61,7 @@ class MapViewTestCase(TestCase):
     def test_context(self):
         response = self.client.get('/map/')
         self.assertEqual(response.context['access_token'],
-                         'pk.eyJ1IjoiaGFtc2llIiwiYSI6ImNsODN4aWdmcjBhNHEzcGw4ZXYxMHcxaXkifQ.67o9saEURWg3rF02gZxGKg')
+                         'pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA')
         self.assertIsNotNone(response.context['addresses'])
         self.assertIsNotNone(response.context['farmer_addresses'])
 
