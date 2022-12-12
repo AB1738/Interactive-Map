@@ -57,8 +57,7 @@
 
 
     <div id="loading" class="loading-icon">
-      <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-      <div style="color:#FFFFFF;font-size:12px;">Loading...</div>
+      <img style="width: 25%; height: 25%;" src="{% static 'css/loading.gif' %}" alt="Loading icon">
     </div>
 
 
@@ -714,7 +713,7 @@
             if(points_in_circle.length > 0)
             {
                 let loading_div = document.getElementById('loading');
-                loading_div.style.display = 'flex';
+                loading_div.style.display = 'block';
                 let closest_marker_distance = Number.MAX_SAFE_INTEGER;
                 let closest_marker = null;
                 for(point of points_in_circle)
