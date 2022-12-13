@@ -146,9 +146,9 @@
        <div style="border-top:1px solid #eeeeee;padding-top:20px;margin-top:20px;padding-bottom: 100px;">
 
         <div id="options" class="optionBox">
-          <button class="optionItem directionOption active" onclick="directionOptionOnClick(this)">Driving</button>
-          <button class="optionItem directionOption" onclick="directionOptionOnClick(this)">Walking</button>
-          <button class="optionItem directionOption" onclick="directionOptionOnClick(this)">Cycling</button>
+          <button id="driving" class="optionItem directionOption active" onclick="directionOptionOnClick(this)">Driving</button>
+          <button id="walking" class="optionItem directionOption" onclick="directionOptionOnClick(this)">Walking</button>
+          <button id="cycling" class="optionItem directionOption" onclick="directionOptionOnClick(this)">Cycling</button>
         </div>
         <button id="find_nearest_business_button" class="findButton" onclick="showdirections()">
           <div class="findDecor">
@@ -291,7 +291,7 @@
         style: "mapbox://styles/mapbox/streets-v11?optimize=true", // style URL
         center: [-73.93, 40.73], // starting position [lng, lat]
 
-        zoom: 13, // starting zoom
+        zoom: 11, // starting zoom
         maxZoom: 21
 
         // maxBounds: bounds
@@ -673,7 +673,7 @@
             var directions = new MapboxDirections({
                 accessToken: mapboxgl.accessToken,
                 interactive: false,
-                {#controls: { inputs: false},#}
+                controls: { inputs: false},
             });
          async function showdirections(){
           if(!directionsshowing) {
@@ -762,13 +762,13 @@
                       {
                           if(json.durations[0][i] < closest_marker_distance)
                           {
-                              closest_marker_distance = json.durations[0][i];
-                              closest_marker = turf.point(json.destinations[i].location);
+                            closest_marker_distance = json.durations[0][i];
+                            closest_marker = turf.point(json.destinations[i].location);
                           }
                       }
                       url = base_url;
                     }
-                      let marker_coords = point.geometry.coordinates[0] + "," + point.geometry.coordinates[1];
+                      let marker_coords = point.geometry.coordinates[0].toString() + "," + point.geometry.coordinates[1].toString();
                       url = url + marker_coords + ";";
                       points++;
                 }
@@ -779,8 +779,8 @@
                   {
                       if(json.durations[0][i] < closest_marker_distance)
                       {
-                          closest_marker_distance = json.durations[0][i];
-                          closest_marker = turf.point(json.destinations[i].location);
+                        closest_marker_distance = json.durations[0][i];
+                        closest_marker = turf.point(json.destinations[i].location);
                       }
                   }
                 loading_div.style.display = 'none';
@@ -910,7 +910,7 @@ function groceryheatmap(){
       },
 
       );
-      
+      map.setLayoutProperty('grocery-stores-heat', 'visibility', 'visible');
     }
     else
     {
@@ -1024,8 +1024,9 @@ function farmerheatmap(){
       },
 
       );
-      
+      map.setLayoutProperty('farmers-markets-heat', 'visibility', 'visible');
     }
+
     else
     {
         const visibility = map.getLayoutProperty('farmers-markets-heat', 'visibility');
@@ -1140,6 +1141,7 @@ function fireheatmap(){
       },
 
       );
+                  map.setLayoutProperty('fire-station-heat', 'visibility', 'visible');
     }
     else
     {
@@ -1253,6 +1255,7 @@ function supermarketheatmap(){
       },
 
       );
+                  map.setLayoutProperty('super-markets-heat', 'visibility', 'visible');
     }
     else
     {
@@ -1367,6 +1370,7 @@ function supercenterheatmap(){
     },
 
     );
+                map.setLayoutProperty('super-center-heat', 'visibility', 'visible');
     }
     else
     {
