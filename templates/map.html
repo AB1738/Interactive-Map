@@ -61,7 +61,7 @@
     </div>
 
 
-    
+    <!-- map mode html -->
     <div id ="mySidebar" class="sidebar" style="padding:20px;padding-top:0px;width:300px;">
       <div id="menu">
         <div class="sidebarLabel" style="margin-top:15px;">Map Mode</div>
@@ -92,6 +92,7 @@
 
         
 
+        <!-- Search radius bar -->
 
         <div class="specialAdd">
           <div class="sidebarLabel">Search Radius</div>
@@ -104,7 +105,7 @@
         <div class="radius-slider-container">
           <input type="range" min="1" max="5" value="3" id="radius-slider">
         </div>
-
+        <!-- Business types buttons html -->
         <div class="sidebarLabel" style="margin-top:10px;">Business Types</div>
 
           <div id='business_types' class="glower">
@@ -124,7 +125,7 @@
                   <div class="locationDecor"><div class="locationDecorInner"></div></div>
                 </button>
           </div>
-
+          <!-- Heatmap Html -->
        <div class="sidebarLabel" style="margin-top:10px;">Heatmaps</div>
        <button id="heatmap1"  class="locationItem" onclick="groceryheatmap();onClickToggleEffect(this)">Grocery Store
         <div class="locationDecor"><div class="locationDecorInner"></div></div>
@@ -144,7 +145,7 @@
 
 
        <div style="border-top:1px solid #eeeeee;padding-top:20px;margin-top:20px;padding-bottom: 100px;">
-
+        <!-- Directions option and find nearest button -->
         <div id="options" class="optionBox">
           <button id="driving" class="optionItem directionOption active" onclick="directionOptionOnClick(this)">Driving</button>
           <button id="walking" class="optionItem directionOption" onclick="directionOptionOnClick(this)">Walking</button>
@@ -177,6 +178,7 @@
       </div>
     </div>
     <script>
+      //scrip to deal with the opening and closing of the nav bar
       let isopen = false;
 
       function openClose(){
@@ -216,7 +218,7 @@
         }
 
       }
-
+      //function that deals with the togglebility of the direction options
       function directionOptionOnClick(el){
         var Buttons = document.querySelectorAll('.directionOption');
         for(var button of Buttons){
@@ -230,7 +232,7 @@
 
 
     <script>
-
+        //variable setup for the layers and maps of the mapbox
         var layers_showing = {
             'grocery-stores' : false,
             'farmers-markets' : false,
@@ -245,7 +247,7 @@
             'super-centers' : {{ supercenter_addresses | safe}},
             'super-markets' : {{ supermarket_addresses | safe}}
         };
-
+        //radius bar code
         const RADIUS_LIMIT = 10;
         let radius_slider = document.getElementById('radius-slider');
         let radius_input = document.getElementById('radius-input');
@@ -278,7 +280,7 @@
                 map.getSource('user-radius').setData(circle);
             }
         })
-
+        //bounds the map to these coordinates 
       const bounds = [
         [-75.323541,40.405131], // Southwest coordinates
         [-71.566392,41.411836] // Northeast coordinates
@@ -716,6 +718,8 @@
                 interactive: false,
                 controls: { inputs: false},
             });
+
+            //code for the show directions
          async function showdirections(){
           if(!directionsshowing) {
               if(user_location == null)
