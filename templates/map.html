@@ -198,7 +198,7 @@
         }
 
       }
-
+      //function that displays toggle when button is clicked
       function onClickToggleEffect(el){
         if(el.classList.contains("active")){
           el.classList.remove("active");
@@ -206,7 +206,7 @@
           el.classList.add("active");
         }
       }
-
+      //function that removes all toggled buttons
       function turnOffAllToggle(){
         var Buttons = document.querySelectorAll('.locationItem');
         for(var button of Buttons){
@@ -307,7 +307,7 @@
           map.setStyle("mapbox://styles/mapbox/" + layerId);
         };
       }
-
+//adds navigation control to the map to improve user experience
       const nav = new mapboxgl.NavigationControl({
         visualizePitch: true,
       });
@@ -364,13 +364,14 @@
               });
             }
           }
-
-
+          
+          
+          //Allows users to display their location on the map
 
       geolocate.on('geolocate', (e) => {
           user_location = turf.point([e.coords.longitude, e.coords.latitude]);
       });
-          map.addControl(geolocate);
+          map.addControl(geolocate); //Adds the geolocate button on the screen
 
 
 
@@ -382,37 +383,42 @@
     <script>
                var directionsshowing = false;
 
-
+            //function that displays the first dataset on the map
 
                function showmarker()
 
                {
                    if (typeof map.getSource('grocery-stores') === 'undefined') {
+                    // adds grocery store data from mapbox tileset as data source
                        map.addSource('grocery-stores', {
                            type: 'vector',
-                           url: 'mapbox://arielb1.a1c5oocq'
+                           url: 'mapbox://arielb1.a1c5oocq' //mapbox tileset containing dataset for grocery stores
                        });
+                       //Adds a layer of markers that correspond to the data source
                        map.addLayer({
                            'id': 'grocery-stores',
-                           'type': 'circle',
+                           'type': 'circle', //type of marker being displayed
                            'source': 'grocery-stores',
                            'layout': {
                                'visibility': 'visible'
                            },
+                           //styling options for the marker
                            'paint': {
-                               'circle-radius': 4,
-                               'circle-color': 'rgba(0,0,255,1)',
-                               'circle-stroke-color': 'black',
-                                'circle-stroke-width':3,
+                               'circle-radius': 4, //radius of marker
+                               'circle-color': 'rgba(0,0,255,1)',//color of marker
+                               'circle-stroke-color': 'black',//outline color of marker
+                                'circle-stroke-width':3,//width of marker outline
 
                            },
-                           'source-layer': 'out-b46o3a'
+                           'source-layer': 'out-b46o3a' //source layer for grocery store tileset
                        });
+                       //popup that displays information for each grocery store marker
                        const popup = new mapboxgl.Popup({
                         closeButton : false,
                         closeOnClick: false,
                         className:'my-popup'
                     });
+                    //adds a popup that appears when the mouse hovers over a marker
             map.on('mouseover', 'grocery-stores', (e) => {
                     map.getCanvas().style.cursor = 'pointer';
                     const coordinates = e.features[0].geometry.coordinates.slice();
@@ -423,6 +429,7 @@
                     properties = properties['DBA Name'] + "<hr>" + properties['Street Address'];
                     popup.setLngLat(coordinates).setHTML(properties).addTo(map);
                 })
+                //removes popup when the mouse stops hovering over the marker
              map.on('mouseleave', 'grocery-stores', () => {
                  map.getCanvas().style.cursor = '';
                  popup.remove();
@@ -431,43 +438,49 @@
                    else {
                        const visibility = map.getLayoutProperty('grocery-stores', 'visibility');
                         if(visibility === "none")
-                        {
+                        { //Adds visibility to the grocery store markers
                             map.setLayoutProperty('grocery-stores', 'visibility', 'visible');
                         }
                         else
-                        {
+                        { //removes visibility from grocery store markers
                             map.setLayoutProperty('grocery-stores', 'visibility', 'none');
                         }
                    }
                    layers_showing['grocery-stores'] = !layers_showing['grocery-stores']
                  }
+
+                 //Function that displays the 2nd dataset on the map
                function showmarker2() {
                    if (typeof map.getSource('farmers-markets') === 'undefined') {
+                    // adds farmers market data from mapbox tileset as data source
                        map.addSource('farmers-markets', {
                             type: 'vector',
-                            url: 'mapbox://arielb1.af9vybob'
+                            url: 'mapbox://arielb1.af9vybob' //mapbox tileset containing data for farmers markets
                         });
+                        //adds a layer of markers that correspond to the data source
                         map.addLayer({
                             'id': 'farmers-markets',
-                            'type': 'circle',
+                            'type': 'circle',//type of marker being displayed
                             'source': 'farmers-markets',
                             'layout': {
                                 'visibility': 'visible'
                             },
+                            //marker styling options
                             'paint': {
-                                'circle-radius': 4,
-                                'circle-color': 'rgba(0,128,0,1)',
-                                'circle-stroke-color': 'black',
-                        'circle-stroke-width':3,
+                                'circle-radius': 4, //raidus for marker
+                                'circle-color': 'rgba(0,128,0,1)', //color for marker
+                                'circle-stroke-color': 'black', //outline color for marker
+                        'circle-stroke-width':3, //width of outline for marker
                             },
-                            'source-layer': 'DOHMH_Farmers_Markets-ccwyus'
+                            'source-layer': 'DOHMH_Farmers_Markets-ccwyus' //source layer for farmers market tileset
                         });
+                        //creates a popup that displays information for markers
                         let popup = new mapboxgl.Popup({
                             closeButton: false,
                             closeOnClick: false,
                             className:'my-popup'
                         });
-
+                        //adds a popup that appears when the mouse hovers over a marker
                         map.on('mouseenter', 'farmers-markets', (e) => {
                             map.getCanvas().style.cursor = 'pointer';
                             const coordinates = e.features[0].geometry.coordinates.slice();
@@ -478,6 +491,7 @@
                                 properties = properties['Market Name'] + "<hr>" + properties['Street Address'];
                                 popup.setLngLat(coordinates).setHTML(properties).addTo(map);
                         });
+                        //removes the popup when the mouse stops hovering over a marker
                         map.on('mouseleave', 'farmers-markets', (e) => {
                             map.getCanvas().style.cursor = '';
                             popup.remove();
@@ -488,41 +502,49 @@
                        const visibility = map.getLayoutProperty('farmers-markets', 'visibility');
                         if(visibility === "none")
                         {
+                          //adds marker visibility to the map
                             map.setLayoutProperty('farmers-markets', 'visibility', 'visible');
                         }
                         else
                         {
+                          //removes marker visibility from the map
                             map.setLayoutProperty('farmers-markets', 'visibility', 'none');
                         }
                    }
                    layers_showing['farmers-markets'] = !layers_showing['farmers-markets']
                }
+               //function that displays markers for third dataset
                function showmarker3() {
                        if (typeof map.getSource('fire-houses') === 'undefined') {
+                        //adds mapbox firehouse tileset a datasource
                            map.addSource('fire-houses', {
                            type: 'vector',
-                           url: 'mapbox://arielb1.388xpmrj'
+                           url: 'mapbox://arielb1.388xpmrj' //mapbox tileset url for fire house dataset
                        });
+                       //adds a layer of markers corresponding to the data source
                            map.addLayer({
                            'id': 'fire-houses',
-                           'type': 'circle',
+                           'type': 'circle', //type of marker being displayed
                            'source': 'fire-houses',
                            'layout': {
                                'visibility': 'visible'
                            },
+                           //marker styling options
                            'paint': {
-                               'circle-radius': 4,
-                               'circle-color': 'rgba(255,0,0,1)',
-                               'circle-stroke-color': 'black',
-                        'circle-stroke-width':3
+                               'circle-radius': 4,//radius of marker
+                               'circle-color': 'rgba(255,0,0,1)',//color of marker
+                               'circle-stroke-color': 'black',//color of outline of marker
+                        'circle-stroke-width':3 //width of outline of marker
                            },
-                           'source-layer': 'FDNY_Firehouse_Listing-4hvksv'
+                           'source-layer': 'FDNY_Firehouse_Listing-4hvksv' //source layer for firehouse tileset
                        });
+                       //create s a popup that displays information for markers
                        let popup = new mapboxgl.Popup({
                             closeButton: false,
                             closeOnClick: false,
                             className:'my-popup'
                         });
+                        //displays popup over marker when mouse is hovering over a marker
                            map.on('mouseenter', 'fire-houses', (e) => {
                                 map.getCanvas().style.cursor = 'pointer';
                                 const coordinates = e.features[0].geometry.coordinates.slice();
@@ -533,6 +555,7 @@
                                 properties = properties['FacilityName'] + "<hr>" + properties['FacilityAddress'];
                                 popup.setLngLat(coordinates).setHTML(properties).addTo(map);
                             });
+                            //removes popup from marker when mouse stop hovering over the marker
                            map.on('mouseleave', 'fire-houses', (e) => {
                                 map.getCanvas().style.cursor = '';
                                 popup.remove();
@@ -542,46 +565,53 @@
                        {
                            const visibility = map.getLayoutProperty('fire-houses', 'visibility');
                             if(visibility === "none")
-                            {
+                            { 
+                              //add visibility to the marker
                                 map.setLayoutProperty('fire-houses', 'visibility', 'visible');
                             }
                             else
                             {
+                              //remove visibility from the marker
                                 map.setLayoutProperty('fire-houses', 'visibility', 'none');
                             }
                        }
                        layers_showing['fire-houses'] = !layers_showing['fire-houses']
                }
 
-
+               //function that displays 4th dataset
               function showmarker4(){
                    if(typeof map.getSource('super-markets') === 'undefined')
                    {
+                    //adds supermarket tileset as a data source
                        map.addSource('super-markets', {
                             type: 'vector',
-                            url: 'mapbox://arielb1.dftl2j6f'
+                            url: 'mapbox://arielb1.dftl2j6f' //tileset url for supermarket tileset
                         });
+                        //adds layers of markers corresponding to the data source
                        map.addLayer({
                         'id': 'super-markets',
-                        'type': 'circle',
+                        'type': 'circle', //type of marker being added
                         'source': 'super-markets',
                         'layout': {
                             'visibility': 'visible'
                         },
+                        //marker styling options
                         'paint': {
-                            'circle-radius': 4,
-                            'circle-color': 'rgba(255,0,255,1)',
-                            'circle-stroke-color': 'black',
-                        'circle-stroke-width':3,
+                            'circle-radius': 4, //radius of marker
+                            'circle-color': 'rgba(255,0,255,1)', //color of marker
+                            'circle-stroke-color': 'black', //color of marker outline
+                        'circle-stroke-width':3, //width of marker outline
 
                         },
-                        'source-layer': 'Supermarkets-52ltms'
+                        'source-layer': 'Supermarkets-52ltms' //source layer for supermarket tileset
                     });
+                    //create popup that display information for markers
                                               let popup = new mapboxgl.Popup({
                             closeButton: false,
                             closeOnClick: false,
                             className:'my-popup'
                         });
+                        //display popup over markers when the mouse hovers over the marker
                            map.on('mouseenter', 'super-markets', (e) => {
                                 map.getCanvas().style.cursor = 'pointer';
                                 const coordinates = e.features[0].geometry.coordinates.slice();
@@ -592,6 +622,7 @@
                                 properties = properties['DBA Name'] + "<hr>" + properties['Street Address'];
                                 popup.setLngLat(coordinates).setHTML(properties).addTo(map);
                             });
+                            //removes popup from marker when mouse stops hovering over the marker
                            map.on('mouseleave', 'super-markets', (e) => {
                                 map.getCanvas().style.cursor = '';
                                 popup.remove();
@@ -602,44 +633,51 @@
                        const visibility = map.getLayoutProperty('super-markets', 'visibility');
                         if(visibility === "none")
                         {
+                          //adds visibility to marker
                             map.setLayoutProperty('super-markets', 'visibility', 'visible');
                         }
                         else
                         {
+                          //removes visibility from marker
                             map.setLayoutProperty('super-markets', 'visibility', 'none');
                         }
                    }
                    layers_showing['super-markets'] = !layers_showing['super-markets']
                }
+               //function for displaying the 5th dataset
                function showmarker5(){
                    if(typeof map.getSource('super-centers') === 'undefined')
                    {
+                    //adds supercenter tileset as a data source
                        map.addSource('super-centers', {
                             type: 'vector',
-                            url: 'mapbox://arielb1.bx5tiqmq'
+                            url: 'mapbox://arielb1.bx5tiqmq' //tileset url supercenter tileset
                         });
+                        //adds layer of markers corresponding to the data source
                        map.addLayer({
                         'id': 'super-centers',
-                        'type': 'circle',
+                        'type': 'circle',//type of marker being displayed
                         'source': 'super-centers',
                         'layout': {
                             'visibility': 'visible'
                         },
-
+                          //marker styling options
                         'paint': {
-                            'circle-radius': 4,
-                            'circle-color': 'rgba(220,88,42,1)',
-                            'circle-stroke-color': 'black',
-                        'circle-stroke-width':3,
+                            'circle-radius': 4, //radius of marker
+                            'circle-color': 'rgba(220,88,42,1)',//color of marker
+                            'circle-stroke-color': 'black',//outline color of marker
+                        'circle-stroke-width':3,//outline width of marker
 
                         },
                         'source-layer': 'Supercenters-49gbzn'
                     });
+                    //creates popup that displays information for markers
                         let popup = new mapboxgl.Popup({
                             closeButton: false,
                             closeOnClick: false,
                             className:'my-popup'
                         });
+                        //displays popup when mouse hovers over a marker
                            map.on('mouseenter', 'super-centers', (e) => {
                                 map.getCanvas().style.cursor = 'pointer';
                                 const coordinates = e.features[0].geometry.coordinates.slice();
@@ -650,6 +688,7 @@
                                 properties = properties['DBA Name'] + "<hr>" + properties['Street Address'];
                                 popup.setLngLat(coordinates).setHTML(properties).addTo(map);
                             });
+                            //removes popup when mouse stops hovering over a marker
                            map.on('mouseleave', 'super-centers', (e) => {
                                 map.getCanvas().style.cursor = '';
                                 popup.remove();
@@ -660,10 +699,12 @@
                        const visibility = map.getLayoutProperty('super-centers', 'visibility');
                         if(visibility === "none")
                         {
+                          //adds visibility to marker
                             map.setLayoutProperty('super-centers', 'visibility', 'visible');
                         }
                         else
                         {
+                          //removes visibilty from the marker
                             map.setLayoutProperty('super-centers', 'visibility', 'none');
                         }
                    }
@@ -817,23 +858,24 @@
 
 <script>
 
-
+//Function for creating and adding a heatmap of grocery stores on the map
 function groceryheatmap(){
 
   if(typeof map.getSource('grocery-stores-heatmap') === 'undefined')
     {
+      // adds grocery store data from mapbox tileset
       map.addSource('grocery-stores-heatmap', {
       'type': 'vector',
-      'url': 'mapbox://arielb1.a1c5oocq'
+      'url': 'mapbox://arielb1.a1c5oocq' //mapbox tileset containing grocery store dataset points
       });
-      
+      //Uses grocery store tileset to display heatmap of grocery stores
       map.addLayer(
       {
       'id': 'grocery-stores-heat',
       'type': 'heatmap',
       'source': 'grocery-stores-heatmap',
-      'source-layer': 'out-b46o3a',
-      'maxzoom': 22,
+      'source-layer': 'out-b46o3a', //Source layer of mapbox tileset
+      'maxzoom': 22, //allows heatmap markers to be visible up to zoom level 22
       'paint': {
 
       'heatmap-weight': .8,
@@ -841,6 +883,7 @@ function groceryheatmap(){
       // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
       // Begin color ramp at 0-stop with a 0-transparancy color
       // to create a blur-like effect.
+      //alters color of heatmap depending on the density of the data
       'heatmap-color': [
             "interpolate",
             ["linear"],
@@ -873,17 +916,17 @@ function groceryheatmap(){
       },
 
       );
-      
+      // Uses grocery store tileset to display circle markers when the user zooms in on the heatmap
       map.addLayer(
       {
       'id': 'grocery-stores-point',
-      'type': 'circle',
+      'type': 'circle', //the type of marker being displayed
       'source': 'grocery-stores-heatmap',
-      'source-layer': 'out-b46o3a',
+      'source-layer': 'out-b46o3a', //source layer for grocery store tileset
       'minzoom': 1,
       'paint': {
 
-      'circle-radius': 3,
+      'circle-radius': 3, //radius of the markers being displayed
 
       'circle-color': [
       'interpolate',
@@ -902,7 +945,7 @@ function groceryheatmap(){
       6,
       'rgb(178,24,43)'
       ],
-      'circle-stroke-color': 'white',
+      'circle-stroke-color': 'white', //color of the exterior part of the marker
       'circle-stroke-width': 1,
       // Transition from heatmap to circle layer by zoom level
       'circle-opacity':2
@@ -917,12 +960,14 @@ function groceryheatmap(){
         const visibility = map.getLayoutProperty('grocery-stores-heat', 'visibility');
         if(visibility === "none")
         {
+          //displays heatmap and heatmap markers if it isnt already being displayed
             map.setLayoutProperty('grocery-stores-heatmap', 'visibility', 'visible');
             map.setLayoutProperty('grocery-stores-point', 'visibility', 'visible');
             map.setLayoutProperty('grocery-stores-heat', 'visibility', 'visible');
         }
         else
         {
+          //removes heatmap and heatmap markers if they are being displayed
             map.setLayoutProperty('grocery-stores-heatmap', 'visibility', 'none');
             map.setLayoutProperty('grocery-stores-point', 'visibility', 'none');
             map.setLayoutProperty('grocery-stores-heat', 'visibility', 'none');
@@ -931,23 +976,24 @@ function groceryheatmap(){
     layers_showing['grocery-stores-heatmap'] = !layers_showing['grocery-stores-heatmap']
 }
 
-
+//Function for creating and adding a heatmap of farmers markets on the map
 function farmerheatmap(){
 
   if(typeof map.getSource('farmers-markets-heatmap') === 'undefined')
     {
+      // // adds farmers market data from mapbox tileset
       map.addSource('farmers-markets-heatmap', {
       'type': 'vector',
-      'url': 'mapbox://arielb1.af9vybob'
+      'url': 'mapbox://arielb1.af9vybob' //mapbox tileset containing farmers market dataset points
       });
-      
+      //Uses farmers market tileset to display heatmap of farmers markets
       map.addLayer(
       {
       'id': 'farmers-markets-heat',
       'type': 'heatmap',
       'source': 'farmers-markets-heatmap',
-      'source-layer': 'DOHMH_Farmers_Markets-ccwyus',
-      'maxzoom': 22,
+      'source-layer': 'DOHMH_Farmers_Markets-ccwyus', //Source layer of mapbox tileset
+      'maxzoom': 22,//allows heatmap markers to remain visible on map up to zoom level 22
       'paint': {
 
       'heatmap-weight': .8,
@@ -987,18 +1033,18 @@ function farmerheatmap(){
       },
 
       );
-      
+      // Uses farmers market tileset to display circle markers when the user zooms in on the heatmap
       map.addLayer(
       {
       'id': 'farmers-markets-point',
-      'type': 'circle',
+      'type': 'circle', //type of marker being displayed
       'source': 'farmers-markets-heatmap',
-      'source-layer': 'DOHMH_Farmers_Markets-ccwyus',
+      'source-layer': 'DOHMH_Farmers_Markets-ccwyus',//source layer for tileset
       'minzoom': 1,
       'paint': {
 
-      'circle-radius': 3,
-
+      'circle-radius': 3, //radius of marker being displayed
+        //alter marker color depending on the square footage 
       'circle-color': [
       'interpolate',
       ['linear'],
@@ -1016,10 +1062,10 @@ function farmerheatmap(){
       6,
       'rgb(178,24,43)'
       ],
-      'circle-stroke-color': 'white',
+      'circle-stroke-color': 'white', //exterior color of marker being displayed
       'circle-stroke-width': 1,
       // Transition from heatmap to circle layer by zoom level
-      'circle-opacity':2
+      'circle-opacity':2 
       }
       },
 
@@ -1032,12 +1078,14 @@ function farmerheatmap(){
         const visibility = map.getLayoutProperty('farmers-markets-heat', 'visibility');
         if(visibility === "none")
         {
+          //displays heatmap and heatmap markers if it isnt already being displayed
             map.setLayoutProperty('farmers-markets-heatmap', 'visibility', 'visible');
             map.setLayoutProperty('farmers-markets-point', 'visibility', 'visible');
             map.setLayoutProperty('farmers-markets-heat', 'visibility', 'visible');
         }
         else
         {
+          //removes heatmap and heatmap markers if they are being displayed
             map.setLayoutProperty('farmers-markets-heatmap', 'visibility', 'none');
             map.setLayoutProperty('farmers-markets-point', 'visibility', 'none');
             map.setLayoutProperty('farmers-markets-heat', 'visibility', 'none');
@@ -1048,30 +1096,32 @@ function farmerheatmap(){
 
 
 }
-
+//Function for creating and adding a heatmap of firestations on the map
 function fireheatmap(){
 
   if(typeof map.getSource('fire-station-heatmap') === 'undefined')
     {
+      // Adds fire station data from mapbox tileset
       map.addSource('fire-station-heatmap', {
       'type': 'vector',
-      'url': 'mapbox://arielb1.388xpmrj'
+      'url': 'mapbox://arielb1.388xpmrj' //mapbox tileset containing data of fire stations
       });
-      
+      //Adds heatmap layer for firestations
       map.addLayer(
       {
       'id': 'fire-station-heat',
       'type': 'heatmap',
       'source': 'fire-station-heatmap',
-      'source-layer': 'FDNY_Firehouse_Listing-4hvksv',
-      'maxzoom': 22,
+      'source-layer': 'FDNY_Firehouse_Listing-4hvksv', //source layer for fire station tileset
+      'maxzoom': 22,//circle remain on the map until the zoom level exceeds 22
       'paint': {
 
-      'heatmap-weight': .8,
-      'heatmap-intensity': 1.1,
+      'heatmap-weight': .8, //weight of the heatmap
+      'heatmap-intensity': 1.1, //intensity of the heatmap
       // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
       // Begin color ramp at 0-stop with a 0-transparancy color
       // to create a blur-like effect.
+      //changes the heatmap color depending on the density of points in that area
       'heatmap-color': [
             "interpolate",
             ["linear"],
@@ -1104,18 +1154,18 @@ function fireheatmap(){
       },
 
       );
-      
+      // Uses fire station tileset to display circle markers when the user zooms in on the heatmap
       map.addLayer(
       {
       'id': 'fire-station-point',
-      'type': 'circle',
+      'type': 'circle', //type of marker being displayed
       'source': 'fire-station-heatmap',
-      'source-layer': 'FDNY_Firehouse_Listing-4hvksv',
+      'source-layer': 'FDNY_Firehouse_Listing-4hvksv', //source layer for mapbox tileset
       'minzoom': 1,
       'paint': {
 
-      'circle-radius': 3,
-
+      'circle-radius': 3, //radius of the marker being displayed
+        //alter the color of the circle depending on the square footage of the point
       'circle-color': [
       'interpolate',
       ['linear'],
@@ -1133,7 +1183,7 @@ function fireheatmap(){
       6,
       'rgb(178,24,43)'
       ],
-      'circle-stroke-color': 'white',
+      'circle-stroke-color': 'white', //exterior color of the marker
       'circle-stroke-width': 1,
       // Transition from heatmap to circle layer by zoom level
       'circle-opacity':2
@@ -1148,12 +1198,14 @@ function fireheatmap(){
         const visibility = map.getLayoutProperty('fire-station-heat', 'visibility');
         if(visibility === "none")
         {
+          //displays heatmap and heatmap markers if it isnt already being displayed
             map.setLayoutProperty('fire-station-heatmap', 'visibility', 'visible');
             map.setLayoutProperty('fire-station-point', 'visibility', 'visible');
             map.setLayoutProperty('fire-station-heat', 'visibility', 'visible');
         }
         else
         {
+          //removes heatmap and heatmap markers if they are being displayed
             map.setLayoutProperty('fire-station-heatmap', 'visibility', 'none');
             map.setLayoutProperty('fire-station-point', 'visibility', 'none');
             map.setLayoutProperty('fire-station-heat', 'visibility', 'none');
@@ -1162,30 +1214,32 @@ function fireheatmap(){
     layers_showing['fire-station-heatmap'] = !layers_showing['fire-station-heatmap']
 
 }
-
+//Function for creating and adding a heatmap of supermarkets on the map
 function supermarketheatmap(){
 
   if(typeof map.getSource('super-markets-heatmap') === 'undefined')
     {
+      // adds super market data from mapbox tileset
       map.addSource('super-markets-heatmap', {
       'type': 'vector',
-      'url': 'mapbox://arielb1.dftl2j6f'
+      'url': 'mapbox://arielb1.dftl2j6f' //mapbox tileset containing super market dataset points
       });
-      
+      //Uses super market tileset to display heatmap of supermarkets
       map.addLayer(
       {
       'id': 'super-markets-heat',
-      'type': 'heatmap',
+      'type': 'heatmap',//type of layer being created
       'source': 'super-markets-heatmap',
-      'source-layer': 'Supermarkets-52ltms',
+      'source-layer': 'Supermarkets-52ltms', //source layer for mapbox tileset
       'maxzoom': 22,
       'paint': {
 
-      'heatmap-weight': .8,
-      'heatmap-intensity': 1.1,
+      'heatmap-weight': .8, //weight of heatmap
+      'heatmap-intensity': 1.1, //intensity of heatmap
       // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
       // Begin color ramp at 0-stop with a 0-transparancy color
       // to create a blur-like effect.
+      //changes color of heatmap depending on the density of the points
       'heatmap-color': [
             "interpolate",
             ["linear"],
@@ -1203,6 +1257,7 @@ function supermarketheatmap(){
             1,
             "red"
           ],
+          //radius of heatmap
       'heatmap-radius': [
             "interpolate",
             ["linear"],
@@ -1218,18 +1273,18 @@ function supermarketheatmap(){
       },
 
       );
-      
+      // Uses grocery store tileset to display circle markers when the user zooms in on the heatmap
       map.addLayer(
       {
       'id': 'super-markets-point',
-      'type': 'circle',
+      'type': 'circle', //type of marker being created
       'source': 'super-markets-heatmap',
-      'source-layer': 'Supermarkets-52ltms',
+      'source-layer': 'Supermarkets-52ltms',//source layer for mapbox tileset
       'minzoom': 1,
       'paint': {
 
-      'circle-radius': 3,
-
+      'circle-radius': 3, //radius of marker being displayed
+        //alter the color of the marker depending on the square footage
       'circle-color': [
       'interpolate',
       ['linear'],
@@ -1247,7 +1302,7 @@ function supermarketheatmap(){
       6,
       'rgb(178,24,43)'
       ],
-      'circle-stroke-color': 'white',
+      'circle-stroke-color': 'white', //exterior color of the marker
       'circle-stroke-width': 1,
       // Transition from heatmap to circle layer by zoom level
       'circle-opacity':2
@@ -1262,12 +1317,14 @@ function supermarketheatmap(){
         const visibility = map.getLayoutProperty('super-markets-heat', 'visibility');
         if(visibility === "none")
         {
+          //displays heatmap and heatmap markers if it isnt already being displayed
             map.setLayoutProperty('super-markets-heatmap', 'visibility', 'visible');
             map.setLayoutProperty('super-markets-point', 'visibility', 'visible');
             map.setLayoutProperty('super-markets-heat', 'visibility', 'visible');
         }
         else
         {
+           //removes heatmap and heatmap markers if they are being displayed
             map.setLayoutProperty('super-markets-heatmap', 'visibility', 'none');
             map.setLayoutProperty('super-markets-point', 'visibility', 'none');
             map.setLayoutProperty('super-markets-heat', 'visibility', 'none');
@@ -1276,31 +1333,33 @@ function supermarketheatmap(){
     layers_showing['super-markets-heatmap'] = !layers_showing['super-markets-heatmap']
 
 }
-
+//Function for creating and adding a heatmap of supercenters on the map
 function supercenterheatmap(){
 
   if(typeof map.getSource('super-center-heatmap') === 'undefined')
     {
       
+// adds super center data from mapbox tileset
     map.addSource('super-center-heatmap', {
     'type': 'vector',
-    'url': 'mapbox://arielb1.bx5tiqmq'
+    'url': 'mapbox://arielb1.bx5tiqmq' //mapbox tileset containing grocery store dataset points
     });
-    
+    //Uses supercenter tileset to display heatmap of supercenters
     map.addLayer(
     {
     'id': 'super-center-heat',
-    'type': 'heatmap',
+    'type': 'heatmap', //creates heatmap
     'source': 'super-center-heatmap',
-    'source-layer': 'Supercenters-49gbzn',
+    'source-layer': 'Supercenters-49gbzn', //source layer for supercenter tileset
     'maxzoom': 22,
     'paint': {
 
-    'heatmap-weight': .8,
-    'heatmap-intensity': 1.1,
+    'heatmap-weight': .8,//weight for heatmap
+    'heatmap-intensity': 1.1,//intensity for heatmap
     // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
     // Begin color ramp at 0-stop with a 0-transparancy color
     // to create a blur-like effect.
+    //changes color of heatmaap depending on the density of the points
     'heatmap-color': [
           "interpolate",
           ["linear"],
@@ -1333,18 +1392,19 @@ function supercenterheatmap(){
     },
 
     );
-    
+    // Uses super center tileset to display circle markers when the user zooms in on the heatmap
     map.addLayer(
     {
     'id': 'super-center-point',
-    'type': 'circle',
+    'type': 'circle', //type of marker being displayed
     'source': 'super-center-heatmap',
-    'source-layer': 'Supercenters-49gbzn',
+    'source-layer': 'Supercenters-49gbzn', //source layer for supercenter tileset
     'minzoom': 1,
     'paint': {
 
-    'circle-radius': 3,
+    'circle-radius': 3, //radius of marker
 
+      //alter color of marker depending on the square footage of the point
     'circle-color': [
     'interpolate',
     ['linear'],
@@ -1362,7 +1422,7 @@ function supercenterheatmap(){
     6,
     'rgb(178,24,43)'
     ],
-    'circle-stroke-color': 'white',
+    'circle-stroke-color': 'white', //exterior color of the marker
     'circle-stroke-width': 1,
     // Transition from heatmap to circle layer by zoom level
     'circle-opacity':2
@@ -1377,12 +1437,14 @@ function supercenterheatmap(){
         const visibility = map.getLayoutProperty('super-center-heat', 'visibility');
         if(visibility === "none")
         {
+          //displays heatmap and heatmap markers if it isnt already being displayed
             map.setLayoutProperty('super-center-heatmap', 'visibility', 'visible');
             map.setLayoutProperty('super-center-point', 'visibility', 'visible');
             map.setLayoutProperty('super-center-heat', 'visibility', 'visible');
         }
         else
         {
+          //removes heatmap and heatmap markers if they are being displayed
             map.setLayoutProperty('super-center-heatmap', 'visibility', 'none');
             map.setLayoutProperty('super-center-point', 'visibility', 'none');
             map.setLayoutProperty('super-center-heat', 'visibility', 'none');
