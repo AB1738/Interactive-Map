@@ -8,9 +8,11 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/aboutPage.css' %}">
+        <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
         <title>Ascent+</title>
+
     </head>
-    <body>
+    <body id="canvas">
         <div class="main">
             <header>
                 <h1>
@@ -24,6 +26,7 @@
                     <a href="{% url 'map' %}" class="page-link">Map</a>
                     <a href="{% url 'aboutme' %}" class="page-link">About</a>
                 </div>
+                <div class="mobileMenu" style="display:none;" onclick="openMobileMenu()"></div>
               </header>
             <div class="parent project-description">
                 <div class="f22 medium mb20">Why Interactive Maps? </div>
@@ -124,5 +127,12 @@
 
     
         </div>
+        <script>
+            function openMobileMenu() {
+                var d = document.getElementById("canvas");
+                d.classList.toggle("mobileMenuActive");
+            }
+            
+        </script>
     </body>
 </html>
