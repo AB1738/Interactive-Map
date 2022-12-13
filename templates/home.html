@@ -11,8 +11,9 @@
 
         <link rel="stylesheet" href="{% static 'css/homePage.css' %}">
         <title>Ascent+</title>
+
     </head>
-    <body>
+    <body id="canvas">
         <div class="main">
             <header>
                 <h1>
@@ -26,6 +27,7 @@
                     <a href="{% url 'map' %}" class="page-link">Map</a>
                     <a href="{% url 'aboutme' %}" class="page-link">About</a>
                 </div>
+                <div class="mobileMenu" style="display:none;" onclick="openMobileMenu()"></div>
             </header>
             <div class="banner">
                 
@@ -107,5 +109,13 @@
             </div>
             </div>
         </div>
+
+        <script>
+            function openMobileMenu() {
+                var d = document.getElementById("canvas");
+                d.classList.toggle("mobileMenuActive");
+            }
+            
+        </script>
     </body>
 </html>
