@@ -27,6 +27,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>Interactive Maps</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
   </head>
   <body id="canvas">
     <header style="padding:20px;align-items: center;height:initial;">
@@ -48,6 +50,8 @@
         <a href="{% url 'map' %}" class="page-link">Map</a>
         <a href="{% url 'aboutme' %}" class="page-link">About</a>
       </div>
+
+      <div class="mobileMenu" style="display:none;" onclick="openMobileMenu()"></div>
     
     </header>
 
@@ -98,7 +102,7 @@
         </div>
         
         <div class="radius-slider-container">
-          <input type="range" min="1" max="10" value="3" id="radius-slider">
+          <input type="range" min="1" max="5" value="3" id="radius-slider">
         </div>
 
         <div class="sidebarLabel" style="margin-top:10px;">Business Types</div>
@@ -138,15 +142,21 @@
         <div class="locationDecor"><div class="locationDecorInner"></div></div>
       </button>
 
-      
+
        <div style="border-top:1px solid #eeeeee;padding-top:20px;margin-top:20px;padding-bottom: 100px;">
+
+        <div id="options" class="optionBox">
+          <button id="driving" class="optionItem directionOption active" onclick="directionOptionOnClick(this)">Driving</button>
+          <button id="walking" class="optionItem directionOption" onclick="directionOptionOnClick(this)">Walking</button>
+          <button id="cycling" class="optionItem directionOption" onclick="directionOptionOnClick(this)">Cycling</button>
+        </div>
         <button id="find_nearest_business_button" class="findButton" onclick="showdirections()">
           <div class="findDecor">
             <div class="fdGroup">
               <div class="find one"></div>
               <div class="find two"></div>
             </div>
-            
+
             <div class="fdGroup two">
               <div class="find one"></div>
               <div class="find two"></div>
@@ -154,14 +164,14 @@
           </div>
           Find Nearest
         </button>
-      
+
         </div>
       </div>
     </div>
-    
 
- 
-    
+
+
+
     <div id="main" style="height:calc(100vh - 89px);">
       <div id="map" style="width: 100%; height: 100%; position: relative">
       </div>
@@ -170,24 +180,23 @@
       let isopen = false;
 
       function openClose(){
-        
-        
+
         isopen= !isopen
         console.log(isopen);
         var d = document.getElementById("canvas");
         d.classList.toggle("menuOff");
         const directionsBox = document.querySelector('.mapboxgl-ctrl-directions');
-        
+
         if(directionsBox!= null){
           if(isopen){
             directionsBox.style.marginLeft = '20px';
           }else{
             directionsBox.style.marginLeft = '320px';
-            
+
           }
-          
+
         }
- 
+
       }
       //function that displays toggle when button is clicked
       function onClickToggleEffect(el){
@@ -206,6 +215,16 @@
           }
         }
 
+      }
+
+      function directionOptionOnClick(el){
+        var Buttons = document.querySelectorAll('.directionOption');
+        for(var button of Buttons){
+          if(button.classList.contains("active")){
+            button.classList.remove("active");
+          }
+        }
+        el.classList.add("active");
       }
       </script>
 
@@ -277,7 +296,7 @@
 
         // maxBounds: bounds
       });
-      
+
 
       const layerList = document.getElementById("menu");
       const inputs = layerList.getElementsByTagName("input");
@@ -348,17 +367,13 @@
           
           
           //Allows users to display their location on the map
+
       geolocate.on('geolocate', (e) => {
           user_location = turf.point([e.coords.longitude, e.coords.latitude]);
       });
           map.addControl(geolocate); //Adds the geolocate button on the screen
 
-        var directions = new MapboxDirections({
-                    accessToken: mapboxgl.accessToken,
-                    interactive: false,
-                    congestion: true,
-                    alternatives: true
-                });
+
 
 
     </script>
@@ -367,7 +382,9 @@
 </script>
     <script>
                var directionsshowing = false;
+
             //function that displays the first dataset on the map
+
                function showmarker()
 
                {
@@ -694,7 +711,11 @@
                    layers_showing['super-centers'] = !layers_showing['super-centers']
 
                }
-
+            var directions = new MapboxDirections({
+                accessToken: mapboxgl.accessToken,
+                interactive: false,
+                controls: { inputs: false},
+            });
          async function showdirections(){
           if(!directionsshowing) {
               if(user_location == null)
@@ -744,22 +765,65 @@
             {
                 let loading_div = document.getElementById('loading');
                 loading_div.style.display = 'block';
+
+                let options = document.getElementById('options').children;
+                let find_shortest_option = "driving";
+                for(let i = 0; i < options.length; i++)
+                {
+                    let button = options[i];
+                    if(button.classList.contains('active'))
+                    {
+                        find_shortest_option = button.textContent.toLowerCase() || button.innerText.toLowerCase();
+                        break;
+                    }
+                }
+                directions = new MapboxDirections({
+                    accessToken: mapboxgl.accessToken,
+                    interactive: false,
+                    controls: { inputs: false},
+                    profile: "mapbox/" + find_shortest_option
+                });
+                let points = 0;
+                const request_limit = 23;
+                let user_location_coords = user_location.geometry.coordinates[0] + "," + user_location.geometry.coordinates[1];
+                let access_token = "access_token=pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA";
+                let url = "https://api.mapbox.com/directions-matrix/v1/mapbox/" + find_shortest_option + "/" + user_location_coords + ";";
+                const base_url = url;
                 let closest_marker_distance = Number.MAX_SAFE_INTEGER;
                 let closest_marker = null;
                 for(point of points_in_circle)
                 {
-                    let user_location_coords = user_location.geometry.coordinates[0] + "," + user_location.geometry.coordinates[1];
-                      let marker_coords = point.geometry.coordinates[0] + "," + point.geometry.coordinates[1];
-                      let url = "https://api.mapbox.com/directions/v5/mapbox/driving/" + user_location_coords + ";" + marker_coords + "?access_token=pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA";
-                      const response = await fetch(url);
-                      const data = await response.json();
-                      let distance = data.routes[0].duration;
-                      if(distance < closest_marker_distance)
+                    if(points > request_limit)
+                    {
+                      points = 0;
+                      url = url.slice(0, -1);
+                      const response = await fetch(url + "?sources=0&" + access_token);
+                      const json = await response.json();
+                      for (let i = 1; i < json.durations[0].length; i++)
                       {
-                        closest_marker_distance = distance;
-                        closest_marker = point;
+                          if(json.durations[0][i] < closest_marker_distance)
+                          {
+                            closest_marker_distance = json.durations[0][i];
+                            closest_marker = turf.point(json.destinations[i].location);
+                          }
                       }
+                      url = base_url;
+                    }
+                      let marker_coords = point.geometry.coordinates[0].toString() + "," + point.geometry.coordinates[1].toString();
+                      url = url + marker_coords + ";";
+                      points++;
                 }
+                url = url.slice(0, -1);
+                const response = await fetch(url + "?sources=0&" + access_token);
+                const json = await response.json();
+                  for (let i = 1; i < json.durations[0].length; i++)
+                  {
+                      if(json.durations[0][i] < closest_marker_distance)
+                      {
+                        closest_marker_distance = json.durations[0][i];
+                        closest_marker = turf.point(json.destinations[i].location);
+                      }
+                  }
                 loading_div.style.display = 'none';
                   if(closest_marker != null) {
                       map.addControl(directions, "top-left");
@@ -781,6 +845,7 @@
               if(map.hasControl(directions))
               {
                   map.removeControl(directions);
+                  directions = null;
               }
           }
         }
@@ -888,7 +953,7 @@ function groceryheatmap(){
       },
 
       );
-      
+      map.setLayoutProperty('grocery-stores-heat', 'visibility', 'visible');
     }
     else
     {
@@ -1005,8 +1070,9 @@ function farmerheatmap(){
       },
 
       );
-      
+      map.setLayoutProperty('farmers-markets-heat', 'visibility', 'visible');
     }
+
     else
     {
         const visibility = map.getLayoutProperty('farmers-markets-heat', 'visibility');
@@ -1125,6 +1191,7 @@ function fireheatmap(){
       },
 
       );
+                  map.setLayoutProperty('fire-station-heat', 'visibility', 'visible');
     }
     else
     {
@@ -1243,6 +1310,7 @@ function supermarketheatmap(){
       },
 
       );
+                  map.setLayoutProperty('super-markets-heat', 'visibility', 'visible');
     }
     else
     {
@@ -1362,6 +1430,7 @@ function supercenterheatmap(){
     },
 
     );
+                map.setLayoutProperty('super-center-heat', 'visibility', 'visible');
     }
     else
     {
@@ -1385,6 +1454,14 @@ function supercenterheatmap(){
 
 }
 
+</script>
+
+<script>
+  function openMobileMenu() {
+      var d = document.getElementById("canvas");
+      d.classList.toggle("mobileMenuActive");
+  }
+  
 </script>
   </body>
 </html>
