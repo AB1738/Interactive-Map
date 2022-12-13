@@ -102,7 +102,7 @@
         </div>
         
         <div class="radius-slider-container">
-          <input type="range" min="1" max="10" value="3" id="radius-slider">
+          <input type="range" min="1" max="5" value="3" id="radius-slider">
         </div>
 
         <div class="sidebarLabel" style="margin-top:10px;">Business Types</div>
@@ -142,9 +142,9 @@
         <div class="locationDecor"><div class="locationDecorInner"></div></div>
       </button>
 
-      
+
        <div style="border-top:1px solid #eeeeee;padding-top:20px;margin-top:20px;padding-bottom: 100px;">
-        
+
         <div id="options" class="optionBox">
           <button class="optionItem directionOption active" onclick="directionOptionOnClick(this)">Driving</button>
           <button class="optionItem directionOption" onclick="directionOptionOnClick(this)">Walking</button>
@@ -156,7 +156,7 @@
               <div class="find one"></div>
               <div class="find two"></div>
             </div>
-            
+
             <div class="fdGroup two">
               <div class="find one"></div>
               <div class="find two"></div>
@@ -164,14 +164,14 @@
           </div>
           Find Nearest
         </button>
-      
+
         </div>
       </div>
     </div>
-    
 
- 
-    
+
+
+
     <div id="main" style="height:calc(100vh - 89px);">
       <div id="map" style="width: 100%; height: 100%; position: relative">
       </div>
@@ -186,17 +186,17 @@
         var d = document.getElementById("canvas");
         d.classList.toggle("menuOff");
         const directionsBox = document.querySelector('.mapboxgl-ctrl-directions');
-        
+
         if(directionsBox!= null){
           if(isopen){
             directionsBox.style.marginLeft = '20px';
           }else{
             directionsBox.style.marginLeft = '320px';
-            
+
           }
-          
+
         }
- 
+
       }
 
       function onClickToggleEffect(el){
@@ -296,7 +296,7 @@
 
         // maxBounds: bounds
       });
-      
+
 
       const layerList = document.getElementById("menu");
       const inputs = layerList.getElementsByTagName("input");
@@ -364,9 +364,9 @@
               });
             }
           }
-          
-          
- 
+
+
+
       geolocate.on('geolocate', (e) => {
           user_location = turf.point([e.coords.longitude, e.coords.latitude]);
       });
@@ -673,7 +673,7 @@
             var directions = new MapboxDirections({
                 accessToken: mapboxgl.accessToken,
                 interactive: false,
-                controls: { inputs: false},
+                {#controls: { inputs: false},#}
             });
          async function showdirections(){
           if(!directionsshowing) {
@@ -724,8 +724,7 @@
             {
                 let loading_div = document.getElementById('loading');
                 loading_div.style.display = 'block';
-                let closest_marker_distance = Number.MAX_SAFE_INTEGER;
-                let closest_marker = null;
+
                 let options = document.getElementById('options').children;
                 let find_shortest_option = "driving";
                 for(let i = 0; i < options.length; i++)
@@ -743,20 +742,47 @@
                     controls: { inputs: false},
                     profile: "mapbox/" + find_shortest_option
                 });
+                let points = 0;
+                const request_limit = 23;
+                let user_location_coords = user_location.geometry.coordinates[0] + "," + user_location.geometry.coordinates[1];
+                let access_token = "access_token=pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA";
+                let url = "https://api.mapbox.com/directions-matrix/v1/mapbox/" + find_shortest_option + "/" + user_location_coords + ";";
+                const base_url = url;
+                let closest_marker_distance = Number.MAX_SAFE_INTEGER;
+                let closest_marker = null;
                 for(point of points_in_circle)
                 {
-                    let user_location_coords = user_location.geometry.coordinates[0] + "," + user_location.geometry.coordinates[1];
-                      let marker_coords = point.geometry.coordinates[0] + "," + point.geometry.coordinates[1];
-                      let url = "https://api.mapbox.com/directions/v5/mapbox/" + find_shortest_option + "/" + user_location_coords + ";" + marker_coords + "?access_token=pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA";
-                      const response = await fetch(url);
-                      const data = await response.json();
-                      let distance = data.routes[0].duration;
-                      if(distance < closest_marker_distance)
+                    if(points > request_limit)
+                    {
+                      points = 0;
+                      url = url.slice(0, -1);
+                      const response = await fetch(url + "?sources=0&" + access_token);
+                      const json = await response.json();
+                      for (let i = 1; i < json.durations[0].length; i++)
                       {
-                        closest_marker_distance = distance;
-                        closest_marker = point;
+                          if(json.durations[0][i] < closest_marker_distance)
+                          {
+                              closest_marker_distance = json.durations[0][i];
+                              closest_marker = turf.point(json.destinations[i].location);
+                          }
                       }
+                      url = base_url;
+                    }
+                      let marker_coords = point.geometry.coordinates[0] + "," + point.geometry.coordinates[1];
+                      url = url + marker_coords + ";";
+                      points++;
                 }
+                url = url.slice(0, -1);
+                const response = await fetch(url + "?sources=0&" + access_token);
+                const json = await response.json();
+                  for (let i = 1; i < json.durations[0].length; i++)
+                  {
+                      if(json.durations[0][i] < closest_marker_distance)
+                      {
+                          closest_marker_distance = json.durations[0][i];
+                          closest_marker = turf.point(json.destinations[i].location);
+                      }
+                  }
                 loading_div.style.display = 'none';
                   if(closest_marker != null) {
                       map.addControl(directions, "top-left");
