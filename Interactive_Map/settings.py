@@ -13,9 +13,14 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from decouple import config
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / '.env')
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -80,17 +85,31 @@ WSGI_APPLICATION = "Interactive_Map.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'MibfauWjmSgS1bbXL431',
-        'HOST': 'containers-us-west-103.railway.app',
-        'PORT': '5895',
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': 'MibfauWjmSgS1bbXL431',
+#         'HOST': 'containers-us-west-103.railway.app',
+#         'PORT': '5432',
+#     }
+# }
 
+
+
+# Replace the DATABASES section of your settings.py with this
+DATABASES = {
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': os.getenv('DB_NAME'),
+    'USER': os.getenv("DB_USER"),
+    'PASSWORD': os.getenv('DB_PASSWORD'),
+    'HOST': os.getenv("DB_HOST"),
+    'PORT': os.getenv('DB_PORT', 6543),
+
+  }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -130,6 +149,8 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 STATIC_ROOT = BASE_DIR / "static"
+
+
 
 
 # Default primary key field type

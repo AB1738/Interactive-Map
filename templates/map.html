@@ -25,6 +25,9 @@
       <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
     <link rel="stylesheet" href="{% static 'css/mapPage.css' %}" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+      <link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}">
+    <link rel="manifest" href="{% static 'site.webmanifest' %}">
     <title>Interactive Maps</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -287,7 +290,7 @@
       ];
 
       mapboxgl.accessToken =
-        "pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA";
+        '{{access_token|escapejs}}';
       const map = new mapboxgl.Map({
         container: "map", // container ID
         style: "mapbox://styles/mapbox/streets-v11?optimize=true", // style URL
@@ -790,7 +793,7 @@
                 let points = 0;
                 const request_limit = 23;
                 let user_location_coords = user_location.geometry.coordinates[0] + "," + user_location.geometry.coordinates[1];
-                let access_token = "access_token=pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA";
+                let access_token = `access_token=${'{{ access_token|escapejs }}'}`;
                 let url = "https://api.mapbox.com/directions-matrix/v1/mapbox/" + find_shortest_option + "/" + user_location_coords + ";";
                 const base_url = url;
                 let closest_marker_distance = Number.MAX_SAFE_INTEGER;
