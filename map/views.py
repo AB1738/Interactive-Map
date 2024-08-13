@@ -1,7 +1,8 @@
 from django.shortcuts import render  # noqa: F401
 from django.views.generic import TemplateView, CreateView
 from .models import GroceryStoreAddresses, FarmersMarketAddresses, FireHouseAddresses, SupercenterAddresses, SuperMarketAddresses
-
+import os
+from dotenv import load_dotenv
 
 class HomePageView(TemplateView):
     template_name = "home.html"
@@ -28,7 +29,7 @@ class MapView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context[
-            "access_token"] = 'pk.eyJ1IjoiYXJpZWxiMSIsImEiOiJjbGIxbnFyNW4wNXVjM3dueW5lbGVoeDRnIn0.8_79cvoMd9lBAUQKUe27tA'
+            "access_token"] = os.getenv('MAPBOX_TOKEN')
         context['addresses'] = list(GroceryStoreAddresses.objects.values())
         context['farmer_addresses'] = list(FarmersMarketAddresses.objects.values())
         context['fire_addresses'] = list(FireHouseAddresses.objects.values())
